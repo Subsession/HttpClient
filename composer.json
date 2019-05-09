@@ -1,0 +1,21 @@
+{
+  "name": "comertis/http",
+  "description": "A Http wrapper for cURL",
+  "type": "library",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Cristian Moraru",
+      "email": "cristian@comertis.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Comertis\\Http\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.0.0"
+  }
+}
