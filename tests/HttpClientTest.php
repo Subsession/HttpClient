@@ -23,6 +23,14 @@ class HttpClientTest
             ]);
     }
 
+    public function init()
+    {
+        echo "<p>get200 -> " . $this->get200() . "</p>";
+        echo "<p>get404 -> " . $this->get404() . "</p>";
+        echo "<p>getBodyNotEmpty -> " . $this->getBodyNotEmpty() . "</p>";
+        echo "<p>getBodyEmpty -> " . $this->getBodyEmpty() . "</p>";
+    }
+
     public function get200()
     {
         try {
@@ -33,8 +41,7 @@ class HttpClientTest
             return $response->getStatusCode() == HttpStatusCode::OK;
 
         } catch (HttpClientException $e) {
-            echo $e->getMessage();
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -48,8 +55,7 @@ class HttpClientTest
             return $response->getStatusCode() == HttpStatusCode::NOT_FOUND;
 
         } catch (HttpClientException $e) {
-            echo $e->getMessage();
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -63,8 +69,7 @@ class HttpClientTest
             return !empty($response->getBody());
 
         } catch (HttpClientException $e) {
-            echo $e->getMessage();
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -78,14 +83,10 @@ class HttpClientTest
             return $response->getBody() == "{}";
 
         } catch (HttpClientException $e) {
-            echo $e->getMessage();
-            return false;
+            return $e->getMessage();
         }
     }
 }
 
 $test = new HttpClientTest();
-echo "<p>get200 -> " . $test->get200() . "</p>";
-echo "<p>get404 -> " . $test->get404() . "</p>";
-echo "<p>getBodyNotEmpty -> " . $test->getBodyNotEmpty() . "</p>";
-echo "<p>getBodyEmpty -> " . $test->getBodyEmpty() . "</p>";
+$test->init();
