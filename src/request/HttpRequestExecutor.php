@@ -23,7 +23,7 @@ class HttpRequestExecutor
      * Request retry count
      *
      * @access private
-     * @property int
+     * @var int
      */
     private $_retry;
 

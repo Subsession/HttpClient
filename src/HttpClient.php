@@ -17,7 +17,7 @@ class HttpClient
      * Holds the request information
      *
      * @access private
-     * @property HttpRequest
+     * @var HttpRequest
      */
     private $_request;
 
@@ -25,7 +25,7 @@ class HttpClient
      * Holds the response information once a request has been executed
      *
      * @access private
-     * @property HttpResponse
+     * @var HttpResponse
      */
     private $_response;
 
@@ -33,7 +33,7 @@ class HttpClient
      * Responsible for executing a HttpRequest
      *
      * @access private
-     * @property HttpRequestExecutor
+     * @var HttpRequestExecutor
      */
     private $_executor;
 
@@ -93,7 +93,7 @@ class HttpClient
     }
 
     /**
-     * Set the curl headers
+     * Set the request headers
      *
      * @access public
      * @param array $headers
@@ -101,7 +101,19 @@ class HttpClient
      */
     public function setHeaders(array $headers)
     {
-        $this->_request->setHeaders($headers);
+        $this->_request->addHeaders($headers);
+
+        return $this;
+    }
+
+    /**
+     * Clear the request headers
+     *
+     * @return HttpClient
+     */
+    public function clearHeaders()
+    {
+        $this->_request->setHeaders([]);
 
         return $this;
     }

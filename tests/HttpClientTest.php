@@ -8,6 +8,9 @@ use Comertis\Http\HttpStatusCode;
 
 class HttpClientTest
 {
+    /**
+     * @var HttpClient
+     */
     private $_httpClient;
 
     const RETRY_COUNT = 3;
@@ -29,6 +32,7 @@ class HttpClientTest
         echo "<p>get404 -> " . $this->get404() . "</p>";
         echo "<p>getBodyNotEmpty -> " . $this->getBodyNotEmpty() . "</p>";
         echo "<p>getBodyEmpty -> " . $this->getBodyEmpty() . "</p>";
+        echo "<p>getHeaderApplicationJson -> " . $this->getHeaderApplicationJson() . "</p>";
     }
 
     public function get200()
@@ -81,6 +85,29 @@ class HttpClientTest
                 ->get();
 
             return $response->getBody() == "{}";
+
+        } catch (HttpClientException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getHeaderApplicationJson()
+    {
+        $contentType = "Content-Type";
+        $applicationJson = "application/json; charset=utf-8";
+
+        try {
+            $response = $this->_httpClient
+                ->setUrl(self::BASE_URL . "posts/1")
+                ->get();
+
+            $headers = $response->getHeaders();
+
+            if (!array_key_exists($contentType, $headers)) {
+                return false;
+            }
+
+            return $headers[$contentType] == $applicationJson;
 
         } catch (HttpClientException $e) {
             return $e->getMessage();

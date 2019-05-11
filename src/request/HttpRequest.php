@@ -10,7 +10,7 @@ class HttpRequest
      * Base url
      *
      * @access private
-     * @param string
+     * @var string
      */
     private $_url;
 
@@ -18,7 +18,7 @@ class HttpRequest
      * HTTP headers
      *
      * @access private
-     * @param array
+     * @var array
      */
     private $_headers;
 
@@ -26,7 +26,7 @@ class HttpRequest
      * HTTP request method
      *
      * @access private
-     * @param string
+     * @var string
      */
     private $_method;
 
@@ -34,7 +34,7 @@ class HttpRequest
      * Http request type
      *
      * @access private
-     * @param string
+     * @var string
      */
     private $_bodyType;
 
@@ -42,7 +42,7 @@ class HttpRequest
      * Request parameters
      *
      * @access private
-     * @param array
+     * @var array
      */
     private $_params;
 
