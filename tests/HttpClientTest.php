@@ -88,5 +88,5 @@ class HttpClientTest
     }
 }
 
-$test = new HttpClientTest();
-$test->init();
+$httpClientTest = new HttpClientTest();
+$httpClientTest->init();

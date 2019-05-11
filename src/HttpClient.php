@@ -4,11 +4,9 @@ namespace Comertis\Http;
 
 use Comertis\Http\HttpClientException;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\HttpRequestBodyType;
+use Comertis\Http\HttpRequestExecutor;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\HttpResult;
-use Comertis\Http\HttpStatusCode;
 
 /**
  * Http client wrapper for cURL
@@ -16,14 +14,7 @@ use Comertis\Http\HttpStatusCode;
 class HttpClient
 {
     /**
-     * cURL instance
-     *
-     * @access private
-     */
-    private $_ch;
-
-    /**
-     * HttpRequest instance
+     * Holds the request information
      *
      * @access private
      * @property HttpRequest
@@ -31,7 +22,7 @@ class HttpClient
     private $_request;
 
     /**
-     * HttpResponse instance
+     * Holds the response information once a request has been executed
      *
      * @access private
      * @property HttpResponse
@@ -39,12 +30,12 @@ class HttpClient
     private $_response;
 
     /**
-     * Request retry count
+     * Responsible for executing a HttpRequest
      *
      * @access private
-     * @property int
+     * @property HttpRequestExecutor
      */
-    private $_retry;
+    private $_executor;
 
     /**
      * @param string|null $url
@@ -55,17 +46,11 @@ class HttpClient
         $this->_request->setUrl($url);
 
         $this->_response = new HttpResponse();
-
-        $this->_ch = curl_init($this->_request->getUrl());
+        $this->_executor = new HttpRequestExecutor();
     }
 
-    /**
-     * Destructor
-     */
     public function __destruct()
     {
-        curl_close($this->_ch);
-
         foreach ($this as $key => $value) {
             unset($this->$key);
         }
@@ -147,26 +132,28 @@ class HttpClient
     }
 
     /**
-     * Get the configured retry count
+     * Get the configured retry count in case a connection
+     * failes to respond
      *
      * @access public
      * @return int
      */
     public function getRetryCount()
     {
-        return $this->_retry;
+        return $this->_executor->getRetryCount();
     }
 
     /**
-     * Set the retry count for requests
+     * Set the number of times to retry a request in case
+     * of failing to get a response
      *
-     * @access public
      * @param int $retryCount
+     * @access public
      * @return HttpClient
      */
-    public function setRetryCount($retryCount = 1)
+    public function setRetryCount($retryCount)
     {
-        $this->_retry = $retryCount;
+        $this->_executor->setRetryCount($retryCount);
 
         return $this;
     }
@@ -181,10 +168,10 @@ class HttpClient
     public function get(array $params = [])
     {
         $this->_request
-            ->setRequestMethod(HttpRequestMethod::GET)
+            ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        $result = $this->_execute($this->_request);
+        $result = $this->_executor->execute($this->_request);
 
         return $result->getResponse();
     }
@@ -199,10 +186,10 @@ class HttpClient
     public function post(array $params = [])
     {
         $this->_request
-            ->setRequestMethod(HttpRequestMethod::POST)
+            ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        $result = $this->_execute($this->_request);
+        $result = $this->_executor->execute($this->_request);
 
         return $result->getResponse();
     }
@@ -226,11 +213,11 @@ class HttpClient
         }
 
         $this->_request
-            ->setRequestMethod(HttpRequestMethod::POST)
-            ->setRequestBodyType(HttpRequestBodyType::JSON)
+            ->setMethod(HttpRequestMethod::POST)
+            ->setBodyType(HttpRequestBodyType::JSON)
             ->setParams($params);
 
-        $result = $this->_execute($this->_request);
+        $result = $this->_executor->execute($this->_request);
 
         return $result->getResponse();
     }
@@ -245,10 +232,10 @@ class HttpClient
     public function put(array $params)
     {
         $this->_request
-            ->setRequestMethod(HttpRequestMethod::PUT)
+            ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        $result = $this->_execute($this->_request);
+        $result = $this->_executor->execute($this->_request);
 
         return $result->getResponse();
     }
@@ -260,13 +247,13 @@ class HttpClient
      * @param array $params Array of parameters to include in the request
      * @return HttpResponse
      */
-    public function delete(array $params)
+    public function delete(array $params = [])
     {
         $this->_request
-            ->setRequestMethod(HttpRequestMethod::DELETE)
+            ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        $result = $this->_execute($this->_request);
+        $result = $this->_executor->execute($this->_request);
 
         return $result->getResponse();
     }
@@ -276,111 +263,26 @@ class HttpClient
      *
      * @access public
      * @param array $params Array of parameters to be json encoded
-     *
+     * @throws HttpClientException
      * @return HttpResponse
      */
-    public function deleteJson(array $params)
+    public function deleteJson(array $params = [])
     {
-        $jsonParams = json_encode($params);
+        if (!empty($params)) {
+            $params = json_encode($params);
 
-        if (empty($jsonParams)) {
-            throw new QuiterException("Failed to json_encode request parameters");
+            if (empty($params)) {
+                throw new HttpClientException("Failed to json_encode request parameters");
+            }
         }
 
         $this->_request
-            ->setRequestMethod(HttpRequestMethod::DELETE)
-            ->setRequestBodyType(HttpRequestBodyType::JSON)
-            ->setParams($jsonParams);
+            ->setMethod(HttpRequestMethod::DELETE)
+            ->setBodyType(HttpRequestBodyType::JSON)
+            ->setParams($params);
 
-        $result = $this->_execute($this->_request);
+        $result = $this->_executor->execute($this->_request);
 
         return $result->getResponse();
-    }
-
-    /**
-     * Execute the HttpRequest
-     *
-     * @access private
-     * @param HttpRequest $request
-     * @throws HttpClientException
-     * @return HttpResult
-     */
-    private function _execute(HttpRequest $request)
-    {
-        $responseHeaders = [];
-        $statusCode = 200;
-
-        if (!empty($params = $request->getParams())) {
-            if ($request->getRequestMethod() == HttpRequestMethod::GET) {
-
-                $url = $request->getUrl();
-                $url .= "?";
-
-                foreach ($params as $key => $value) {
-                    $url .= $key . "=" . $value . "&";
-                }
-
-                $url = trim($url, "&");
-
-                $request->setUrl($url);
-
-            } else {
-                switch ($request->getRequestBodyType()) {
-                    case HttpRequestBodyType::JSON:
-                        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, json_encode($params));
-                        break;
-
-                    default:
-                        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($params));
-                        break;
-                }
-            }
-        }
-
-        curl_setopt($this->_ch, CURLOPT_URL, $request->getUrl());
-        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
-        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getRequestMethod());
-
-        curl_setopt($this->_ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$responseHeaders) {
-            $headerLength = strlen($header);
-            $header = explode(':', $header, 2);
-
-            if (count($header) < 2) {
-                return $headerLength;
-            }
-
-            $name = strtolower(trim($header[0]));
-
-            if (!array_key_exists($name, $responseHeaders)) {
-                $responseHeaders[$name] = [trim($header[1])];
-            } else {
-                $responseHeaders[$name][] = trim($header[1]);
-            }
-
-            return $headerLength;
-        });
-
-        for ($i = 0; $i < $this->getRetryCount(); $i++) {
-            $responseBody = curl_exec($this->_ch);
-            $responseInfo = curl_getinfo($this->_ch);
-            $responseStatusCode = $responseInfo['http_code'];
-
-            $statusCode = $responseStatusCode;
-
-            if ($responseStatusCode !== HttpStatusCode::INTERNAL_SERVER_ERROR) {
-                break;
-            }
-
-            sleep(1);
-        }
-
-        if (!isset($responseBody) || !$responseBody) {
-            throw new HttpClientException("Failed to get response after " . $this->getRetryCount() . " tries.");
-        }
-
-        $this->_response = new HttpResponse($responseHeaders, $statusCode, $responseBody);
-
-        return new HttpResult($this->_request, $this->_response);
     }
 }

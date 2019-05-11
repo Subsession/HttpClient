@@ -4,9 +4,6 @@ namespace Comertis\Http;
 
 use Comertis\Http\HttpRequestMethod;
 
-/**
- * Http Request class
- */
 class HttpRequest
 {
     /**
@@ -31,7 +28,7 @@ class HttpRequest
      * @access private
      * @param string
      */
-    private $_requestMethod;
+    private $_method;
 
     /**
      * Http request type
@@ -39,13 +36,13 @@ class HttpRequest
      * @access private
      * @param string
      */
-    private $_requestType;
+    private $_bodyType;
 
     /**
      * Request parameters
      *
      * @access private
-     * @var array
+     * @param array
      */
     private $_params;
 
@@ -65,7 +62,7 @@ class HttpRequest
 
         $this->_url = $url;
         $this->_headers = $headers;
-        $this->_requestMethod = $requestMethod;
+        $this->_method = $requestMethod;
         $this->_params = $params;
     }
 
@@ -79,6 +76,7 @@ class HttpRequest
     /**
      * Get the HttpRequest headers
      *
+     * @access public
      * @return array
      */
     public function getHeaders()
@@ -90,10 +88,10 @@ class HttpRequest
      * Set the HttpRequest headers
      *
      * @param array $headers
-     *
+     * @access public
      * @return HttpRequest
      */
-    public function setHeaders($headers = [])
+    public function setHeaders(array $headers = [])
     {
         $this->_headers = $headers;
 
@@ -101,25 +99,43 @@ class HttpRequest
     }
 
     /**
+     * Add headers to the request
+     * if they are not already present
+     *
+     * @param array $headers
+     * @access public
+     * @return void
+     */
+    public function addHeaders(array $headers = [])
+    {
+        foreach ($headers as $key => $value) {
+            if (!\array_key_exists($key, $this->_headers)) {
+                $this->_headers[$key] = $value;
+            }
+        }
+    }
+
+    /**
      * Get the HttpRequest method
      *
+     * @access public
      * @return string
      */
-    public function getRequestMethod()
+    public function getMethod()
     {
-        return $this->_requestMethod;
+        return $this->_method;
     }
 
     /**
      * Set the HttpRequest method
      *
      * @param string $requestMethod
-     *
+     * @access public
      * @return HttpRequest
      */
-    public function setRequestMethod($requestMethod)
+    public function setMethod($requestMethod)
     {
-        $this->_requestMethod = $requestMethod;
+        $this->_method = $requestMethod;
 
         return $this;
     }
@@ -127,6 +143,7 @@ class HttpRequest
     /**
      * Get the HttpRequest URL
      *
+     * @access public
      * @return string
      */
     public function getUrl()
@@ -138,7 +155,7 @@ class HttpRequest
      * Set the HttpRequest URL
      *
      * @param string $url
-     *
+     * @access public
      * @return HttpRequest
      */
     public function setUrl($url = null)
@@ -151,6 +168,7 @@ class HttpRequest
     /**
      * Get the HttpRequest parameters
      *
+     * @access public
      * @return array
      */
     public function getParams()
@@ -162,10 +180,10 @@ class HttpRequest
      * Set the HttpRequest parameters
      *
      * @param array $params
-     *
+     * @access public
      * @return HttpRequest
      */
-    public function setParams($params)
+    public function setParams(array $params)
     {
         $this->_params = $params;
 
@@ -173,25 +191,26 @@ class HttpRequest
     }
 
     /**
-     * Get the request type
+     * Get the request body type
      *
+     * @access public
      * @return string
      */
-    public function getRequestBodyType()
+    public function getBodyType()
     {
-        return $this->_requestType;
+        return $this->_bodyType;
     }
 
     /**
-     * set the request type
+     * Set the request body type
      *
-     * @param string $requestType
-     *
+     * @param string $bodyType
+     * @access public
      * @return HttpRequest
      */
-    public function setRequestBodyType($requestType)
+    public function setBodyType($bodyType)
     {
-        $this->_requestType = $requestType;
+        $this->_bodyType = $bodyType;
 
         return $this;
     }

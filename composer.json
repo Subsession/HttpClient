@@ -1,8 +1,8 @@
 {
   "name": "comertis/http",
-  "description": "A Http wrapper for cURL",
+  "description": "A object-oriented Http wrapper for cURL",
   "type": "library",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
     {
