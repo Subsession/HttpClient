@@ -20,10 +20,7 @@ class HttpClientTest
     {
         $this->_httpClient = new HttpClient();
         $this->_httpClient
-            ->setRetryCount(self::RETRY_COUNT)
-            ->setHeaders([
-                "Accept" => "application/json",
-            ]);
+            ->setRetryCount(self::RETRY_COUNT);
     }
 
     public function init()
@@ -33,6 +30,11 @@ class HttpClientTest
         echo "<p>getBodyNotEmpty -> " . $this->getBodyNotEmpty() . "</p>";
         echo "<p>getBodyEmpty -> " . $this->getBodyEmpty() . "</p>";
         echo "<p>getHeaderApplicationJson -> " . $this->getHeaderApplicationJson() . "</p>";
+        echo "<p>getSinglePost -> " . $this->getSinglePost() . "</p>";
+        echo "<p>getArrayOfPosts -> " . $this->getArrayOfPosts() . "</p>";
+        echo "<p>postPost -> " . $this->postPost() . "</p>";
+        echo "<p>putPost -> " . $this->putPost() . "</p>";
+        echo "<p>deletePost -> " . $this->deletePost() . "</p>";
     }
 
     public function get200()
@@ -43,7 +45,6 @@ class HttpClientTest
                 ->get();
 
             return $response->getStatusCode() == HttpStatusCode::OK;
-
         } catch (HttpClientException $e) {
             return $e->getMessage();
         }
@@ -57,7 +58,6 @@ class HttpClientTest
                 ->get();
 
             return $response->getStatusCode() == HttpStatusCode::NOT_FOUND;
-
         } catch (HttpClientException $e) {
             return $e->getMessage();
         }
@@ -71,7 +71,6 @@ class HttpClientTest
                 ->get();
 
             return !empty($response->getBody());
-
         } catch (HttpClientException $e) {
             return $e->getMessage();
         }
@@ -85,7 +84,6 @@ class HttpClientTest
                 ->get();
 
             return $response->getBody() == "{}";
-
         } catch (HttpClientException $e) {
             return $e->getMessage();
         }
@@ -108,10 +106,146 @@ class HttpClientTest
             }
 
             return $headers[$contentType] == $applicationJson;
-
         } catch (HttpClientException $e) {
             return $e->getMessage();
         }
+    }
+
+    public function getSinglePost()
+    {
+        $result = true;
+        try {
+            $response = $this->_httpClient
+                ->setUrl(self::BASE_URL . "posts/1")
+                ->get();
+
+            if ($response->getStatusCode() != HttpStatusCode::OK) {
+                $result = false;
+            }
+
+            if (empty($response->getBody())) {
+                $result = false;
+            }
+        } catch (HttpClientException $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function getArrayOfPosts()
+    {
+        $result = true;
+        try {
+            $response = $this->_httpClient
+                ->setUrl(self::BASE_URL . "posts")
+                ->get();
+
+            if ($response->getStatusCode() != HttpStatusCode::OK) {
+                $result = false;
+            }
+
+            if (empty($response->getBody())) {
+                $result = false;
+            }
+
+            $posts = json_decode($response->getBody());
+
+            if (!is_array($posts)) {
+                return false;
+            }
+        } catch (HttpClientException $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function postPost()
+    {
+        $result = true;
+        try {
+
+            $post = new stdClass;
+            $post->title = "test title";
+            $post->body = "test body";
+            $post->userId = 1;
+
+            $response = $this->_httpClient
+                ->setUrl(self::BASE_URL . "posts")
+                ->postJson($post);
+
+            if ($response->getStatusCode() != HttpStatusCode::CREATED) {
+                $result = false;
+            }
+
+            if (empty($response->getBody())) {
+                $result = false;
+            }
+
+            $responseBody = json_decode($response->getBody());
+
+            if (!is_object($responseBody)) {
+                return false;
+            }
+        } catch (HttpClientException $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function putPost()
+    {
+        $result = true;
+        try {
+
+            $post = new stdClass;
+            $post->title = "test title";
+            $post->body = "test body";
+            $post->userId = 1;
+
+            $response = $this->_httpClient
+                ->setUrl(self::BASE_URL . "posts/1")
+                ->putJson($post);
+
+            if ($response->getStatusCode() != HttpStatusCode::OK) {
+                $result = false;
+            }
+
+            if (empty($response->getBody())) {
+                $result = false;
+            }
+
+            $responseBody = json_decode($response->getBody());
+
+            if (!is_object($responseBody)) {
+                return false;
+            }
+        } catch (HttpClientException $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function deletePost()
+    {
+        $result = true;
+        try {
+
+            $response = $this->_httpClient
+                ->setUrl(self::BASE_URL . "posts/1")
+                ->delete();
+
+            if ($response->getStatusCode() != HttpStatusCode::OK) {
+                $result = false;
+            }
+        } catch (HttpClientException $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
     }
 }
 
