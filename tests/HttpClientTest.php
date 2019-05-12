@@ -83,7 +83,7 @@ class HttpClientTest
                 ->setUrl(self::BASE_URL . "posts/2222")
                 ->get();
 
-            return $response->getBody() == "{}";
+            return $response->getBody() == "{}" || empty($response->getBody());
         } catch (HttpClientException $e) {
             return $e->getMessage();
         }
