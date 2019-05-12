@@ -25,16 +25,26 @@ class HttpClientTest
 
     public function init()
     {
-        echo "<p>get200 -> " . $this->get200() . "</p>";
-        echo "<p>get404 -> " . $this->get404() . "</p>";
-        echo "<p>getBodyNotEmpty -> " . $this->getBodyNotEmpty() . "</p>";
-        echo "<p>getBodyEmpty -> " . $this->getBodyEmpty() . "</p>";
-        echo "<p>getHeaderApplicationJson -> " . $this->getHeaderApplicationJson() . "</p>";
-        echo "<p>getSinglePost -> " . $this->getSinglePost() . "</p>";
-        echo "<p>getArrayOfPosts -> " . $this->getArrayOfPosts() . "</p>";
-        echo "<p>postPost -> " . $this->postPost() . "</p>";
-        echo "<p>putPost -> " . $this->putPost() . "</p>";
-        echo "<p>deletePost -> " . $this->deletePost() . "</p>";
+        $functions = get_class_methods(__CLASS__);
+
+        unset($functions[0]); // __construct()
+        unset($functions[1]); // init()
+        unset($functions[2]); // output()
+
+        foreach ($functions as $function) {
+            echo "<h1>" . $function . "</h1>";
+            echo "<h3>Result: " . $this->$function() . "</h3>";
+            echo "<hr>";
+        }
+    }
+
+    private function output($response)
+    {
+        echo "<h2>Request:</h2>";
+        var_dump($this->_httpClient->getRequest());
+
+        echo "<h2>Response:</h2>";
+        var_dump($response);
     }
 
     public function get200()
@@ -43,6 +53,8 @@ class HttpClientTest
             $response = $this->_httpClient
                 ->setUrl(self::BASE_URL . "posts/1")
                 ->get();
+
+            $this->output($response);
 
             return $response->getStatusCode() == HttpStatusCode::OK;
         } catch (HttpClientException $e) {
@@ -57,6 +69,8 @@ class HttpClientTest
                 ->setUrl(self::BASE_URL . "posts/2222")
                 ->get();
 
+            $this->output($response);
+
             return $response->getStatusCode() == HttpStatusCode::NOT_FOUND;
         } catch (HttpClientException $e) {
             return $e->getMessage();
@@ -70,6 +84,8 @@ class HttpClientTest
                 ->setUrl(self::BASE_URL . "posts/1")
                 ->get();
 
+            $this->output($response);
+
             return !empty($response->getBody());
         } catch (HttpClientException $e) {
             return $e->getMessage();
@@ -82,6 +98,8 @@ class HttpClientTest
             $response = $this->_httpClient
                 ->setUrl(self::BASE_URL . "posts/2222")
                 ->get();
+
+            $this->output($response);
 
             return $response->getBody() == "{}" || empty($response->getBody());
         } catch (HttpClientException $e) {
@@ -98,6 +116,8 @@ class HttpClientTest
             $response = $this->_httpClient
                 ->setUrl(self::BASE_URL . "posts/1")
                 ->get();
+
+            $this->output($response);
 
             $headers = $response->getHeaders();
 
@@ -118,6 +138,8 @@ class HttpClientTest
             $response = $this->_httpClient
                 ->setUrl(self::BASE_URL . "posts/1")
                 ->get();
+
+            $this->output($response);
 
             if ($response->getStatusCode() != HttpStatusCode::OK) {
                 $result = false;
@@ -140,6 +162,8 @@ class HttpClientTest
             $response = $this->_httpClient
                 ->setUrl(self::BASE_URL . "posts")
                 ->get();
+
+            $this->output($response);
 
             if ($response->getStatusCode() != HttpStatusCode::OK) {
                 $result = false;
@@ -175,6 +199,8 @@ class HttpClientTest
                 ->setUrl(self::BASE_URL . "posts")
                 ->postJson($post);
 
+            $this->output($response);
+
             if ($response->getStatusCode() != HttpStatusCode::CREATED) {
                 $result = false;
             }
@@ -209,6 +235,8 @@ class HttpClientTest
                 ->setUrl(self::BASE_URL . "posts/1")
                 ->putJson($post);
 
+            $this->output($response);
+
             if ($response->getStatusCode() != HttpStatusCode::OK) {
                 $result = false;
             }
@@ -237,6 +265,8 @@ class HttpClientTest
             $response = $this->_httpClient
                 ->setUrl(self::BASE_URL . "posts/1")
                 ->delete();
+
+            $this->output($response);
 
             if ($response->getStatusCode() != HttpStatusCode::OK) {
                 $result = false;
