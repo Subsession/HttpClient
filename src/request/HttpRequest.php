@@ -47,6 +47,19 @@ class HttpRequest
     private $_params;
 
     /**
+     * Default headers
+     *
+     * @var array
+     */
+    private $_defaultHeaders = [
+        "Cache-Control" => "max-age=0",
+        "Connection" => "keep-alive",
+        "Keep-Alive" => "300",
+        "Accept" => "application/json,text/xml,application/xml,application/xhtml+xml,text/html,text/plain,image/png,*/*",
+        "Accept-Charset" => "utf-8,ISO-8859-1",
+    ];
+
+    /**
      * Http client wrapper for cUrl
      *
      * @param string $url
@@ -64,6 +77,8 @@ class HttpRequest
         $this->_headers = $headers;
         $this->_method = $requestMethod;
         $this->_params = $params;
+
+        $this->addHeaders($this->_defaultHeaders);
     }
 
     public function __destruct()

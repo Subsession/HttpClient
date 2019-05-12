@@ -16,6 +16,7 @@ class HttpRequestExecutor
      * cURL instance
      *
      * @access private
+     * @var resource
      */
     private $_ch;
 
