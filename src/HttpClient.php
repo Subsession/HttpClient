@@ -4,9 +4,9 @@ namespace Comertis\Http;
 
 use Comertis\Http\HttpClientException;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\HttpRequestExecutor;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpResponse;
+use Comertis\Http\Internal\HttpExecutor;
 
 /**
  * Http client wrapper for cURL
@@ -33,7 +33,7 @@ class HttpClient
      * Responsible for executing a HttpRequest
      *
      * @access private
-     * @var HttpRequestExecutor
+     * @var HttpExecutor
      */
     private $_executor;
 
@@ -46,7 +46,7 @@ class HttpClient
         $this->_request->setUrl($url);
 
         $this->_response = new HttpResponse();
-        $this->_executor = new HttpRequestExecutor();
+        $this->_executor = new HttpExecutor();
     }
 
     public function __destruct()
@@ -57,7 +57,7 @@ class HttpClient
     }
 
     /**
-     * Get the endpoint URL
+     * @see HttpRequest::getUrl()
      *
      * @access public
      * @return string
@@ -68,7 +68,7 @@ class HttpClient
     }
 
     /**
-     * Set the endpoint URL
+     * @see HttpRequest::setUrl()
      *
      * @access public
      * @param string $url
@@ -82,7 +82,7 @@ class HttpClient
     }
 
     /**
-     * Get the HttpRequest headers
+     * @see HttpRequest::getHeaders()
      *
      * @access public
      * @return array
@@ -93,7 +93,7 @@ class HttpClient
     }
 
     /**
-     * Set the request headers
+     * @see HttpRequest::setHeaders()
      *
      * @access public
      * @param array $headers
@@ -101,13 +101,26 @@ class HttpClient
      */
     public function setHeaders(array $headers)
     {
+        $this->_request->setHeaders($headers);
+
+        return $this;
+    }
+
+    /**
+     * @see HttpRequest::addHeaders()
+     *
+     * @param array $headers
+     * @return HttpClient
+     */
+    public function addHeaders(array $headers)
+    {
         $this->_request->addHeaders($headers);
 
         return $this;
     }
 
     /**
-     * Clear the request headers
+     * @see HttpRequest::setHeaders()
      *
      * @return HttpClient
      */
@@ -144,8 +157,7 @@ class HttpClient
     }
 
     /**
-     * Get the configured retry count in case a connection
-     * failes to respond
+     * @see HttpExecutor::getRetryCount()
      *
      * @access public
      * @return int
@@ -156,10 +168,9 @@ class HttpClient
     }
 
     /**
-     * Set the number of times to retry a request in case
-     * of failing to get a response
+     * @see HttpExecutor::setRetryCount()
      *
-     * @param int $retryCount
+     * @param int $retryCount Number of retries on a connection before giving up
      * @access public
      * @return HttpClient
      */
@@ -174,7 +185,7 @@ class HttpClient
      * Execute a GET request
      *
      * @access public
-     * @param array $params
+     * @param array $params Parameters to include in the request
      * @return HttpResponse
      */
     public function get(array $params = [])
@@ -192,10 +203,10 @@ class HttpClient
      * Execute a POST request
      *
      * @access public
-     * @param array $params
+     * @param array $params Parameters to include in the request
      * @return HttpResponse
      */
-    public function post(array $params = [])
+    public function post($params = [])
     {
         $this->_request
             ->setMethod(HttpRequestMethod::POST)
@@ -207,23 +218,15 @@ class HttpClient
     }
 
     /**
-     * Execute a POST request against the endpoint with JSON formatted parameters
+     * Execute a POST request with JSON formatted parameters
      *
      * @access public
-     * @param array $params
+     * @param array|mixed|object $params Parameters to include in the request
      * @throws HttpClientException
      * @return HttpResponse
      */
-    public function postJson(array $params = [])
+    public function postJson($params = [])
     {
-        if (!empty($params)) {
-            $params = json_encode($params);
-
-            if (empty($params)) {
-                throw new HttpClientException("Failed to json_encode post parameters");
-            }
-        }
-
         $this->_request
             ->setMethod(HttpRequestMethod::POST)
             ->setBodyType(HttpRequestBodyType::JSON)
@@ -238,10 +241,10 @@ class HttpClient
      * Execute a PUT request
      *
      * @access public
-     * @param array $params
+     * @param array|mixed|object $params Parameters to include in the request
      * @return HttpResponse
      */
-    public function put(array $params)
+    public function put($params = [])
     {
         $this->_request
             ->setMethod(HttpRequestMethod::PUT)
@@ -253,13 +256,32 @@ class HttpClient
     }
 
     /**
+     * Execute a PUT request with JSON formatted parameters
+     *
+     * @access public
+     * @param array|mixed|object $params Parameters to be json encoded
+     * @return HttpResponse
+     */
+    public function putJson($params = [])
+    {
+        $this->_request
+            ->setMethod(HttpRequestMethod::PUT)
+            ->setBodyType(HttpRequestBodyType::JSON)
+            ->setParams($params);
+
+        $result = $this->_executor->execute($this->_request);
+
+        return $result->getResponse();
+    }
+
+    /**
      * Execute a DELETE request
      *
      * @access public
-     * @param array $params Array of parameters to include in the request
+     * @param array $params Parameters to include in the request
      * @return HttpResponse
      */
-    public function delete(array $params = [])
+    public function delete($params = [])
     {
         $this->_request
             ->setMethod(HttpRequestMethod::DELETE)
@@ -271,23 +293,15 @@ class HttpClient
     }
 
     /**
-     * Execute a DELETE request with json encoded parameters
+     * Execute a DELETE request with JSON encoded parameters
      *
      * @access public
-     * @param array $params Array of parameters to be json encoded
+     * @param array $params Parameters to be json encoded
      * @throws HttpClientException
      * @return HttpResponse
      */
-    public function deleteJson(array $params = [])
+    public function deleteJson($params = [])
     {
-        if (!empty($params)) {
-            $params = json_encode($params);
-
-            if (empty($params)) {
-                throw new HttpClientException("Failed to json_encode request parameters");
-            }
-        }
-
         $this->_request
             ->setMethod(HttpRequestMethod::DELETE)
             ->setBodyType(HttpRequestBodyType::JSON)

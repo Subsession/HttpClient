@@ -12,7 +12,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Comertis\\Http\\": "src/"
+      "Comertis\\Http\\": "src/",
+      "Comertis\\Http\\Internal\\": "src/"
     }
   },
   "require": {
