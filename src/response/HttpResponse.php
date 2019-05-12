@@ -7,6 +7,7 @@ class HttpResponse
     /**
      * Response headers
      *
+     * @access private
      * @var array
      */
     private $_headers;
@@ -14,6 +15,7 @@ class HttpResponse
     /**
      * Response HTTP status code
      *
+     * @access private
      * @var int
      */
     private $_statusCode;
@@ -21,9 +23,42 @@ class HttpResponse
     /**
      * Response body
      *
+     * @access private
      * @var mixed
      */
     private $_body;
+
+    /**
+     * Total transaction time in seconds for last transfer
+     *
+     * @access private
+     * @var int
+     */
+    private $_transactionTime;
+
+    /**
+     * Average download speed
+     *
+     * @access private
+     * @var string
+     */
+    private $_downloadSpeed;
+
+    /**
+     * Average upload speed
+     *
+     * @access private
+     * @var string
+     */
+    private $_uploadSpeed;
+
+    /**
+     * Total size of all headers received
+     *
+     * @access private
+     * @var string
+     */
+    private $_headerSize;
 
     /**
      * HttpResponse instance for HttpClient
@@ -118,6 +153,106 @@ class HttpResponse
     public function setBody($body)
     {
         $this->_body = $body;
+
+        return $this;
+    }
+
+    /**
+     * Total transaction time in seconds
+     *
+     * @access public
+     * @return int
+     */
+    public function getTransactionTime()
+    {
+        return $this->_transactionTime;
+    }
+
+    /**
+     * Total transaction time in seconds
+     *
+     * @param int $time
+     * @access public
+     * @return HttpResponse
+     */
+    public function setTransactionTime($time)
+    {
+        $this->_transactionTime = $time;
+
+        return $this;
+    }
+
+    /**
+     * Average download speed
+     *
+     * @access public
+     * @return string
+     */
+    public function getDownloadSpeed()
+    {
+        return $this->_downloadSpeed;
+    }
+
+    /**
+     * Average download speed
+     *
+     * @param string $downloadSpeed
+     * @access public
+     * @return HttpResponse
+     */
+    public function setDownloadSpeed($downloadSpeed)
+    {
+        $this->_downloadSpeed = $downloadSpeed;
+
+        return $this;
+    }
+
+    /**
+     * Average upload speed
+     *
+     * @access public
+     * @return string
+     */
+    public function getUploadSpeed()
+    {
+        return $this->_uploadSpeed;
+    }
+
+    /**
+     * Average upload speed
+     *
+     * @param string $uploadSpeed
+     * @access public
+     * @return HttpResponse
+     */
+    public function setUploadSpeed($uploadSpeed)
+    {
+        $this->_uploadSpeed = $uploadSpeed;
+
+        return $this;
+    }
+
+    /**
+     * Total size of all headers received
+     *
+     * @access public
+     * @return string
+     */
+    public function getHeaderSize()
+    {
+        return $this->_headerSize;
+    }
+
+    /**
+     * Total size of all headers received
+     *
+     * @param string $headerSize
+     * @access public
+     * @return HttpResponse
+     */
+    public function setHeadersSize($headerSize)
+    {
+        $this->_headerSize = $headerSize;
 
         return $this;
     }
