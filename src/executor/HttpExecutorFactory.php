@@ -4,6 +4,7 @@ namespace Comertis\Http\Internal;
 
 use Comertis\Http\HttpExecutorException;
 use Comertis\Http\Internal\HttpCurlExecutor;
+use Comertis\Http\Internal\HttpContextExecutor;
 
 class HttpExecutorFactory
 {
@@ -47,6 +48,8 @@ class HttpExecutorFactory
     {
         if (\extension_loaded("curl")) {
             return new HttpCurlExecutor();
+        } else {
+            return new HttpContextExecutor();
         }
     }
 }
