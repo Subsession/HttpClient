@@ -9,7 +9,7 @@ use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestBodyType;
 use Comertis\Http\Internal\IHttpExecutor;
 
-class HttpContextExecutor implements IHttpExecutor
+class HttpStreamExecutor implements IHttpExecutor
 {
     /**
      * Stream context options

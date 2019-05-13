@@ -4,7 +4,9 @@ namespace Comertis\Http\Internal;
 
 use Comertis\Http\HttpExecutorException;
 use Comertis\Http\Internal\HttpCurlExecutor;
-use Comertis\Http\Internal\HttpContextExecutor;
+use Comertis\Http\Internal\HttpPeclExecutor;
+use Comertis\Http\Internal\HttpStreamExecutor;
+use Comertis\Http\Internal\HttpExecutorImplementation;
 
 class HttpExecutorFactory
 {
@@ -46,10 +48,12 @@ class HttpExecutorFactory
      */
     private static function setExecutor()
     {
-        if (\extension_loaded("curl")) {
+        if (\extension_loaded(HttpExecutorImplementation::CURL)) {
             return new HttpCurlExecutor();
+        } else if (\extension_loaded(HttpExecutorImplementation::PECL)) {
+            return new HttpPeclExecutor();
         } else {
-            return new HttpContextExecutor();
+            return new HttpStreamExecutor();
         }
     }
 }
