@@ -4,6 +4,7 @@ namespace Comertis\Http\Internal;
 
 use Comertis\Http\HttpRequest;
 use Comertis\Http\Internal\IHttpExecutor;
+use Comertis\Http\HttpNotImplementedException;
 
 class HttpPeclExecutor implements IHttpExecutor
 {
@@ -16,7 +17,7 @@ class HttpPeclExecutor implements IHttpExecutor
      */
     public function prepareUrl(HttpRequest &$request)
     {
-
+        throw new HttpNotImplementedException("This function is not yet implemented");
     }
 
     /**
@@ -28,7 +29,7 @@ class HttpPeclExecutor implements IHttpExecutor
      */
     public function prepareHeaders(HttpRequest &$request)
     {
-
+        throw new HttpNotImplementedException("This function is not yet implemented");
     }
 
     /**
@@ -40,7 +41,7 @@ class HttpPeclExecutor implements IHttpExecutor
      */
     public function prepareParams(HttpRequest &$request)
     {
-
+        throw new HttpNotImplementedException("This function is not yet implemented");
     }
 
     /**
@@ -52,6 +53,6 @@ class HttpPeclExecutor implements IHttpExecutor
      */
     public function execute(HttpRequest $request)
     {
-
+        throw new HttpNotImplementedException("This function is not yet implemented");
     }
 }
