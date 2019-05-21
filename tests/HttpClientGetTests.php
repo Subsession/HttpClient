@@ -1,50 +1,29 @@
 <?php
-// Autoload files using Composer autoload
-require_once __DIR__ . '/../vendor/autoload.php';
 
-use Comertis\Http\HttpClient;
+namespace Comertis\Http\Tests;
+
+require_once __DIR__ . '/HttpTests.php';
+
 use Comertis\Http\HttpClientException;
 use Comertis\Http\HttpStatusCode;
+use Comertis\Http\Tests\HttpTests;
 
-class HttpClientTest
+class HttpClientGetTests extends HttpTests
 {
-    /**
-     * @var HttpClient
-     */
-    private $_httpClient;
-
-    const RETRY_COUNT = 3;
-    const BASE_URL = "http://jsonplaceholder.typicode.com/";
-
-    public function __construct()
-    {
-        $this->_httpClient = new HttpClient();
-        $this->_httpClient
-            ->setRetryCount(self::RETRY_COUNT);
-    }
-
     public function init()
     {
         $functions = get_class_methods(__CLASS__);
 
-        unset($functions[0]); // __construct()
-        unset($functions[1]); // init()
-        unset($functions[2]); // output()
+        foreach ($functions as $key => &$function) {
+            if ($function == "init" || $function == "__construct" || $function == "output") {
+                unset($functions[$key]);
+                continue;
+            }
 
-        foreach ($functions as $function) {
             echo "<h1>" . $function . "</h1>";
             echo "<h3>Result: " . $this->$function() . "</h3>";
             echo "<hr>";
         }
-    }
-
-    private function output($response)
-    {
-        echo "<h2>Request:</h2>";
-        var_dump($this->_httpClient->getRequest());
-
-        echo "<h2>Response:</h2>";
-        var_dump($response);
     }
 
     public function get200()
@@ -185,86 +164,14 @@ class HttpClientTest
         return $result;
     }
 
-    public function postPost()
-    {
-        $result = true;
-        try {
-
-            $post = new stdClass;
-            $post->title = "test title";
-            $post->body = "test body";
-            $post->userId = 1;
-
-            $response = $this->_httpClient
-                ->setUrl(self::BASE_URL . "posts")
-                ->postJson($post);
-
-            $this->output($response);
-
-            if ($response->getStatusCode() != HttpStatusCode::CREATED) {
-                $result = false;
-            }
-
-            if (empty($response->getBody())) {
-                $result = false;
-            }
-
-            $responseBody = json_decode($response->getBody());
-
-            if (!is_object($responseBody)) {
-                return false;
-            }
-        } catch (HttpClientException $e) {
-            $result = $e->getMessage();
-        }
-
-        return $result;
-    }
-
-    public function putPost()
-    {
-        $result = true;
-        try {
-
-            $post = new stdClass;
-            $post->title = "test title";
-            $post->body = "test body";
-            $post->userId = 1;
-
-            $response = $this->_httpClient
-                ->setUrl(self::BASE_URL . "posts/1")
-                ->putJson($post);
-
-            $this->output($response);
-
-            if ($response->getStatusCode() != HttpStatusCode::OK) {
-                $result = false;
-            }
-
-            if (empty($response->getBody())) {
-                $result = false;
-            }
-
-            $responseBody = json_decode($response->getBody());
-
-            if (!is_object($responseBody)) {
-                return false;
-            }
-        } catch (HttpClientException $e) {
-            $result = $e->getMessage();
-        }
-
-        return $result;
-    }
-
-    public function deletePost()
+    public function getErrorResposne()
     {
         $result = true;
         try {
 
             $response = $this->_httpClient
-                ->setUrl(self::BASE_URL . "posts/1")
-                ->delete();
+                ->setUrl('http://404.php.net/')
+                ->get();
 
             $this->output($response);
 
@@ -272,12 +179,10 @@ class HttpClientTest
                 $result = false;
             }
         } catch (HttpClientException $e) {
+            $this->output();
             $result = $e->getMessage();
         }
 
         return $result;
     }
 }
-
-$httpClientTest = new HttpClientTest();
-$httpClientTest->init();
