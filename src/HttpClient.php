@@ -5,6 +5,7 @@ namespace Comertis\Http;
 use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
+use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
 use Comertis\Http\Internal\Executors\HttpExecutor;
 
