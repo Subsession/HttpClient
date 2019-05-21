@@ -61,6 +61,14 @@ class HttpResponse
     private $_headerSize;
 
     /**
+     * Response error message
+     *
+     * @access private
+     * @var string
+     */
+    private $_error;
+
+    /**
      * HttpResponse instance for HttpClient
      *
      * @param array $headers
@@ -253,6 +261,31 @@ class HttpResponse
     public function setHeadersSize($headerSize)
     {
         $this->_headerSize = $headerSize;
+
+        return $this;
+    }
+
+    /**
+     * Get the response error
+     *
+     * @access public
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->_error;
+    }
+
+    /**
+     * Set the response error
+     *
+     * @param int $error
+     * @access public
+     * @return HttpResponse
+     */
+    public function setError($error)
+    {
+        $this->_error = $error;
 
         return $this;
     }
