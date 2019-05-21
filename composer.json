@@ -13,7 +13,8 @@
   "autoload": {
     "psr-4": {
       "Comertis\\Http\\": "src/",
-      "Comertis\\Http\\Internal\\": "src/"
+      "Comertis\\Http\\Internal\\": "src/",
+      "Comertis\\Http\\Tests\\": "tests/"
     }
   },
   "require": {

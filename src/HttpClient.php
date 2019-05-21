@@ -6,7 +6,7 @@ use Comertis\Http\HttpClientException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\HttpExecutor;
+use Comertis\Http\Internal\Executors\HttpExecutor;
 
 /**
  * Http client wrapper for cURL

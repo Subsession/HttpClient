@@ -1,6 +1,6 @@
 <?php
 
-namespace Comertis\Http\Internal;
+namespace Comertis\Http\Internal\Executors;
 
 use Comertis\Http\HttpClientException;
 use Comertis\Http\HttpRequest;
@@ -8,6 +8,7 @@ use Comertis\Http\HttpRequestBodyType;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpResponse;
 use Comertis\Http\HttpResult;
+use Comertis\Http\Internal\Executors\IHttpExecutor;
 
 /**
  * IHttpExecutor implementation using the cURL
@@ -74,11 +75,11 @@ class HttpCurlExecutor implements IHttpExecutor
         $params = null;
         if (!empty($params = $request->getParams())) {
             if (is_array($params)) {
-                $request->addHeaders(["Content-Length" => \strlen(implode($params))]);
+                $request->addHeaders(["Content-Length" => strlen(implode($params))]);
             } else if (is_object($params)) {
-                $request->addHeaders(["Content-Length" => \strlen(serialize($params))]);
+                $request->addHeaders(["Content-Length" => strlen(serialize($params))]);
             } else {
-                $request->addHeaders(["Content-Length" => \strlen($params)]);
+                $request->addHeaders(["Content-Length" => strlen($params)]);
             }
         }
 
@@ -105,11 +106,12 @@ class HttpCurlExecutor implements IHttpExecutor
         if (!empty($params = $request->getParams())) {
             switch ($request->getBodyType()) {
                 case HttpRequestBodyType::JSON:
-                    \curl_setopt($this->_ch, CURLOPT_POSTFIELDS, \json_encode($params));
+                    curl_setopt($this->_ch, CURLOPT_POSTFIELDS, json_encode($params));
                     break;
 
+                case HttpRequestBodyType::X_WWW_FORM_URLENCODED:
                 default:
-                    \curl_setopt($this->_ch, CURLOPT_POSTFIELDS, \http_build_query($params));
+                    curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($params));
                     break;
             }
         }
@@ -125,45 +127,70 @@ class HttpCurlExecutor implements IHttpExecutor
      */
     public function execute(HttpRequest $request)
     {
+        /**
+         * @var array
+         */
         $responseHeaders = [];
+
+        /**
+         * @var string|bool
+         */
         $responseBody = false;
+
+        /**
+         * @var array
+         */
         $responseInfo = [];
+
+        /**
+         * @var int
+         */
         $responseStatusCode = 500;
 
-        \curl_setopt($this->_ch, CURLOPT_URL, $request->getUrl());
-        \curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
-        \curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+        /**
+         * @var string|null
+         */
+        $responseError = null;
 
-        \curl_setopt($this->_ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$responseHeaders) {
-            $headerLength = \strlen($header);
-            $header = \explode(':', $header, 2);
+        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->_ch, CURLOPT_FOLLOWLOCATION, true);
 
-            if (\count($header) < 2) {
+        curl_setopt($this->_ch, CURLOPT_URL, $request->getUrl());
+        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
+        curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+
+        curl_setopt($this->_ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$responseHeaders) {
+            $headerLength = strlen($header);
+            $header = explode(':', $header, 2);
+
+            if (count($header) < 2) {
                 return $headerLength;
             }
 
-            $key = \trim($header[0]);
-            $value = \trim($header[1]);
-
-            $responseHeaders[$key] = $value;
+            $responseHeaders[trim($header[0])] = trim($header[1]);
 
             return $headerLength;
         });
 
-        $responseBody = \curl_exec($this->_ch);
-        $responseInfo = \curl_getinfo($this->_ch);
-        $responseStatusCode = $responseInfo['http_code'];
+        $responseBody = curl_exec($this->_ch);
 
-        if (!isset($responseBody) || !$responseBody) {
-            throw new HttpClientException("Failed to get response after " . $this->getRetryCount() . " tries. Status code: " . $responseStatusCode);
+        if (curl_errno($this->_ch)) {
+            $responseError = curl_error($this->_ch);
         }
+
+        if (!$responseBody) {
+            throw new HttpClientException("Failed to get response. Error: " . $responseError ?: "No error message to show.");
+        }
+
+        $responseInfo = curl_getinfo($this->_ch);
+        $responseStatusCode = $responseInfo['http_code'];
 
         $response = new HttpResponse($responseHeaders, $responseStatusCode, $responseBody);
         $response->setTransactionTime($responseInfo['total_time'])
             ->setDownloadSpeed($responseInfo['speed_download'])
             ->setUploadSpeed($responseInfo['speed_upload'])
-            ->setHeadersSize($responseInfo['header_size']);
+            ->setHeadersSize($responseInfo['header_size'])
+            ->setError($responseError);
 
         return new HttpResult($request, $response);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Comertis\Http\Internal;
+namespace Comertis\Http\Internal\Executors;
 
 use Comertis\Http\HttpResult;
 use Comertis\Http\HttpRequest;
@@ -129,7 +129,7 @@ class HttpStreamExecutor implements IHttpExecutor
         $headers = $responseInfo['wrapper_data'];
         for ($i = 1; $i < count($headers); $i++) {
             $currentHeader = explode(":", $headers[$i], 2);
-            $responseHeaders[\trim($currentHeader[0])] = \trim($currentHeader[1]);
+            $responseHeaders[trim($currentHeader[0])] = trim($currentHeader[1]);
         }
 
         // Body

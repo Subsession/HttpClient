@@ -1,10 +1,11 @@
 <?php
 
-namespace Comertis\Http\Internal;
+namespace Comertis\Http\Internal\Executors;
 
 use Comertis\Http\HttpExecutorException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpStatusCode;
+use Comertis\Http\Internal\Executors\HttpExecutorFactory;
 
 class HttpExecutor
 {

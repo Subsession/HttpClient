@@ -1,6 +1,6 @@
 <?php
 
-namespace Comertis\Http\Internal;
+namespace Comertis\Http\Internal\Executors;
 
 use Comertis\Http\HttpRequest;
 use Comertis\Http\Internal\IHttpExecutor;
