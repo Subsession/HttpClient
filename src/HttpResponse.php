@@ -2,6 +2,8 @@
 
 namespace Comertis\Http;
 
+use Comertis\Http\HttpStatusCode;
+
 class HttpResponse
 {
     /**
@@ -96,6 +98,7 @@ class HttpResponse
     /**
      * Get the HTTP response headers
      *
+     * @access public
      * @return array
      */
     public function getHeaders()
@@ -106,8 +109,8 @@ class HttpResponse
     /**
      * Set the HTTP response headers
      *
+     * @access public
      * @param array $headers
-     *
      * @return HttpResponse
      */
     public function setHeaders($headers)
@@ -120,6 +123,7 @@ class HttpResponse
     /**
      * Get the HTTP response status code
      *
+     * @access public
      * @return int
      */
     public function getStatusCode()
@@ -130,8 +134,8 @@ class HttpResponse
     /**
      * Set the HTTP response status code
      *
+     * @access public
      * @param int $statusCode
-     *
      * @return HttpResponse
      */
     public function setStatusCode($statusCode)
@@ -144,6 +148,7 @@ class HttpResponse
     /**
      * Get the HTTP response body
      *
+     * @access public
      * @return mixed
      */
     public function getBody()
@@ -154,9 +159,9 @@ class HttpResponse
     /**
      * Set the HTTP response body
      *
+     * @access public
      * @param string|mixed $body
-     *
-     * @return mixed
+     * @return HttpResponse
      */
     public function setBody($body)
     {
@@ -179,8 +184,8 @@ class HttpResponse
     /**
      * Total transaction time in seconds
      *
-     * @param int $time
      * @access public
+     * @param int $time
      * @return HttpResponse
      */
     public function setTransactionTime($time)
@@ -204,8 +209,8 @@ class HttpResponse
     /**
      * Average download speed
      *
-     * @param string $downloadSpeed
      * @access public
+     * @param string $downloadSpeed
      * @return HttpResponse
      */
     public function setDownloadSpeed($downloadSpeed)
@@ -229,8 +234,8 @@ class HttpResponse
     /**
      * Average upload speed
      *
-     * @param string $uploadSpeed
      * @access public
+     * @param string $uploadSpeed
      * @return HttpResponse
      */
     public function setUploadSpeed($uploadSpeed)
@@ -254,8 +259,8 @@ class HttpResponse
     /**
      * Total size of all headers received
      *
-     * @param string $headerSize
      * @access public
+     * @param string $headerSize
      * @return HttpResponse
      */
     public function setHeadersSize($headerSize)
@@ -279,8 +284,8 @@ class HttpResponse
     /**
      * Set the response error
      *
-     * @param int $error
      * @access public
+     * @param int $error
      * @return HttpResponse
      */
     public function setError($error)

@@ -2,7 +2,7 @@
 
 namespace Comertis\Http;
 
-use Comertis\Http\HttpClientException;
+use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpResponse;
@@ -182,6 +182,33 @@ class HttpClient
     }
 
     /**
+     * Get the explicitly specified IHttpExecutor implementation
+     * used for requests
+     *
+     * @access public
+     * @return string|null
+     */
+    public function getExplicitExecutor()
+    {
+        return $this->_executor->getExplicitExecutor();
+    }
+
+    /**
+     * Specify an explicit IHttpExecutor implementation to use
+     * for requests
+     *
+     * @access public
+     * @param string $executorImplementation
+     * @return HttpClient
+     */
+    public function setExplicitExecutor($executorImplementation)
+    {
+        $this->_executor->setExplicitExecutor($executorImplementation);
+
+        return $this;
+    }
+
+    /**
      * Execute a GET request
      *
      * @access public
@@ -229,7 +256,7 @@ class HttpClient
     {
         $this->_request
             ->setMethod(HttpRequestMethod::POST)
-            ->setBodyType(HttpRequestBodyType::JSON)
+            ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
         $result = $this->_executor->execute($this->_request);
@@ -266,7 +293,7 @@ class HttpClient
     {
         $this->_request
             ->setMethod(HttpRequestMethod::PUT)
-            ->setBodyType(HttpRequestBodyType::JSON)
+            ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
         $result = $this->_executor->execute($this->_request);
@@ -304,7 +331,7 @@ class HttpClient
     {
         $this->_request
             ->setMethod(HttpRequestMethod::DELETE)
-            ->setBodyType(HttpRequestBodyType::JSON)
+            ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
         $result = $this->_executor->execute($this->_request);

@@ -17,9 +17,18 @@ class HttpExecutor
      */
     private $_retry;
 
+    /**
+     * Specific IHttpExecutor implementation to use
+     *
+     * @access private
+     * @var string
+     */
+    private $_explicitExecutor;
+
     public function __construct()
     {
         $this->_retry = 1;
+        $this->_explicitExecutor = null;
     }
 
     /**
@@ -49,6 +58,31 @@ class HttpExecutor
     }
 
     /**
+     * Get the configured explicit IHttpExecutor implementation
+     *
+     * @access public
+     * @return string|null
+     */
+    public function getExplicitExecutor()
+    {
+        return $this->_explicitExecutor;
+    }
+
+    /**
+     * Specify a explicit IHttpExecutor implementation to use
+     *
+     * @access public
+     * @param string $executorImplementation
+     * @return HttpExecutor
+     */
+    public function setExplicitExecutor($executorImplementation)
+    {
+        $this->_explicitExecutor = $executorImplementation;
+
+        return $this;
+    }
+
+    /**
      * Execute the HttpRequest
      *
      * @param HttpRequest $request
@@ -57,7 +91,11 @@ class HttpExecutor
      */
     public function execute(HttpRequest $request)
     {
-        $executor = HttpExecutorFactory::getExecutor();
+        if (!is_null($this->_explicitExecutor)) {
+            $executor = HttpExecutorFactory::getExplicitExecutor($this->_explicitExecutor);
+        } else {
+            $executor = HttpExecutorFactory::getExecutor();
+        }
 
         $executor->prepareUrl($request);
         $executor->prepareHeaders($request);

@@ -1,8 +1,8 @@
 <?php
 
-namespace Comertis\Http;
+namespace Comertis\Http\Exceptions;
 
-use \Exception;
+use Exception;
 
 class HttpExecutorException extends Exception
 {

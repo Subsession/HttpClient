@@ -2,7 +2,7 @@
 
 namespace Comertis\Http;
 
-class HttpRequestBodyType
+class HttpRequestType
 {
     const NONE = "NONE";
     const FORM_DATA = "FORM_DATA";

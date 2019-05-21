@@ -13,7 +13,9 @@
   "autoload": {
     "psr-4": {
       "Comertis\\Http\\": "src/",
-      "Comertis\\Http\\Internal\\": "src/",
+      "Comertis\\Http\\Exceptions\\": "src/exceptions",
+      "Comertis\\Http\\Internal\\": "src/internal",
+      "Comertis\\Http\\Internal\\Executors\\": "src/internal/executor",
       "Comertis\\Http\\Tests\\": "tests/"
     }
   },

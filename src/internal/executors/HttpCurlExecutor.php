@@ -2,10 +2,12 @@
 
 namespace Comertis\Http\Internal\Executors;
 
-use Comertis\Http\HttpClientException;
+require_once __DIR__ . '/IHttpExecutor.php';
+
+use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\HttpRequestBodyType;
 use Comertis\Http\HttpRequestMethod;
+use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
 use Comertis\Http\HttpResult;
 use Comertis\Http\Internal\Executors\IHttpExecutor;
@@ -84,8 +86,8 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         switch ($request->getBodyType()) {
-            case HttpRequestBodyType::JSON:
-                $request->addHeaders(["Content-Type" => HttpRequestBodyType::JSON]);
+            case HttpRequestType::JSON:
+                $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
                 break;
 
             default:
@@ -105,11 +107,11 @@ class HttpCurlExecutor implements IHttpExecutor
         $params = null;
         if (!empty($params = $request->getParams())) {
             switch ($request->getBodyType()) {
-                case HttpRequestBodyType::JSON:
+                case HttpRequestType::JSON:
                     curl_setopt($this->_ch, CURLOPT_POSTFIELDS, json_encode($params));
                     break;
 
-                case HttpRequestBodyType::X_WWW_FORM_URLENCODED:
+                case HttpRequestType::X_WWW_FORM_URLENCODED:
                 default:
                     curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($params));
                     break;

@@ -4,7 +4,7 @@ namespace Comertis\Http\Tests;
 
 require_once __DIR__ . '/HttpTests.php';
 
-use Comertis\Http\HttpClientException;
+use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Tests\HttpTests;
 

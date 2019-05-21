@@ -2,11 +2,15 @@
 
 namespace Comertis\Http;
 
+use Comertis\Http\HttpRequest;
+use Comertis\Http\HttpResponse;
+
 class HttpResult
 {
     /**
      * Original HttpRequest
      *
+     * @access private
      * @var HttpRequest
      */
     private $_request;
@@ -14,6 +18,7 @@ class HttpResult
     /**
      * HttpResponse
      *
+     * @access private
      * @var HttpResponse
      */
     private $_response;
@@ -40,6 +45,7 @@ class HttpResult
     /**
      * Get the original sent HttpRequest
      *
+     * @access public
      * @return HttpRequest
      */
     public function getRequest()
@@ -50,8 +56,8 @@ class HttpResult
     /**
      * Set the HttpRequest
      *
+     * @access public
      * @param HttpRequest $request
-     *
      * @return HttpResult
      */
     public function setRequest(HttpRequest $request)
@@ -63,6 +69,7 @@ class HttpResult
     /**
      * Get the HttpResponse
      *
+     * @access public
      * @return HttpResponse
      */
     public function getResponse()
@@ -73,8 +80,8 @@ class HttpResult
     /**
      * Set the HttpResponse
      *
+     * @access public
      * @param HttpResponse $response
-     *
      * @return HttpResult
      */
     public function setResponse(HttpResponse $response)

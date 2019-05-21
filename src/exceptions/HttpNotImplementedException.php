@@ -1,6 +1,8 @@
 <?php
 
-namespace Comertis\Http;
+namespace Comertis\Http\Exceptions;
+
+use Exception;
 
 class HttpNotImplementedException extends Exception
 {

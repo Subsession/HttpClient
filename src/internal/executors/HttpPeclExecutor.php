@@ -2,9 +2,11 @@
 
 namespace Comertis\Http\Internal\Executors;
 
+require_once __DIR__ . '/../IHttpExecutor.php';
+
+use Comertis\Http\Exceptions\HttpNotImplementedException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\Internal\IHttpExecutor;
-use Comertis\Http\HttpNotImplementedException;
 
 class HttpPeclExecutor implements IHttpExecutor
 {

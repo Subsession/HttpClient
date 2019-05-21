@@ -2,7 +2,7 @@
 
 namespace Comertis\Http\Internal\Executors;
 
-use Comertis\Http\HttpExecutorException;
+use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\Internal\Executors\HttpCurlExecutor;
 use Comertis\Http\Internal\Executors\HttpExecutorImplementation;
 use Comertis\Http\Internal\Executors\HttpPeclExecutor;
@@ -44,6 +44,45 @@ class HttpExecutorFactory
         }
 
         return self::$_executor;
+    }
+
+    /**
+     * Create an explicit implementation of IHttpExecutor
+     *
+     * @static
+     * @access public
+     * @param string $executorImplementation
+     * @return IHttpExecutor|null
+     */
+    public static function getExplicitExecutor($executorImplementation)
+    {
+        $implementation = null;
+
+        switch ($executorImplementation) {
+            case HttpExecutorImplementation::CURL:
+                if (self::checkCurlImplementation()) {
+                    $implementation = new HttpCurlExecutor();
+                }
+                break;
+
+            case HttpExecutorImplementation::PECL:
+                if (self::checkPeclImplementation()) {
+                    $implementation = new HttpPeclExecutor();
+                }
+                break;
+
+            case HttpExecutorImplementation::STREAM:
+                if (self::checkStreamImplementation()) {
+                    $implementation = new HttpStreamExecutor();
+                }
+                break;
+
+            default:
+                break;
+
+        }
+
+        return $implementation;
     }
 
     /**

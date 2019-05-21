@@ -3,6 +3,7 @@
 namespace Comertis\Http\Tests;
 
 use Comertis\Http\HttpClient;
+use Comertis\Http\Internal\Executors\HttpExecutorImplementation;
 
 class HttpTests
 {
@@ -18,7 +19,8 @@ class HttpTests
     {
         $this->_httpClient = new HttpClient();
         $this->_httpClient
-            ->setRetryCount(self::RETRY_COUNT);
+            ->setRetryCount(self::RETRY_COUNT)
+            ->setExplicitExecutor(HttpExecutorImplementation::CURL);
     }
 
     protected function output($response = null)

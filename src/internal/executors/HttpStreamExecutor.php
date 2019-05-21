@@ -2,12 +2,14 @@
 
 namespace Comertis\Http\Internal\Executors;
 
-use Comertis\Http\HttpResult;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\HttpResponse;
 use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\HttpRequestBodyType;
-use Comertis\Http\Internal\IHttpExecutor;
+use Comertis\Http\HttpRequestType;
+use Comertis\Http\HttpResponse;
+use Comertis\Http\HttpResult;
+use Comertis\Http\Internal\Executors\IHttpExecutor;
+
+require_once __DIR__ . '/IHttpExecutor.php';
 
 class HttpStreamExecutor implements IHttpExecutor
 {
@@ -59,9 +61,9 @@ class HttpStreamExecutor implements IHttpExecutor
     {
         $this->_options = [
             'http' => [
-                'method'  => $request->getMethod(),
-                'header' => ''
-            ]
+                'method' => $request->getMethod(),
+                'header' => '',
+            ],
         ];
 
         foreach ($request->getHeaders() as $key => $value) {
@@ -88,11 +90,11 @@ class HttpStreamExecutor implements IHttpExecutor
         }
 
         switch ($request->getBodyType()) {
-            case HttpRequestBodyType::JSON:
+            case HttpRequestType::JSON:
                 $params = json_encode($params);
                 break;
 
-            case HttpRequestBodyType::X_WWW_FORM_URLENCODED:
+            case HttpRequestType::X_WWW_FORM_URLENCODED:
             default:
                 $params = http_build_query($params);
                 break;
@@ -110,10 +112,30 @@ class HttpStreamExecutor implements IHttpExecutor
      */
     public function execute(HttpRequest $request)
     {
-        $responseInfo = [];
+        /**
+         * @var array
+         */
         $responseHeaders = [];
-        $responseBody = null;
-        $responseStatusCode = 500;
+
+        /**
+         * @var string|bool
+         */
+        $responseBody = false;
+
+        /**
+         * @var array
+         */
+        $responseInfo = [];
+
+        /**
+         * @var int
+         */
+        $responseStatusCode = 0;
+
+        /**
+         * @var string|null
+         */
+        $responseError = null;
 
         $context = stream_context_create($this->_options);
 
@@ -121,36 +143,35 @@ class HttpStreamExecutor implements IHttpExecutor
 
         if ($stream) {
             $responseInfo = stream_get_meta_data($stream);
-        } else {
+            $responseBody = stream_get_contents($stream);
+            fclose($stream);
+        } else if (isset($http_response_header)) {
             $responseInfo['wrapper_data'] = $http_response_header;
         }
 
-        // Headers
-        $headers = $responseInfo['wrapper_data'];
-        for ($i = 1; $i < count($headers); $i++) {
-            $currentHeader = explode(":", $headers[$i], 2);
-            $responseHeaders[trim($currentHeader[0])] = trim($currentHeader[1]);
+        if (isset($responseInfo['wrapper_data'])) {
+            $headers = $responseInfo['wrapper_data'];
+
+            for ($i = 1; $i < count($headers); $i++) {
+                $currentHeader = explode(":", $headers[$i], 2);
+                $responseHeaders[trim($currentHeader[0])] = trim($currentHeader[1]);
+            }
+
+            $match = [];
+            $status_line = $responseInfo['wrapper_data'][0];
+
+            preg_match('{HTTP\/\S*\s(\d{3})}', $status_line, $match);
+
+            if (isset($match[1])) {
+                $responseStatusCode = (int) $match[1];
+            }
         }
 
-        // Body
-        if ($stream) {
-            $responseBody = stream_get_contents($stream);
-        }
-
-        // Status Code
-        $match = [];
-        $status_line = $responseInfo['wrapper_data'][0];
-
-        preg_match('{HTTP\/\S*\s(\d{3})}', $status_line, $match);
-
-        $responseStatusCode = (int)$match[1];
-
-        // Cleanup
-        if ($stream) {
-            fclose($stream);
-        }
-
-        $response = new HttpResponse($responseHeaders, $responseStatusCode, $responseBody);
+        $response = new HttpResponse();
+        $response->setBody($responseBody)
+            ->setHeaders($responseHeaders)
+            ->setStatusCode($responseStatusCode)
+            ->setError($responseError);
 
         return new HttpResult($request, $response);
     }
