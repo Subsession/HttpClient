@@ -110,6 +110,7 @@ class HttpClient
     /**
      * @see HttpRequest::addHeaders()
      *
+     * @access public
      * @param array $headers
      * @return HttpClient
      */
@@ -123,6 +124,7 @@ class HttpClient
     /**
      * @see HttpRequest::setHeaders()
      *
+     * @access public
      * @return HttpClient
      */
     public function clearHeaders()
@@ -171,8 +173,8 @@ class HttpClient
     /**
      * @see HttpExecutor::setRetryCount()
      *
-     * @param int $retryCount Number of retries on a connection before giving up
      * @access public
+     * @param int $retryCount Number of retries on a connection before giving up
      * @return HttpClient
      */
     public function setRetryCount($retryCount)
