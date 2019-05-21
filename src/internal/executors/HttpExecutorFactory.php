@@ -51,12 +51,41 @@ class HttpExecutorFactory
      *
      * @static
      * @access public
-     * @param string $executorImplementation
+     * @param string|array $executorImplementation
      * @return IHttpExecutor|null
      */
     public static function getExplicitExecutor($executorImplementation)
     {
         $implementation = null;
+
+        if (is_array($executorImplementation)) {
+            foreach ($executorImplementation as $key => $value) {
+                switch ($value) {
+                    case HttpExecutorImplementation::CURL:
+                        if (self::checkCurlImplementation()) {
+                            return new HttpCurlExecutor();
+                        }
+                        break;
+
+                    case HttpExecutorImplementation::PECL:
+                        if (self::checkPeclImplementation()) {
+                            return new HttpPeclExecutor();
+                        }
+                        break;
+
+                    case HttpExecutorImplementation::STREAM:
+                        if (self::checkStreamImplementation()) {
+                            return new HttpStreamExecutor();
+                        }
+                        break;
+
+                    default:
+                        return $implementation;
+                        break;
+
+                }
+            }
+        }
 
         switch ($executorImplementation) {
             case HttpExecutorImplementation::CURL:
@@ -75,9 +104,6 @@ class HttpExecutorFactory
                 if (self::checkStreamImplementation()) {
                     $implementation = new HttpStreamExecutor();
                 }
-                break;
-
-            default:
                 break;
 
         }

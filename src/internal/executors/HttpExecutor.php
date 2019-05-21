@@ -2,7 +2,7 @@
 
 namespace Comertis\Http\Internal\Executors;
 
-use Comertis\Http\HttpExecutorException;
+use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Internal\Executors\HttpExecutorFactory;
@@ -72,7 +72,7 @@ class HttpExecutor
      * Specify a explicit IHttpExecutor implementation to use
      *
      * @access public
-     * @param string $executorImplementation
+     * @param string|array $executorImplementation
      * @return HttpExecutor
      */
     public function setExplicitExecutor($executorImplementation)
@@ -85,8 +85,8 @@ class HttpExecutor
     /**
      * Execute the HttpRequest
      *
-     * @param HttpRequest $request
      * @access public
+     * @param HttpRequest $request
      * @return HttpResult
      */
     public function execute(HttpRequest $request)

@@ -198,10 +198,12 @@ class HttpClient
 
     /**
      * Specify an explicit IHttpExecutor implementation to use
-     * for requests
+     * for requests, either just one, or a array with the preffered
+     * order of the available implementations.
+     * @see HttpExecutorImplementation
      *
      * @access public
-     * @param string $executorImplementation
+     * @param string|array $executorImplementation
      * @return HttpClient
      */
     public function setExplicitExecutor($executorImplementation)
