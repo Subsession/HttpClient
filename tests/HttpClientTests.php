@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 final class HttpClientTests extends TestCase
 {
+    /**
+     * @var HttpClient
+     */
     private $_httpClient;
 
     const BASE_URL = "http://jsonplaceholder.typicode.com/";
@@ -15,6 +18,7 @@ final class HttpClientTests extends TestCase
     public function __construct()
     {
         $this->_httpClient = new HttpClient();
+        parent::__construct();
     }
 
     public function testExpect200Response()
@@ -23,7 +27,7 @@ final class HttpClientTests extends TestCase
             ->setUrl(self::BASE_URL . "posts/1")
             ->get();
 
-        $this->assertEqual(
+        $this->assertEquals(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -39,7 +43,7 @@ final class HttpClientTests extends TestCase
             ->setUrl(self::BASE_URL . "post/222222")
             ->get();
 
-        $this->assertEqual(
+        $this->assertEquals(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
@@ -72,7 +76,7 @@ final class HttpClientTests extends TestCase
             $response->getStatusCode()
         );
 
-        $this->assertEqual(
+        $this->assertEquals(
             '{}',
             $response->getBody()
         );
