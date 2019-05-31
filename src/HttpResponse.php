@@ -1,16 +1,58 @@
 <?php
+/**
+ * PHP Version 7
+ *
+ * LICENSE:
+ * Permission is hereby granted, free of charge, to any
+ * person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall
+ * be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  GIT: &Id&
+ * @link     https://github.com/Comertis/Cache
+ */
 
 namespace Comertis\Http;
 
 use Comertis\Http\HttpStatusCode;
 
+/**
+ * Undocumented class
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.0.0
+ * @link     https://github.com/Comertis/Cache
+ */
 class HttpResponse
 {
     /**
      * Response headers
      *
      * @access private
-     * @var array
+     * @var    array
      */
     private $_headers;
 
@@ -18,7 +60,7 @@ class HttpResponse
      * Response HTTP status code
      *
      * @access private
-     * @var int
+     * @var    integer
      */
     private $_statusCode;
 
@@ -26,7 +68,7 @@ class HttpResponse
      * Response body
      *
      * @access private
-     * @var mixed
+     * @var    mixed
      */
     private $_body;
 
@@ -34,7 +76,7 @@ class HttpResponse
      * Total transaction time in seconds for last transfer
      *
      * @access private
-     * @var int
+     * @var    integer
      */
     private $_transactionTime;
 
@@ -42,7 +84,7 @@ class HttpResponse
      * Average download speed
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_downloadSpeed;
 
@@ -50,7 +92,7 @@ class HttpResponse
      * Average upload speed
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_uploadSpeed;
 
@@ -58,7 +100,7 @@ class HttpResponse
      * Total size of all headers received
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_headerSize;
 
@@ -66,16 +108,16 @@ class HttpResponse
      * Response error message
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_error;
 
     /**
      * HttpResponse instance for HttpClient
      *
-     * @param array $headers
-     * @param int $statusCode
-     * @param mixed|string $body
+     * @param array        $headers    Response headers
+     * @param integer      $statusCode Response status code
+     * @param mixed|string $body       Response body
      */
     public function __construct($headers = [], $statusCode = null, $body = null)
     {
@@ -88,6 +130,9 @@ class HttpResponse
         $this->_body = $body;
     }
 
+    /**
+     * Destructor
+     */
     public function __destruct()
     {
         foreach ($this as $key => $value) {
@@ -96,7 +141,7 @@ class HttpResponse
     }
 
     /**
-     * Get the HTTP response headers
+     * Get the response headers
      *
      * @access public
      * @return array
@@ -107,10 +152,11 @@ class HttpResponse
     }
 
     /**
-     * Set the HTTP response headers
+     * Set the response headers
+     *
+     * @param array $headers Response headers
      *
      * @access public
-     * @param array $headers
      * @return HttpResponse
      */
     public function setHeaders($headers)
@@ -121,10 +167,10 @@ class HttpResponse
     }
 
     /**
-     * Get the HTTP response status code
+     * Get the response status code
      *
      * @access public
-     * @return int
+     * @return integer
      */
     public function getStatusCode()
     {
@@ -132,10 +178,12 @@ class HttpResponse
     }
 
     /**
-     * Set the HTTP response status code
+     * Set the response status code
+     *
+     * @param integer $statusCode Status code
      *
      * @access public
-     * @param int $statusCode
+     * @see    HttpStatusCode
      * @return HttpResponse
      */
     public function setStatusCode($statusCode)
@@ -146,7 +194,7 @@ class HttpResponse
     }
 
     /**
-     * Get the HTTP response body
+     * Get the response body
      *
      * @access public
      * @return mixed
@@ -157,10 +205,11 @@ class HttpResponse
     }
 
     /**
-     * Set the HTTP response body
+     * Set the response body
+     *
+     * @param string|mixed $body Response body
      *
      * @access public
-     * @param string|mixed $body
      * @return HttpResponse
      */
     public function setBody($body)
@@ -174,7 +223,7 @@ class HttpResponse
      * Total transaction time in seconds
      *
      * @access public
-     * @return int
+     * @return integer
      */
     public function getTransactionTime()
     {
@@ -184,8 +233,9 @@ class HttpResponse
     /**
      * Total transaction time in seconds
      *
+     * @param integer $time Transaction time in seconds
+     *
      * @access public
-     * @param int $time
      * @return HttpResponse
      */
     public function setTransactionTime($time)
@@ -196,7 +246,7 @@ class HttpResponse
     }
 
     /**
-     * Average download speed
+     * Get the average download speed
      *
      * @access public
      * @return string
@@ -207,10 +257,11 @@ class HttpResponse
     }
 
     /**
-     * Average download speed
+     * Set the average download speed
+     *
+     * @param string $downloadSpeed Download speed
      *
      * @access public
-     * @param string $downloadSpeed
      * @return HttpResponse
      */
     public function setDownloadSpeed($downloadSpeed)
@@ -221,7 +272,7 @@ class HttpResponse
     }
 
     /**
-     * Average upload speed
+     * Get the average upload speed
      *
      * @access public
      * @return string
@@ -232,10 +283,11 @@ class HttpResponse
     }
 
     /**
-     * Average upload speed
+     * Set the average upload speed
+     *
+     * @param string $uploadSpeed Upload speed
      *
      * @access public
-     * @param string $uploadSpeed
      * @return HttpResponse
      */
     public function setUploadSpeed($uploadSpeed)
@@ -246,7 +298,7 @@ class HttpResponse
     }
 
     /**
-     * Total size of all headers received
+     * Get the total size of all headers received
      *
      * @access public
      * @return string
@@ -257,10 +309,11 @@ class HttpResponse
     }
 
     /**
-     * Total size of all headers received
+     * Set the total size of all headers received
+     *
+     * @param string $headerSize Header size
      *
      * @access public
-     * @param string $headerSize
      * @return HttpResponse
      */
     public function setHeadersSize($headerSize)
@@ -284,8 +337,9 @@ class HttpResponse
     /**
      * Set the response error
      *
+     * @param integer $error Error message
+     *
      * @access public
-     * @param int $error
      * @return HttpResponse
      */
     public function setError($error)

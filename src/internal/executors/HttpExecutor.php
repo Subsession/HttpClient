@@ -1,4 +1,36 @@
 <?php
+/**
+ * PHP Version 7
+ *
+ * LICENSE:
+ * Permission is hereby granted, free of charge, to any
+ * person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall
+ * be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  GIT: &Id&
+ * @link     https://github.com/Comertis/Cache
+ */
 
 namespace Comertis\Http\Internal\Executors;
 
@@ -7,13 +39,23 @@ use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Internal\Executors\HttpExecutorFactory;
 
+/**
+ * Undocumented class
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.0.0
+ * @link     https://github.com/Comertis/Cache
+ */
 class HttpExecutor
 {
     /**
      * Request retry count
      *
      * @access private
-     * @var int
+     * @var    integer
      */
     private $_retry;
 
@@ -21,21 +63,42 @@ class HttpExecutor
      * Specific IHttpExecutor implementation to use
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_explicitExecutor;
 
+    /**
+     * Default number of retries for HttpRequests
+     *
+     * @access public
+     * @var    integer
+     */
+    const DEFAULT_RETRY_COUNT = 1;
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->_retry = 1;
+        $this->_retry = self::DEFAULT_RETRY_COUNT;
         $this->_explicitExecutor = null;
+    }
+
+    /**
+     * Destructor
+     */
+    public function __destruct()
+    {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
     }
 
     /**
      * Get the configured retry count for requests
      *
      * @access public
-     * @return int
+     * @return integer
      */
     public function getRetryCount()
     {
@@ -46,8 +109,9 @@ class HttpExecutor
      * Set the number of times to retry a request
      * in case of failing to get a response
      *
+     * @param integer $retryCount Number of retries
+     *
      * @access public
-     * @param int $retryCount
      * @return HttpExecutor
      */
     public function setRetryCount($retryCount)
@@ -71,8 +135,9 @@ class HttpExecutor
     /**
      * Specify a explicit IHttpExecutor implementation to use
      *
+     * @param string|array $executorImplementation Executor implementation
+     *
      * @access public
-     * @param string|array $executorImplementation
      * @return HttpExecutor
      */
     public function setExplicitExecutor($executorImplementation)
@@ -85,8 +150,10 @@ class HttpExecutor
     /**
      * Execute the HttpRequest
      *
+     * @param HttpRequest $request HttpRequest instance to execute
+     *
      * @access public
-     * @param HttpRequest $request
+     * @see    IHttpExecutor::execute()
      * @return HttpResult
      */
     public function execute(HttpRequest $request)
@@ -109,6 +176,7 @@ class HttpExecutor
             }
         }
 
-        throw new HttpExecutorException("Failed to get response after " . $this->getRetryCount() . " tries.");
+        $message = "Failed to get response after " . $this->getRetryCount() . " tries.";
+        throw new HttpExecutorException($message);
     }
 }

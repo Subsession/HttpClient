@@ -1,10 +1,43 @@
 <?php
+/**
+ * PHP Version 7
+ *
+ * LICENSE:
+ * Permission is hereby granted, free of charge, to any
+ * person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall
+ * be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  GIT: &Id&
+ * @link     https://github.com/Comertis/Cache
+ */
 
 namespace Comertis\Http\Internal\Executors;
 
 require_once __DIR__ . '/IHttpExecutor.php';
 
 use Comertis\Http\Exceptions\HttpClientException;
+use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
@@ -15,74 +48,123 @@ use Comertis\Http\Internal\Executors\IHttpExecutor;
 /**
  * IHttpExecutor implementation using the cURL
  * php extension
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.0.0
+ * @link     https://github.com/Comertis/Cache
  */
 class HttpCurlExecutor implements IHttpExecutor
 {
     /**
-     * cURL instance
+     * CURL instance
      *
      * @access private
-     * @var resource
+     * @var    resource
      */
     private $_ch;
 
+    /**
+     * Expected extensions for this IHttpExecutor implementation
+     * to work properly
+     *
+     * @access public
+     * @var    array
+     */
+    const EXPECTED_EXTENSIONS = [
+        "curl",
+    ];
+
+    /**
+     * Expected functions for this IHttpExecutor implementation
+     * to work properly
+     *
+     * @access public
+     * @var    array
+     */
+    const EXPECTED_FUNCTIONS = [
+        "curl_init",
+        "curl_close",
+        "curl_setopt",
+        "curl_exec",
+        "curl_errno",
+        "curl_getinfo",
+    ];
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->_ch = curl_init();
     }
 
+    /**
+     * Destructor
+     */
     public function __destruct()
     {
         curl_close($this->_ch);
     }
 
     /**
-     * @see IHttpExecutor::prepareUrl()
+     * Prepare the request URL
      *
-     * @param HttpRequest $request
+     * @param HttpRequest $request HttpRequest instance, passed by reference
+     *
      * @access public
+     * @see    IHttpExecutor::prepareUrl()
      * @return void
      */
     public function prepareUrl(HttpRequest &$request)
     {
-        $params = null;
-        if (empty($params = $request->getParams())) {
+        if (empty($request->getParams())) {
             return;
         }
 
-        if ($request->getMethod() == HttpRequestMethod::GET) {
+        $params = $request->getParams();
 
-            $url = $request->getUrl();
-            $url .= "?";
-
-            foreach ($params as $key => $value) {
-                $url .= $key . "=" . $value . "&";
-            }
-
-            $url = trim($url, "&");
-
-            $request->setUrl($url);
+        if ($request->getMethod() !== HttpRequestMethod::GET) {
+            return;
         }
+
+        $url = $request->getUrl();
+        $url .= "?";
+
+        foreach ($params as $key => $value) {
+            $url .= $key . "=" . $value . "&";
+        }
+
+        $url = trim($url, "&");
+
+        $request->setUrl($url);
     }
 
     /**
-     * @see IHttpExecutor::prepareHeaders()
+     * Prepare the request headers
      *
-     * @param HttpRequest $request
+     * @param HttpRequest $request HttpRequest instance, passed by reference
+     *
      * @access public
+     * @see    IHttpExecutor::prepareHeaders()
      * @return void
      */
     public function prepareHeaders(HttpRequest &$request)
     {
-        $params = null;
-        if (!empty($params = $request->getParams())) {
-            if (is_array($params)) {
-                $request->addHeaders(["Content-Length" => strlen(implode($params))]);
-            } else if (is_object($params)) {
-                $request->addHeaders(["Content-Length" => strlen(serialize($params))]);
-            } else {
-                $request->addHeaders(["Content-Length" => strlen($params)]);
-            }
+        if (empty($request->getParams())) {
+            return;
+        }
+
+        $params = $request->getParams();
+
+        if (is_array($params)) {
+            $request->addHeaders(["Content-Length" => strlen(implode($params))]);
+        } else if (is_object($params)) {
+            $request->addHeaders(["Content-Length" => strlen(serialize($params))]);
+        } else {
+            $request->addHeaders(["Content-Length" => strlen($params)]);
         }
 
         switch ($request->getBodyType()) {
@@ -96,60 +178,83 @@ class HttpCurlExecutor implements IHttpExecutor
     }
 
     /**
-     * @see IHttpExecutor::prepareParams()
+     * Prepare the request parameters
      *
-     * @param HttpRequest $request
+     * @param HttpRequest $request HttpRequest instance, passed by reference
+     *
      * @access public
+     * @see    IHttpExecutor::prepareParams()
      * @return void
      */
     public function prepareParams(HttpRequest &$request)
     {
-        $params = null;
-        if (!empty($params = $request->getParams())) {
-            switch ($request->getBodyType()) {
-                case HttpRequestType::JSON:
-                    curl_setopt($this->_ch, CURLOPT_POSTFIELDS, json_encode($params));
-                    break;
-
-                case HttpRequestType::X_WWW_FORM_URLENCODED:
-                default:
-                    curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($params));
-                    break;
-            }
+        if (empty($request->getParams())) {
+            return;
         }
+
+        $params = $request->getParams();
+
+        switch ($request->getBodyType()) {
+            case HttpRequestType::JSON:
+                $params = json_encode($params);
+                break;
+
+            case HttpRequestType::X_WWW_FORM_URLENCODED:
+            default:
+                $params = http_build_query($params);
+                break;
+        }
+
+        if (empty($params) | is_null($params)) {
+            throw new HttpExecutorException("Failed to parse request parameters");
+        }
+
+        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
     }
 
     /**
-     * @see IHttpExecutor::execute()
+     * Execute the request
+     *
+     * @param HttpRequest $request HttpRequest instance to execute
      *
      * @access private
-     * @param HttpRequest $request
+     * @see    IHttpExecutor::execute()
      * @throws HttpClientException
      * @return HttpResult
      */
     public function execute(HttpRequest $request)
     {
         /**
+         * Response headers
+         *
          * @var array
          */
         $responseHeaders = [];
 
         /**
+         * Response body
+         *
          * @var string|bool
          */
         $responseBody = false;
 
         /**
+         * Response metadata
+         *
          * @var array
          */
         $responseInfo = [];
 
         /**
-         * @var int
+         * Response status code
+         *
+         * @var integer
          */
         $responseStatusCode = 500;
 
         /**
+         * Response error message
+         *
          * @var string|null
          */
         $responseError = null;
@@ -161,18 +266,20 @@ class HttpCurlExecutor implements IHttpExecutor
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
 
-        curl_setopt($this->_ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$responseHeaders) {
-            $headerLength = strlen($header);
-            $header = explode(':', $header, 2);
+        curl_setopt($this->_ch, CURLOPT_HEADERFUNCTION,
+            function ($curl, $header) use (&$responseHeaders) {
+                $headerLength = strlen($header);
+                $header = explode(':', $header, 2);
 
-            if (count($header) < 2) {
+                if (count($header) < 2) {
+                    return $headerLength;
+                }
+
+                $responseHeaders[trim($header[0])] = trim($header[1]);
+
                 return $headerLength;
             }
-
-            $responseHeaders[trim($header[0])] = trim($header[1]);
-
-            return $headerLength;
-        });
+        );
 
         $responseBody = curl_exec($this->_ch);
 
@@ -181,7 +288,8 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         if (!$responseBody) {
-            throw new HttpClientException("Failed to get response. Error: " . $responseError ?: "No error message to show.");
+            $message = "Failed to get response. Error: " . $responseError ?? "No error message to show.";
+            throw new HttpClientException($message);
         }
 
         $responseInfo = curl_getinfo($this->_ch);

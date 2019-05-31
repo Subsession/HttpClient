@@ -1,4 +1,36 @@
 <?php
+/**
+ * PHP Version 7
+ *
+ * LICENSE:
+ * Permission is hereby granted, free of charge, to any
+ * person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall
+ * be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  GIT: &Id&
+ * @link     https://github.com/Comertis/Cache
+ */
 
 namespace Comertis\Http;
 
@@ -10,7 +42,14 @@ use Comertis\Http\HttpResponse;
 use Comertis\Http\Internal\Executors\HttpExecutor;
 
 /**
- * Http client wrapper for cURL
+ * Undocumented class
+ *
+ * @category Http
+ * @package  Comertis\Http
+ * @author   Cristian Moraru <cristian@comertis.com>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.0.0
+ * @link     https://github.com/Comertis/Cache
  */
 class HttpClient
 {
@@ -18,7 +57,8 @@ class HttpClient
      * Holds the request information
      *
      * @access private
-     * @var HttpRequest
+     * @see    HttpRequest
+     * @var    HttpRequest
      */
     private $_request;
 
@@ -26,7 +66,8 @@ class HttpClient
      * Holds the response information once a request has been executed
      *
      * @access private
-     * @var HttpResponse
+     * @see    HttpResponse
+     * @var    HttpResponse
      */
     private $_response;
 
@@ -34,22 +75,31 @@ class HttpClient
      * Responsible for executing a HttpRequest
      *
      * @access private
-     * @var HttpExecutor
+     * @see    HttpExecutor
+     * @var    HttpExecutor
      */
     private $_executor;
 
     /**
-     * @param string|null $url
+     * Constructor
+     *
+     * @param string|null $url Base url
      */
     public function __construct($url = null)
     {
         $this->_request = new HttpRequest();
-        $this->_request->setUrl($url);
+
+        if (!is_null($url)) {
+            $this->_request->setUrl($url);
+        }
 
         $this->_response = new HttpResponse();
         $this->_executor = new HttpExecutor();
     }
 
+    /**
+     * Destructor
+     */
     public function __destruct()
     {
         foreach ($this as $key => $value) {
@@ -58,6 +108,8 @@ class HttpClient
     }
 
     /**
+     * Get the request URL
+     *
      * @see HttpRequest::getUrl()
      *
      * @access public
@@ -69,13 +121,15 @@ class HttpClient
     }
 
     /**
-     * @see HttpRequest::setUrl()
+     * Set the request URL
+     *
+     * @param string $url Request URL
      *
      * @access public
-     * @param string $url
+     * @see    HttpRequest::setUrl()
      * @return HttpClient
      */
-    public function setUrl($url = null)
+    public function setUrl($url)
     {
         $this->_request->setUrl($url);
 
@@ -83,9 +137,10 @@ class HttpClient
     }
 
     /**
-     * @see HttpRequest::getHeaders()
+     * Get the request headers
      *
      * @access public
+     * @see    HttpRequest::getHeaders()
      * @return array
      */
     public function getHeaders()
@@ -94,10 +149,12 @@ class HttpClient
     }
 
     /**
-     * @see HttpRequest::setHeaders()
+     * Set the request headers
+     *
+     * @param array $headers Key => Value pair array of headers
      *
      * @access public
-     * @param array $headers
+     * @see    HttpRequest::setHeaders()
      * @return HttpClient
      */
     public function setHeaders(array $headers)
@@ -108,10 +165,12 @@ class HttpClient
     }
 
     /**
-     * @see HttpRequest::addHeaders()
+     * Add headers to the request
+     *
+     * @param array $headers Key => Value pair array of headers
      *
      * @access public
-     * @param array $headers
+     * @see    HttpRequest::addHeaders()
      * @return HttpClient
      */
     public function addHeaders(array $headers)
@@ -122,9 +181,10 @@ class HttpClient
     }
 
     /**
-     * @see HttpRequest::setHeaders()
+     * Clear all headers from the request
      *
      * @access public
+     * @see    HttpRequest::setHeaders()
      * @return HttpClient
      */
     public function clearHeaders()
@@ -138,6 +198,7 @@ class HttpClient
      * Get the HttpClient request
      *
      * @access public
+     * @see    HttpClient
      * @return HttpRequest
      */
     public function getRequest()
@@ -148,8 +209,9 @@ class HttpClient
     /**
      * Set the HttpClient request
      *
+     * @param HttpRequest $request HttpRequest instance
+     *
      * @access public
-     * @param HttpRequest $request
      * @return HttpClient
      */
     public function setRequest(HttpRequest $request)
@@ -160,10 +222,11 @@ class HttpClient
     }
 
     /**
-     * @see HttpExecutor::getRetryCount()
+     * Get the configured retry count for requests
      *
      * @access public
-     * @return int
+     * @see    HttpExecutor::getRetryCount()
+     * @return integer
      */
     public function getRetryCount()
     {
@@ -171,10 +234,12 @@ class HttpClient
     }
 
     /**
-     * @see HttpExecutor::setRetryCount()
+     * Set the retry count for requests
+     *
+     * @param integer $retryCount Number of retries on a connection before giving up
      *
      * @access public
-     * @param int $retryCount Number of retries on a connection before giving up
+     * @see    HttpExecutor::setRetryCount()
      * @return HttpClient
      */
     public function setRetryCount($retryCount)
@@ -198,12 +263,14 @@ class HttpClient
 
     /**
      * Specify an explicit IHttpExecutor implementation to use
-     * for requests, either just one, or a array with the preffered
+     * for requests, either just one, or a array with the preferred
      * order of the available implementations.
-     * @see HttpExecutorImplementation
+     *
+     * @param string|array $executorImplementation HttpExecutorImplementation
+     *                                             implementation
      *
      * @access public
-     * @param string|array $executorImplementation
+     * @see    HttpExecutorImplementation
      * @return HttpClient
      */
     public function setExplicitExecutor($executorImplementation)
@@ -216,11 +283,12 @@ class HttpClient
     /**
      * Execute a GET request
      *
-     * @access public
      * @param array $params Parameters to include in the request
+     *
+     * @access public
      * @return HttpResponse
      */
-    public function get(array $params = [])
+    public function get($params = [])
     {
         $this->_request
             ->setMethod(HttpRequestMethod::GET)
@@ -234,8 +302,9 @@ class HttpClient
     /**
      * Execute a POST request
      *
-     * @access public
      * @param array $params Parameters to include in the request
+     *
+     * @access public
      * @return HttpResponse
      */
     public function post($params = [])
@@ -252,8 +321,9 @@ class HttpClient
     /**
      * Execute a POST request with JSON formatted parameters
      *
-     * @access public
      * @param array|mixed|object $params Parameters to include in the request
+     *
+     * @access public
      * @throws HttpClientException
      * @return HttpResponse
      */
@@ -272,8 +342,9 @@ class HttpClient
     /**
      * Execute a PUT request
      *
-     * @access public
      * @param array|mixed|object $params Parameters to include in the request
+     *
+     * @access public
      * @return HttpResponse
      */
     public function put($params = [])
@@ -290,8 +361,9 @@ class HttpClient
     /**
      * Execute a PUT request with JSON formatted parameters
      *
-     * @access public
      * @param array|mixed|object $params Parameters to be json encoded
+     *
+     * @access public
      * @return HttpResponse
      */
     public function putJson($params = [])
@@ -309,8 +381,9 @@ class HttpClient
     /**
      * Execute a DELETE request
      *
-     * @access public
      * @param array $params Parameters to include in the request
+     *
+     * @access public
      * @return HttpResponse
      */
     public function delete($params = [])
@@ -327,8 +400,9 @@ class HttpClient
     /**
      * Execute a DELETE request with JSON encoded parameters
      *
-     * @access public
      * @param array $params Parameters to be json encoded
+     *
+     * @access public
      * @throws HttpClientException
      * @return HttpResponse
      */
