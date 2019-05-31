@@ -164,13 +164,13 @@ class HttpClientGetTests extends HttpTests
         return $result;
     }
 
-    public function getErrorResposne()
+    public function getErrorResponse()
     {
         $result = true;
         try {
 
             $response = $this->_httpClient
-                ->setUrl('http://404.php.net/')
+                ->setUrl(self::BASE_URL . "posts/222222222")
                 ->get();
 
             $this->output($response);
