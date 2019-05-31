@@ -29,7 +29,7 @@
  * @author   Cristian Moraru <cristian@comertis.com>
  * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/Cache
+ * @link     https://github.com/Comertis/HttpClient
  */
 
 namespace Comertis\Http;
@@ -44,7 +44,7 @@ use Comertis\Http\HttpStatusCode;
  * @author   Cristian Moraru <cristian@comertis.com>
  * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/Cache
+ * @link     https://github.com/Comertis/HttpClient
  */
 class HttpResponse
 {
