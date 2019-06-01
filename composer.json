@@ -1,24 +1,39 @@
 {
   "name": "comertis/http",
-  "description": "A object-oriented Http wrapper for cURL",
+  "description": "A object-oriented Http connection library",
   "type": "library",
   "minimum-stability": "stable",
   "license": "MIT",
+  "prefer-stable": true,
+  "readme": "README.md",
   "authors": [
     {
       "name": "Cristian Moraru",
-      "email": "cristian@comertis.com"
+      "email": "cristian@comertis.com",
+      "role": "Developer"
     }
   ],
+  "support": {
+    "issues": "https://github.com/Comertis/HttpClient/issues",
+    "source": "https://github.com/Comertis/HttpClient",
+    "docs": "https://github.com/Comertis/HttpClient/tree/master/docs"
+  },
   "autoload": {
-    "files": [
-      "src/internal/executors/IHttpExecutor.php"
-    ],
     "psr-4": {
       "Comertis\\Http\\": "src/",
       "Comertis\\Http\\Exceptions\\": "src/exceptions",
       "Comertis\\Http\\Internal\\": "src/internal",
-      "Comertis\\Http\\Internal\\Executors\\": "src/internal/executor",
+      "Comertis\\Http\\Internal\\Executors\\": "src/internal/executor"
+    },
+    "exclude-from-classmap": [
+      "/test/**",
+      "/tests/**",
+      "/Test/**",
+      "/Tests/**"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Comertis\\Http\\Tests\\": "tests/"
     }
   },
@@ -27,5 +42,10 @@
   },
   "require-dev": {
     "phpunit/phpunit": "7"
+  },
+  "suggest": {
+    "ext-curl": "*",
+    "ext-json": "*",
+    "lib-curl": "*"
   }
 }
