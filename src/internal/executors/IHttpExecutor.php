@@ -40,6 +40,8 @@ use Comertis\Http\HttpRequest;
  * Defines the minimum necessary for a HttpExecutor
  * implementation regardless of used library or extension
  *
+ * @uses Comertis\Http\HttpRequest
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>

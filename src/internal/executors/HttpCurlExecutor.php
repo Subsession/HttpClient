@@ -36,7 +36,6 @@ namespace Comertis\Http\Internal\Executors;
 
 require_once __DIR__ . '/IHttpExecutor.php';
 
-use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
@@ -46,8 +45,16 @@ use Comertis\Http\HttpResult;
 use Comertis\Http\Internal\Executors\IHttpExecutor;
 
 /**
- * IHttpExecutor implementation using the cURL
- * php extension
+ * IHttpExecutor implementation using the CURL
+ * PHP extension
+ *
+ * @uses Comertis\Http\Exceptions\HttpExecutorException
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpRequestMethod
+ * @uses Comertis\Http\HttpRequestType
+ * @uses Comertis\Http\HttpResponse
+ * @uses Comertis\Http\HttpResult
+ * @uses Comertis\Http\Internal\Executors\IHttpExecutor
  *
  * @category Http
  * @package  Comertis\Http
@@ -110,13 +117,7 @@ class HttpCurlExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request URL
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareUrl()
-     * @return void
+     * @inheritDoc
      */
     public function prepareUrl(HttpRequest &$request)
     {
@@ -145,13 +146,7 @@ class HttpCurlExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request headers
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareHeaders()
-     * @return void
+     * @inheritDoc
      */
     public function prepareHeaders(HttpRequest &$request)
     {
@@ -180,13 +175,7 @@ class HttpCurlExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request parameters
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareParams()
-     * @return void
+     * @inheritDoc
      */
     public function prepareParams(HttpRequest &$request)
     {
@@ -215,14 +204,7 @@ class HttpCurlExecutor implements IHttpExecutor
     }
 
     /**
-     * Execute the request
-     *
-     * @param HttpRequest $request HttpRequest instance to execute
-     *
-     * @access private
-     * @see    IHttpExecutor::execute()
-     * @throws HttpClientException
-     * @return HttpResult
+     * @inheritDoc
      */
     public function execute(HttpRequest $request)
     {

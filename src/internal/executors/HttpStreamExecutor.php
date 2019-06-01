@@ -46,6 +46,13 @@ require_once __DIR__ . '/IHttpExecutor.php';
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpRequestMethod
+ * @uses Comertis\Http\HttpRequestType
+ * @uses Comertis\Http\HttpResponse
+ * @uses Comertis\Http\HttpResult
+ * @uses Comertis\Http\Internal\Executors\IHttpExecutor
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
@@ -90,13 +97,7 @@ class HttpStreamExecutor implements IHttpExecutor
     ];
 
     /**
-     * Prepare the request URL
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareUrl()
-     * @return void
+     * @inheritDoc
      */
     public function prepareUrl(HttpRequest &$request)
     {
@@ -123,13 +124,7 @@ class HttpStreamExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request headers
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareHeaders()
-     * @return void
+     * @inheritDoc
      */
     public function prepareHeaders(HttpRequest &$request)
     {
@@ -150,13 +145,7 @@ class HttpStreamExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request parameters
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareParams()
-     * @return void
+     * @inheritDoc
      */
     public function prepareParams(HttpRequest &$request)
     {
@@ -185,13 +174,7 @@ class HttpStreamExecutor implements IHttpExecutor
     }
 
     /**
-     * Execute the request
-     *
-     * @param HttpRequest $request HttpRequest instance
-     *
-     * @access public
-     * @see    IHttpExecutor::execute()
-     * @return HttpResult
+     * @inheritDoc
      */
     public function execute(HttpRequest $request)
     {

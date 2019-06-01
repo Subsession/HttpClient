@@ -39,6 +39,8 @@ use Comertis\Http\HttpStatusCode;
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\HttpStatusCode
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>

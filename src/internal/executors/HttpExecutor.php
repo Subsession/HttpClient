@@ -42,6 +42,11 @@ use Comertis\Http\Internal\Executors\HttpExecutorFactory;
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\Exceptions\HttpExecutorException
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpStatusCode
+ * @uses Comertis\Http\Internal\Executors\HttpExecutorFactory
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>

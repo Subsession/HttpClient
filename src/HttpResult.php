@@ -40,6 +40,9 @@ use Comertis\Http\HttpResponse;
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpResponse
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>

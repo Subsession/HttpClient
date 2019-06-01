@@ -43,6 +43,11 @@ use Comertis\Http\Internal\Executors\HttpStreamExecutor;
  * Responsible for creating an implementation of IHttpExecutor
  * based on available PHP extensions and/or functions
  *
+ * @uses Comertis\Http\Exceptions\HttpExecutorException
+ * @uses Comertis\Http\Internal\Executors\HttpCurlExecutor
+ * @uses Comertis\Http\Internal\Executors\HttpPeclExecutor
+ * @uses Comertis\Http\Internal\Executors\HttpStreamExecutor
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
@@ -68,8 +73,8 @@ class HttpExecutorFactory
      *
      * @static
      * @access public
-     * @return IHttpExecutor
      * @throws HttpExecutorException
+     * @return IHttpExecutor
      */
     public static function getExecutor()
     {

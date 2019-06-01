@@ -18,13 +18,15 @@ final class HttpClientTests extends TestCase
     public function __construct()
     {
         $this->_httpClient = new HttpClient();
+        $this->_httpClient->setBaseUrl(self::BASE_URL);
+
         parent::__construct();
     }
 
     public function testExpect200Response()
     {
         $response = $this->_httpClient
-            ->setUrl(self::BASE_URL . "posts/1")
+            ->setUrl("posts/1")
             ->get();
 
         $this->assertEquals(
@@ -40,7 +42,7 @@ final class HttpClientTests extends TestCase
     public function testExpect404Response()
     {
         $response = $this->_httpClient
-            ->setUrl(self::BASE_URL . "post/222222")
+            ->setUrl("post/222222")
             ->get();
 
         $this->assertEquals(
@@ -52,7 +54,7 @@ final class HttpClientTests extends TestCase
     public function testExpectResponseBodyToHaveContent()
     {
         $response = $this->_httpClient
-            ->setUrl(self::BASE_URL . "posts/1")
+            ->setUrl("posts/1")
             ->get();
 
         $this->assertEquals(
@@ -68,7 +70,7 @@ final class HttpClientTests extends TestCase
     public function testExpectResponseBodyToBeEmpty()
     {
         $response = $this->_httpClient
-            ->setUrl(self::BASE_URL . "posts/2222")
+            ->setUrl("posts/2222")
             ->get();
 
         $this->assertEquals(
@@ -88,7 +90,7 @@ final class HttpClientTests extends TestCase
         $applicationJson = "application/json; charset=utf-8";
 
         $response = $this->_httpClient
-            ->setUrl(self::BASE_URL . "posts/1")
+            ->setUrl("posts/1")
             ->get();
 
         $responseHeaders = $response->getHeaders();

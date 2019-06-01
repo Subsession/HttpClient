@@ -43,6 +43,10 @@ use Comertis\Http\Internal\IHttpExecutor;
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\Exceptions\HttpNotImplementedException
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\Internal\IHttpExecutor
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
@@ -76,14 +80,8 @@ class HttpPeclExecutor implements IHttpExecutor
     ];
 
     /**
-     * Prepare the request URL
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareUrl()
-     * @throws HttpNotImplementedException
-     * @return void
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
      */
     public function prepareUrl(HttpRequest &$request)
     {
@@ -91,14 +89,8 @@ class HttpPeclExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request headers
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareHeaders()
-     * @throws HttpNotImplementedException
-     * @return void
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
      */
     public function prepareHeaders(HttpRequest &$request)
     {
@@ -106,14 +98,8 @@ class HttpPeclExecutor implements IHttpExecutor
     }
 
     /**
-     * Prepare the request parameters
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @see    IHttpExecutor::prepareParams()
-     * @throws HttpNotImplementedException
-     * @return void
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
      */
     public function prepareParams(HttpRequest &$request)
     {
@@ -121,14 +107,8 @@ class HttpPeclExecutor implements IHttpExecutor
     }
 
     /**
-     * Execute the request
-     *
-     * @param HttpRequest $request HttpRequest instance to execute
-     *
-     * @access private
-     * @see    IHttpExecutor::execute()
-     * @throws HttpNotImplementedException
-     * @return HttpResult
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
      */
     public function execute(HttpRequest $request)
     {

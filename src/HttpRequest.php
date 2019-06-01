@@ -40,6 +40,9 @@ use Comertis\Http\HttpRequestMethod;
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\Exceptions\HttpClientException
+ * @uses Comertis\Http\HttpRequestMethod
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
