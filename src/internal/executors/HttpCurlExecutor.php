@@ -168,12 +168,12 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         switch ($request->getBodyType()) {
-            case HttpRequestType::JSON:
-                $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
-                break;
+        case HttpRequestType::JSON:
+            $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -195,14 +195,14 @@ class HttpCurlExecutor implements IHttpExecutor
         $params = $request->getParams();
 
         switch ($request->getBodyType()) {
-            case HttpRequestType::JSON:
-                $params = json_encode($params);
-                break;
+        case HttpRequestType::JSON:
+            $params = json_encode($params);
+            break;
 
-            case HttpRequestType::X_WWW_FORM_URLENCODED:
-            default:
-                $params = http_build_query($params);
-                break;
+        case HttpRequestType::X_WWW_FORM_URLENCODED:
+        default:
+            $params = http_build_query($params);
+            break;
         }
 
         if (empty($params) | is_null($params)) {
@@ -266,7 +266,9 @@ class HttpCurlExecutor implements IHttpExecutor
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
 
-        curl_setopt($this->_ch, CURLOPT_HEADERFUNCTION,
+        curl_setopt(
+            $this->_ch,
+            CURLOPT_HEADERFUNCTION,
             function ($curl, $header) use (&$responseHeaders) {
                 $headerLength = strlen($header);
                 $header = explode(':', $header, 2);
@@ -287,16 +289,12 @@ class HttpCurlExecutor implements IHttpExecutor
             $responseError = curl_error($this->_ch);
         }
 
-        if (!$responseBody) {
-            $message = "Failed to get response. Error: " . $responseError ?? "No error message to show.";
-            throw new HttpClientException($message);
-        }
-
         $responseInfo = curl_getinfo($this->_ch);
         $responseStatusCode = $responseInfo['http_code'];
 
-        $response = new HttpResponse($responseHeaders, $responseStatusCode, $responseBody);
-        $response->setTransactionTime($responseInfo['total_time'])
+        $response = new HttpResponse($responseHeaders, $responseStatusCode);
+        $response->setBody($responseBody)
+            ->setTransactionTime($responseInfo['total_time'])
             ->setDownloadSpeed($responseInfo['speed_download'])
             ->setUploadSpeed($responseInfo['speed_upload'])
             ->setHeadersSize($responseInfo['header_size'])
