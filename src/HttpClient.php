@@ -44,6 +44,13 @@ use Comertis\Http\Internal\Executors\HttpExecutor;
 /**
  * Undocumented class
  *
+ * @uses Comertis\Http\Exceptions\HttpClientException
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpRequestMethod
+ * @uses Comertis\Http\HttpRequestType
+ * @uses Comertis\Http\HttpResponse
+ * @uses Comertis\Http\Internal\Executors\HttpExecutor
+ *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
@@ -81,20 +88,22 @@ class HttpClient
     private $_executor;
 
     /**
-     * Constructor
+     * Base URL for all requests
      *
-     * @param string|null $url Base url
+     * @access private
+     * @var    string|null
      */
-    public function __construct($url = null)
+    private $_baseUrl;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
         $this->_request = new HttpRequest();
-
-        if (!is_null($url)) {
-            $this->_request->setUrl($url);
-        }
-
         $this->_response = new HttpResponse();
         $this->_executor = new HttpExecutor();
+        $this->_baseUrl = null;
     }
 
     /**
@@ -108,11 +117,37 @@ class HttpClient
     }
 
     /**
-     * Get the request URL
-     *
-     * @see HttpRequest::getUrl()
+     * Get the configured base URL for all requests
      *
      * @access public
+     * @return string|null
+     */
+    public function getBaseUrl()
+    {
+        return $this->_baseUrl;
+    }
+
+    /**
+     * Set the base URL for all requests
+     *
+     * @param string|null $url Base URL | Null to remove
+     *
+     * @access public
+     * @return HttpClient
+     */
+    public function setBaseUrl($url)
+    {
+        $this->_baseUrl = $url;
+        $this->_request->setUrl($this->getBaseUrl());
+
+        return $this;
+    }
+
+    /**
+     * Get the request URL
+     *
+     * @access public
+     * @see    HttpRequest::getUrl()
      * @return string
      */
     public function getUrl()
@@ -121,16 +156,24 @@ class HttpClient
     }
 
     /**
-     * Set the request URL
+     * Set the request URL.
+     *
+     * Absolute URL if base url is null,
+     * Relative URL if base url is set
      *
      * @param string $url Request URL
      *
      * @access public
+     * @see    HttpClient::setBaseUrl()
      * @see    HttpRequest::setUrl()
      * @return HttpClient
      */
     public function setUrl($url)
     {
+        if (!is_null($this->getBaseUrl())) {
+            $url = $this->getBaseUrl() . $url;
+        }
+
         $this->_request->setUrl($url);
 
         return $this;
@@ -212,6 +255,7 @@ class HttpClient
      * @param HttpRequest $request HttpRequest instance
      *
      * @access public
+     * @see    HttpRequest
      * @return HttpClient
      */
     public function setRequest(HttpRequest $request)
@@ -266,16 +310,16 @@ class HttpClient
      * for requests, either just one, or a array with the preferred
      * order of the available implementations.
      *
-     * @param string|array $executorImplementation HttpExecutorImplementation
-     *                                             implementation
+     * @param string|array $implementation Single|Array of available
+     *                                     IHttpExecutor implementations
      *
      * @access public
-     * @see    HttpExecutorImplementation
+     * @see    IHttpExecutor
      * @return HttpClient
      */
-    public function setExplicitExecutor($executorImplementation)
+    public function setExplicitExecutor($implementation)
     {
-        $this->_executor->setExplicitExecutor($executorImplementation);
+        $this->_executor->setExplicitExecutor($implementation);
 
         return $this;
     }
