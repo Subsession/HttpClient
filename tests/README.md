@@ -30,3 +30,10 @@ Below you see an alternative output which is based on the idea that the name of 
 ```
 ./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests
 ```
+
+### Test results
+
+| Iterations | Average execution time in seconds |
+| ---------- | --------------------------------- |
+| 10         | 1.1462                            |
+| 100        | 1.116                             |
