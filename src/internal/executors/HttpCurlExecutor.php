@@ -34,8 +34,6 @@
 
 namespace Comertis\Http\Internal\Executors;
 
-require_once __DIR__ . '/IHttpExecutor.php';
-
 use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;

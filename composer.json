@@ -11,6 +11,9 @@
     }
   ],
   "autoload": {
+    "files": [
+      "src/internal/executors/IHttpExecutor.php"
+    ],
     "psr-4": {
       "Comertis\\Http\\": "src/",
       "Comertis\\Http\\Exceptions\\": "src/exceptions",

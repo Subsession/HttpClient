@@ -41,8 +41,6 @@ use Comertis\Http\HttpResponse;
 use Comertis\Http\HttpResult;
 use Comertis\Http\Internal\Executors\IHttpExecutor;
 
-require_once __DIR__ . '/IHttpExecutor.php';
-
 /**
  * Undocumented class
  *
