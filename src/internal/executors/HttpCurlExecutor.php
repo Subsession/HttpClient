@@ -120,13 +120,13 @@ class HttpCurlExecutor implements IHttpExecutor
      */
     public function prepareUrl(HttpRequest &$request)
     {
-        if (empty($request->getParams())) {
+        if ($request->getMethod() !== HttpRequestMethod::GET) {
             return;
         }
 
         $params = $request->getParams();
 
-        if ($request->getMethod() !== HttpRequestMethod::GET) {
+        if (empty($params) | is_null($params)) {
             return;
         }
 
