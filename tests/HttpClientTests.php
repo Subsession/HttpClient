@@ -23,7 +23,7 @@ final class HttpClientTests extends TestCase
         parent::__construct();
     }
 
-    public function testExpect200Response()
+    public function testExpect200ResponseStatusCode()
     {
         $response = $this->_httpClient
             ->setUrl("posts/1")
@@ -39,7 +39,7 @@ final class HttpClientTests extends TestCase
         );
     }
 
-    public function testExpect404Response()
+    public function testExpect404ResponseStatusCode()
     {
         $response = $this->_httpClient
             ->setUrl("post/222222")
