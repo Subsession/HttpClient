@@ -131,13 +131,15 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         $url = $request->getUrl();
-        $url .= "?";
 
-        foreach ($params as $key => $value) {
-            $url .= $key . "=" . $value . "&";
+        $separator = "?";
+
+        // If "?" already exists in the url
+        if (strpos($url, $separator) !== false) {
+            $separator = "&";
         }
 
-        $url = trim($url, "&");
+        $url .= $separator . http_build_query($params);
 
         $request->setUrl($url);
     }
@@ -168,12 +170,12 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         switch ($request->getBodyType()) {
-        case HttpRequestType::JSON:
-            $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
-            break;
+            case HttpRequestType::JSON:
+                $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -195,14 +197,14 @@ class HttpCurlExecutor implements IHttpExecutor
         $params = $request->getParams();
 
         switch ($request->getBodyType()) {
-        case HttpRequestType::JSON:
-            $params = json_encode($params);
-            break;
+            case HttpRequestType::JSON:
+                $params = json_encode($params);
+                break;
 
-        case HttpRequestType::X_WWW_FORM_URLENCODED:
-        default:
-            $params = http_build_query($params);
-            break;
+            case HttpRequestType::X_WWW_FORM_URLENCODED:
+            default:
+                $params = http_build_query($params);
+                break;
         }
 
         if (empty($params) | is_null($params)) {
