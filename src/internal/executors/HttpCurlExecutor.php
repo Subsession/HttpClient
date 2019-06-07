@@ -153,14 +153,24 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         $params = $request->getParams();
+        $contentLength = 0;
 
         if (is_array($params)) {
-            $request->addHeaders(["Content-Length" => strlen(implode($params))]);
+
+            foreach ($params as $key => $value) {
+                if (is_object($value)) {
+                    $contentLength += strlen(serialize($value));
+                } else {
+                    $contentLength += strlen($value);
+                }
+            }
         } else if (is_object($params)) {
-            $request->addHeaders(["Content-Length" => strlen(serialize($params))]);
+            $contentLength = strlen(serialize($params));
         } else {
-            $request->addHeaders(["Content-Length" => strlen($params)]);
+            $contentLength = strlen($params);
         }
+
+        $request->addHeaders(["Content-Length" => $contentLength]);
 
         switch ($request->getBodyType()) {
             case HttpRequestType::JSON:
