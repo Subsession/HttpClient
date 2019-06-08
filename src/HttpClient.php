@@ -325,6 +325,26 @@ class HttpClient
     }
 
     /**
+     * Execute a HEAD request
+     *
+     * @param array $params Parameters to include in the request.
+     *                      These parameters will be added to the URL
+     *
+     * @access public
+     * @return HttpResponse
+     */
+    public function head($params = [])
+    {
+        $this->_request
+            ->setMethod(HttpRequestMethod::HEAD)
+            ->setParams($params);
+
+        $result = $this->_executor->execute($this->_request);
+
+        return $result->getResponse();
+    }
+
+    /**
      * Execute a GET request
      *
      * @param array $params Parameters to include in the request
