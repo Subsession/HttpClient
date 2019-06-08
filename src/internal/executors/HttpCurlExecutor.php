@@ -119,7 +119,9 @@ class HttpCurlExecutor implements IHttpExecutor
      */
     public function prepareUrl(HttpRequest &$request)
     {
-        if ($request->getMethod() !== HttpRequestMethod::GET) {
+        $method = $request->getMethod();
+
+        if ($method !== HttpRequestMethod::GET || $method !== HttpRequestMethod::HEAD) {
             return;
         }
 
@@ -149,6 +151,12 @@ class HttpCurlExecutor implements IHttpExecutor
     public function prepareHeaders(HttpRequest &$request)
     {
         if (empty($request->getParams())) {
+            return;
+        }
+
+        $method = $request->getMethod();
+
+        if ($method == HttpRequestMethod::GET | $method == HttpRequestMethod::HEAD) {
             return;
         }
 
@@ -188,6 +196,12 @@ class HttpCurlExecutor implements IHttpExecutor
     public function prepareParams(HttpRequest &$request)
     {
         if (empty($request->getParams())) {
+            return;
+        }
+
+        $method = $request->getMethod();
+
+        if ($method == HttpRequestMethod::GET | $method == HttpRequestMethod::HEAD) {
             return;
         }
 
