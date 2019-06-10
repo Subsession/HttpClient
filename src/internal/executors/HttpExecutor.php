@@ -178,7 +178,7 @@ class HttpExecutor
     public function execute(HttpRequest $request)
     {
         if (is_null($this->_executor)) {
-            $this->_executor = HttpExecutorFactory::getExecutor($this->_implementation);
+            $this->_executor = HttpExecutorFactory::build($this->_implementation);
         }
 
         $this->_executor->prepareUrl($request);

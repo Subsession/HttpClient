@@ -58,40 +58,32 @@ use Comertis\Http\Internal\Executors\HttpStreamExecutor;
 class HttpExecutorFactory
 {
     /**
-     * Instance of IHttpExecutor used to avoid
-     * having to re-declare it on each fetch
-     *
-     * @static
-     * @access private
-     * @var    IHttpExecutor|null
-     */
-    private static $_executor = null;
-
-    /**
      * Create an instance of a IHttpExecutor based on loaded extensions
      * and/or available functions
+     *
+     * @param string|array $implementation Explicit IHttpExecutor implementation
      *
      * @static
      * @access public
      * @throws HttpExecutorException
      * @return IHttpExecutor
      */
-    public static function getExecutor($implementation = null)
+    public static function build($implementation = null)
     {
+        $executor = null;
+
         if (!is_null($implementation)) {
-            return self::getExplicitExecutor($implementation);
+            $executor = self::getExplicitExecutor($implementation);
+        } else {
+            $executor = self::getExecutor();
         }
 
-        if (!isset(self::$_executor)) {
-            self::$_executor = self::_setExecutor();
-        }
-
-        if (is_null(self::$_executor)) {
+        if (is_null($executor)) {
             $message = "Failed to create an executor, missing necessary extensions/functions";
             throw new HttpExecutorException($message);
         }
 
-        return self::$_executor;
+        return $executor;
     }
 
     /**
@@ -110,110 +102,75 @@ class HttpExecutorFactory
          *
          * @var IHttpExecutor|null
          */
-        $toReturn = null;
+        $executor = null;
 
         if (is_array($implementation)) {
-            return self::_getExplicitExecutorFromArray($implementation);
+            foreach ($implementation as $key => $value) {
+
+                // Recursive call until one executor implementation is returned
+                $executor = self::getExplicitExecutor($value);
+
+                if (!is_null($executor)) {
+                    return $executor;
+                }
+            }
         }
 
         switch ($implementation) {
             case HttpCurlExecutor::class:
                 if (self::_checkCurlImplementation()) {
-                    $toReturn = new HttpCurlExecutor();
+                    $executor = new HttpCurlExecutor();
                 }
                 break;
 
             case HttpPeclExecutor::class:
                 if (self::_checkPeclImplementation()) {
-                    $toReturn = new HttpPeclExecutor();
+                    $executor = new HttpPeclExecutor();
                 }
                 break;
 
             case HttpStreamExecutor::class:
                 if (self::_checkStreamImplementation()) {
-                    $toReturn = new HttpStreamExecutor();
+                    $executor = new HttpStreamExecutor();
                 }
                 break;
             default:
                 break;
         }
 
-        return $toReturn;
+        return $executor;
     }
 
     /**
-     * Create an explicit implementation of IHttpExecutor
-     * given an array of preferred implementations
+     * ATTENTION: Do NOT use this method to generate a IHttpExecutor
+     * instance, use HttpExecutorFactory::build() instead
      *
-     * @param array $implementations Executor implementations
-     *
-     * @static
-     * @access public
-     * @return IHttpExecutor|null
-     */
-    private static function _getExplicitExecutorFromArray($implementations)
-    {
-        /**
-         * Implementation of IHttpExecutor
-         *
-         * @var IHttpExecutor|null
-         */
-        $toReturn = null;
-
-        foreach ($implementations as $key => $value) {
-            switch ($value) {
-                case HttpCurlExecutor::class:
-                    if (self::_checkCurlImplementation()) {
-                        return new HttpCurlExecutor();
-                    }
-                    break;
-
-                case HttpPeclExecutor::class:
-                    if (self::_checkPeclImplementation()) {
-                        return new HttpPeclExecutor();
-                    }
-                    break;
-
-                case HttpStreamExecutor::class:
-                    if (self::_checkStreamImplementation()) {
-                        return new HttpStreamExecutor();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        return $toReturn;
-    }
-
-    /**
      * Load an instance of IHttpExecutor based on installed
      * PHP extensions and/or available functions
      *
      * @static
-     * @access private
+     * @access public
+     * @see    HttpExecutorFactory::build()
      * @return IHttpExecutor|null
      */
-    private static function _setExecutor()
+    public static function getExecutor()
     {
         /**
          * IHttpExecutor implementation
          *
          * @var IHttpExecutor|null
          */
-        $implementation = null;
+        $executor = null;
 
         if (self::_checkCurlImplementation()) {
-            $implementation = new HttpCurlExecutor();
+            $executor = new HttpCurlExecutor();
         } else if (self::_checkPeclImplementation()) {
-            $implementation = new HttpPeclExecutor();
+            $executor = new HttpPeclExecutor();
         } else if (self::_checkStreamImplementation()) {
-            $implementation = new HttpStreamExecutor();
+            $executor = new HttpStreamExecutor();
         }
 
-        return $implementation;
+        return $executor;
     }
 
     /**
