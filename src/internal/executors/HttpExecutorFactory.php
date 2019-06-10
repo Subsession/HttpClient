@@ -76,8 +76,12 @@ class HttpExecutorFactory
      * @throws HttpExecutorException
      * @return IHttpExecutor
      */
-    public static function getExecutor()
+    public static function getExecutor($implementation = null)
     {
+        if (!is_null($implementation)) {
+            return self::getExplicitExecutor($implementation);
+        }
+
         if (!isset(self::$_executor)) {
             self::$_executor = self::_setExecutor();
         }

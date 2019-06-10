@@ -81,6 +81,15 @@ class HttpExecutor
     const DEFAULT_RETRY_COUNT = 1;
 
     /**
+     * IHttpExecutor implementation instance,
+     * used as a cache
+     *
+     * @access private
+     * @var    IHttpExecutor
+     */
+    private $_executor;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -163,18 +172,16 @@ class HttpExecutor
      */
     public function execute(HttpRequest $request)
     {
-        if (!is_null($this->_explicitExecutor)) {
-            $executor = HttpExecutorFactory::getExplicitExecutor($this->_explicitExecutor);
-        } else {
-            $executor = HttpExecutorFactory::getExecutor();
+        if (is_null($this->_executor)) {
+            $this->_executor = HttpExecutorFactory::getExecutor($this->_implementation);
         }
 
-        $executor->prepareUrl($request);
-        $executor->prepareHeaders($request);
-        $executor->prepareParams($request);
+        $this->_executor->prepareUrl($request);
+        $this->_executor->prepareHeaders($request);
+        $this->_executor->prepareParams($request);
 
         for ($i = 0; $i < $this->getRetryCount(); $i++) {
-            $result = $executor->execute($request);
+            $result = $this->_executor->execute($request);
 
             if ($result->getResponse()->getStatusCode() != HttpStatusCode::INTERNAL_SERVER_ERROR) {
                 return $result;
