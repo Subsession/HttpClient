@@ -317,9 +317,9 @@ class HttpClient
      * @see    IHttpExecutor
      * @return HttpClient
      */
-    public function setExplicitExecutor($implementation)
+    public function setImplementation($implementation)
     {
-        $this->_executor->setExplicitExecutor($implementation);
+        $this->_executor->setImplementation($implementation);
 
         return $this;
     }

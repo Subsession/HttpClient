@@ -70,7 +70,7 @@ class HttpExecutor
      * @access private
      * @var    string
      */
-    private $_explicitExecutor;
+    private $_implementation;
 
     /**
      * Default number of retries for HttpRequests
@@ -95,7 +95,7 @@ class HttpExecutor
     public function __construct()
     {
         $this->_retry = self::DEFAULT_RETRY_COUNT;
-        $this->_explicitExecutor = null;
+        $this->_implementation = null;
     }
 
     /**
@@ -143,20 +143,26 @@ class HttpExecutor
      */
     public function getExplicitExecutor()
     {
-        return $this->_explicitExecutor;
+        return $this->_implementation;
     }
 
     /**
-     * Specify a explicit IHttpExecutor implementation to use
+     * Specify a IHttpExecutor implementation to use
      *
-     * @param string|array $executorImplementation Executor implementation
+     * It can be in the form of a single class
+     *     Example: HttpCurlExecutor::class
+     *
+     * Or it can be an array of preferred implementations
+     *     Example: [HttpCurlExecutor::class, HttpStreamExecutor::class]
+     *
+     * @param string|array $implementation IHttpExecutor implementation
      *
      * @access public
      * @return HttpExecutor
      */
-    public function setExplicitExecutor($executorImplementation)
+    public function setImplementation($implementation)
     {
-        $this->_explicitExecutor = $executorImplementation;
+        $this->_implementation = $implementation;
 
         return $this;
     }
@@ -167,7 +173,6 @@ class HttpExecutor
      * @param HttpRequest $request HttpRequest instance to execute
      *
      * @access public
-     * @see    IHttpExecutor::execute()
      * @return HttpResult
      */
     public function execute(HttpRequest $request)
