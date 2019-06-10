@@ -5,6 +5,7 @@ namespace Comertis\Http\Tests;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\Internal\Executors\HttpCurlExecutor;
 use PHPUnit\Framework\TestCase;
+use Comertis\Http\HttpRequestMethod;
 
 final class HttpCurlExecutorTests extends TestCase
 {
@@ -32,6 +33,7 @@ final class HttpCurlExecutorTests extends TestCase
         $params = [$object];
 
         $request = new HttpRequest();
+        $request->setMethod(HttpRequestMethod::POST);
         $request->setParams($params);
 
         $this->_httpCurlExecutor->prepareHeaders($request);
