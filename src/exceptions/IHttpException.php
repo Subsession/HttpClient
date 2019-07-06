@@ -34,11 +34,8 @@
 
 namespace Comertis\Http\Exceptions;
 
-use Comertis\Http\Exceptions\IHttpException;
-use Exception;
-
 /**
- * Undocumented class
+ * Custom exception interface
  *
  * @category Http
  * @package  Comertis\Http
@@ -47,39 +44,61 @@ use Exception;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpClientException extends Exception implements IHttpException
+interface IHttpException
 {
     /**
      * Exception message
      *
-     * @access protected
-     * @var    string
+     * @access public
+     * @return string
      */
-    protected $message = 'Unknown exception';
+    public function getMessage();
 
     /**
-     * User-defined exception code
+     * User-defined Exception code
      *
-     * @access protected
-     * @var    integer
+     * @access public
+     * @return integer|string
      */
-    protected $code = 0;
+    public function getCode();
 
     /**
-     * Source filename of exception
+     * Source filename
      *
-     * @access protected
-     * @var    string
+     * @access public
+     * @return string
      */
-    protected $file;
+    public function getFile();
 
     /**
-     * Source line of exception
+     * Source line
      *
-     * @access protected
-     * @var    integer
+     * @access public
+     * @return integer|string
      */
-    protected $line;
+    public function getLine();
+
+    /**
+     * An array of the backtrace()
+     *
+     * @access public
+     * @return array
+     */
+    public function getTrace();
+
+    /**
+     * Formated string of trace
+     *
+     * @return string
+     */
+    public function getTraceAsString();
+
+    /**
+     * Formated string for display
+     *
+     * @return string
+     */
+    public function __toString();
 
     /**
      * Constructor
@@ -87,25 +106,5 @@ class HttpClientException extends Exception implements IHttpException
      * @param string  $message Exception message
      * @param integer $code    Exception code
      */
-    public function __construct($message = null, $code = 0)
-    {
-        if (!$message) {
-            throw new $this('Unknown ' . get_class($this));
-        }
-
-        parent::__construct($message, $code);
-    }
-
-    /**
-     * Override __toString()
-     *
-     * @access public
-     * @return string
-     */
-    public function __toString()
-    {
-        return get_class($this) . "
-            '{$this->message}' in {$this->file}({$this->line})\n"
-            . "{$this->getTraceAsString()}";
-    }
+    public function __construct($message = null, $code = 0);
 }
