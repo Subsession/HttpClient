@@ -173,7 +173,7 @@ class HttpExecutor
      * @param HttpRequest $request HttpRequest instance to execute
      *
      * @access public
-     * @return HttpResult
+     * @return HttpResponse
      */
     public function execute(HttpRequest $request)
     {

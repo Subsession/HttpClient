@@ -373,9 +373,9 @@ class HttpClient
             ->setMethod(HttpRequestMethod::HEAD)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -392,9 +392,9 @@ class HttpClient
             ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -411,9 +411,9 @@ class HttpClient
             ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -432,9 +432,9 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -451,9 +451,9 @@ class HttpClient
             ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -471,9 +471,9 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -490,9 +490,9 @@ class HttpClient
             ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 
     /**
@@ -511,8 +511,8 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $result = $this->_executor->execute($this->_request);
+        $this->_response = $this->_executor->execute($this->_request);
 
-        return $result->getResponse();
+        return $this->getResponse();
     }
 }

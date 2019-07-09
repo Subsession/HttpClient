@@ -82,13 +82,12 @@ interface IHttpExecutor
     public function prepareParams(HttpRequest &$request);
 
     /**
-     * Execute the HttpRequest and return a HttpResult
-     * which contains the HttpRequest and a HttpResponse
+     * Execute the HttpRequest and return a HttpResponse
      *
      * @param HttpRequest $request HttpRequest instance
      *
      * @access public
-     * @return HttpResult
+     * @return HttpResponse
      */
     public function execute(HttpRequest $request);
 }

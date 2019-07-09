@@ -38,7 +38,6 @@ use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\HttpResult;
 use Comertis\Http\Internal\Executors\IHttpExecutor;
 
 /**
@@ -48,7 +47,6 @@ use Comertis\Http\Internal\Executors\IHttpExecutor;
  * @uses Comertis\Http\HttpRequestMethod
  * @uses Comertis\Http\HttpRequestType
  * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\HttpResult
  * @uses Comertis\Http\Internal\Executors\IHttpExecutor
  *
  * @category Http
@@ -249,6 +247,6 @@ class HttpStreamExecutor implements IHttpExecutor
             ->setStatusCode($responseStatusCode)
             ->setError($responseError);
 
-        return new HttpResult($request, $response);
+        return $response;
     }
 }
