@@ -266,6 +266,40 @@ class HttpClient
     }
 
     /**
+     * Get the HttpResponse instance after executing
+     * a HttpRequest
+     *
+     * This returns null if called before executing
+     * the HttpRequest.
+     *
+     * @access public
+     * @return HttpResponse
+     */
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+    /**
+     * Set the HttpResponse instance
+     *
+     * This should never be used explicitly in
+     * normal use-cases, this method exists for
+     * consistency reasons.
+     *
+     * @param HttpResponse $httpResponse HttpResponse instance
+     *
+     * @access public
+     * @return HttpClient
+     */
+    public function setResponse(HttpResponse $httpResponse)
+    {
+        $this->_response = $httpResponse;
+
+        return $this;
+    }
+
+    /**
      * Get the configured retry count for requests
      *
      * @access public
