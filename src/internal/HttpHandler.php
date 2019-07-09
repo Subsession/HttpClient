@@ -32,7 +32,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Internal;
 
 use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\HttpRequest;
@@ -54,7 +54,7 @@ use Comertis\Http\Internal\Executors\HttpExecutorFactory;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpExecutor
+class HttpHandler
 {
     /**
      * Request retry count
@@ -126,7 +126,7 @@ class HttpExecutor
      * @param integer $retryCount Number of retries
      *
      * @access public
-     * @return HttpExecutor
+     * @return HttpHandler
      */
     public function setRetryCount($retryCount)
     {
@@ -158,7 +158,7 @@ class HttpExecutor
      * @param string|array $implementation IHttpExecutor implementation
      *
      * @access public
-     * @return HttpExecutor
+     * @return HttpHandler
      */
     public function setImplementation($implementation)
     {

@@ -39,7 +39,7 @@ use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\Executors\HttpExecutor;
+use Comertis\Http\Internal\HttpHandler;
 
 /**
  * Undocumented class
@@ -49,7 +49,7 @@ use Comertis\Http\Internal\Executors\HttpExecutor;
  * @uses Comertis\Http\HttpRequestMethod
  * @uses Comertis\Http\HttpRequestType
  * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Internal\Executors\HttpExecutor
+ * @uses Comertis\Http\Internal\Executors\HttpHandler
  *
  * @category Http
  * @package  Comertis\Http
@@ -82,10 +82,10 @@ class HttpClient
      * Responsible for executing a HttpRequest
      *
      * @access private
-     * @see    HttpExecutor
-     * @var    HttpExecutor
+     * @see    HttpHandler
+     * @var    HttpHandler
      */
-    private $_executor;
+    private $_handler;
 
     /**
      * Base URL for all requests
@@ -102,7 +102,7 @@ class HttpClient
     {
         $this->_request = new HttpRequest();
         $this->_response = new HttpResponse();
-        $this->_executor = new HttpExecutor();
+        $this->_handler = new HttpHandler();
         $this->_baseUrl = null;
     }
 
@@ -303,12 +303,12 @@ class HttpClient
      * Get the configured retry count for requests
      *
      * @access public
-     * @see    HttpExecutor::getRetryCount()
+     * @see    HttpHandler::getRetryCount()
      * @return integer
      */
     public function getRetryCount()
     {
-        return $this->_executor->getRetryCount();
+        return $this->_handler->getRetryCount();
     }
 
     /**
@@ -317,12 +317,12 @@ class HttpClient
      * @param integer $retryCount Number of retries on a connection before giving up
      *
      * @access public
-     * @see    HttpExecutor::setRetryCount()
+     * @see    HttpHandler::setRetryCount()
      * @return HttpClient
      */
     public function setRetryCount($retryCount)
     {
-        $this->_executor->setRetryCount($retryCount);
+        $this->_handler->setRetryCount($retryCount);
 
         return $this;
     }
@@ -336,7 +336,7 @@ class HttpClient
      */
     public function getExplicitExecutor()
     {
-        return $this->_executor->getExplicitExecutor();
+        return $this->_handler->getExplicitExecutor();
     }
 
     /**
@@ -353,7 +353,7 @@ class HttpClient
      */
     public function setImplementation($implementation)
     {
-        $this->_executor->setImplementation($implementation);
+        $this->_handler->setImplementation($implementation);
 
         return $this;
     }
@@ -373,7 +373,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::HEAD)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -392,7 +392,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -411,7 +411,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -432,7 +432,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -451,7 +451,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -471,7 +471,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -490,7 +490,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
@@ -511,7 +511,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->_response = $this->_executor->execute($this->_request);
+        $this->_response = $this->_handler->execute($this->_request);
 
         return $this->getResponse();
     }
