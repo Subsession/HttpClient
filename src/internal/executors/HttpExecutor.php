@@ -188,7 +188,7 @@ class HttpExecutor
         for ($i = 0; $i < $this->getRetryCount(); $i++) {
             $result = $this->_executor->execute($request);
 
-            if (!in_array($result->getResponse()->getStatusCode(), HttpStatusCode::SERVER_ERRORS)) {
+            if (!in_array($result->getStatusCode(), HttpStatusCode::SERVER_ERRORS)) {
                 return $result;
             }
         }
