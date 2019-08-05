@@ -350,4 +350,59 @@ class HttpResponse
 
         return $this;
     }
+
+    /**
+     * Flag indicating that the response is in the 1xx status range
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isInformational()
+    {
+        return in_array($this->getStatusCode(), HttpStatusCode::INFORMATIONAL);
+    }
+
+    /**
+     * Flag indicating that the response is in the 2xx status range
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isSuccess()
+    {
+        return in_array($this->getStatusCode(), HttpStatusCode::SUCCESS);
+    }
+
+    /**
+     * Flag indicating that the response is in the 3xx status range
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isRedirect()
+    {
+        return in_array($this->getStatusCode(), HttpStatusCode::REDIRECTION);
+    }
+
+    /**
+     * Flag indicating that the response is in the 4xx status range
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isClientError()
+    {
+        return in_array($this->getStatusCode(), HttpStatusCode::CLIENT_ERRORS);
+    }
+
+    /**
+     * Flag indicating that the response is in the 5xx status range
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isServerError()
+    {
+        return in_array($this->getStatusCode(), HttpStatusCode::SERVER_ERRORS);
+    }
 }

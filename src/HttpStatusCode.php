@@ -115,6 +115,11 @@ class HttpStatusCode
     const NOT_EXTENDED = 510;
     const NETWORK_AUTHENTICATION_REQUIRED = 511;
 
+    /**
+     * 1xx range
+     *
+     * @var array
+     */
     const INFORMATIONAL = [
         self::HTTP_CONTINUE,
         self::SWITCHING_PROTOCOLS,
@@ -122,6 +127,11 @@ class HttpStatusCode
         self::EARLY_HINTS,
     ];
 
+    /**
+     * 2xx range
+     *
+     * @var array
+     */
     const SUCCESS = [
         self::OK,
         self::CREATED,
@@ -135,6 +145,11 @@ class HttpStatusCode
         self::IM_USED,
     ];
 
+    /**
+     * 3xx range
+     *
+     * @var array
+     */
     const REDIRECTION = [
         self::MULTIPLE_CHOICES,
         self::MOVED_PERMANENTLY,
@@ -147,6 +162,11 @@ class HttpStatusCode
         self::PERMANENTLY_REDIRECT,
     ];
 
+    /**
+     * 4xx range
+     *
+     * @var array
+     */
     const CLIENT_ERRORS = [
         self::BAD_REQUEST,
         self::UNAUTHORIZED,
@@ -180,6 +200,11 @@ class HttpStatusCode
         self::UNAVAILABLE_FOR_LEGAL_REASONS,
     ];
 
+    /**
+     * 5xx range
+     *
+     * @var array
+     */
     const SERVER_ERRORS = [
         self::INTERNAL_SERVER_ERROR,
         self::NOT_IMPLEMENTED,
