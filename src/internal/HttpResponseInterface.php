@@ -32,10 +32,9 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Internal;
 
 use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class
@@ -49,68 +48,15 @@ use Comertis\Http\Internal\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpResponse implements HttpResponseInterface
+interface HttpResponseInterface
 {
-    /**
-     * Response headers
-     *
-     * @access private
-     * @var    array
-     */
-    private $headers;
-
-    /**
-     * Response HTTP status code
-     *
-     * @access private
-     * @var    integer
-     */
-    private $statusCode;
-
-    /**
-     * Response body
-     *
-     * @access private
-     * @var    mixed
-     */
-    private $body;
-
-    /**
-     * Response error message
-     *
-     * @access private
-     * @var    string
-     */
-    private $error;
-
-    /**
-     * HttpResponse instance for HttpClient
-     *
-     * @param array        $headers    Response headers
-     * @param integer      $statusCode Response status code
-     * @param mixed|string $body       Response body
-     */
-    public function __construct($headers = [], $statusCode = null, $body = null)
-    {
-        if (is_null($statusCode)) {
-            $statusCode = HttpStatusCode::OK;
-        }
-
-        $this->headers = $headers;
-        $this->statusCode = $statusCode;
-        $this->body = $body;
-    }
-
     /**
      * Get the response headers
      *
      * @access public
      * @return array
      */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
+    public function getHeaders();
 
     /**
      * Set the response headers
@@ -120,12 +66,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return HttpResponse
      */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
+    public function setHeaders($headers);
 
     /**
      * Get the response status code
@@ -133,10 +74,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return integer
      */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
+    public function getStatusCode();
 
     /**
      * Set the response status code
@@ -147,12 +85,7 @@ class HttpResponse implements HttpResponseInterface
      * @see    HttpStatusCode
      * @return HttpResponse
      */
-    public function setStatusCode($statusCode)
-    {
-        $this->statusCode = $statusCode;
-
-        return $this;
-    }
+    public function setStatusCode($statusCode);
 
     /**
      * Get the response body
@@ -160,10 +93,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return mixed
      */
-    public function getBody()
-    {
-        return $this->body;
-    }
+    public function getBody();
 
     /**
      * Set the response body
@@ -173,12 +103,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return HttpResponse
      */
-    public function setBody($body)
-    {
-        $this->body = $body;
-
-        return $this;
-    }
+    public function setBody($body);
 
     /**
      * Get the response error
@@ -186,10 +111,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return string
      */
-    public function getError()
-    {
-        return $this->error;
-    }
+    public function getError();
 
     /**
      * Set the response error
@@ -199,12 +121,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return HttpResponse
      */
-    public function setError($error)
-    {
-        $this->error = $error;
-
-        return $this;
-    }
+    public function setError($error);
 
     /**
      * Flag indicating that the response is in the 1xx status range
@@ -212,10 +129,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return boolean
      */
-    public function isInformational()
-    {
-        return in_array($this->getStatusCode(), HttpStatusCode::INFORMATIONAL);
-    }
+    public function isInformational();
 
     /**
      * Flag indicating that the response is in the 2xx status range
@@ -223,10 +137,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return boolean
      */
-    public function isSuccess()
-    {
-        return in_array($this->getStatusCode(), HttpStatusCode::SUCCESS);
-    }
+    public function isSuccess();
 
     /**
      * Flag indicating that the response is in the 3xx status range
@@ -234,10 +145,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return boolean
      */
-    public function isRedirect()
-    {
-        return in_array($this->getStatusCode(), HttpStatusCode::REDIRECTION);
-    }
+    public function isRedirect();
 
     /**
      * Flag indicating that the response is in the 4xx status range
@@ -245,10 +153,7 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return boolean
      */
-    public function isClientError()
-    {
-        return in_array($this->getStatusCode(), HttpStatusCode::CLIENT_ERRORS);
-    }
+    public function isClientError();
 
     /**
      * Flag indicating that the response is in the 5xx status range
@@ -256,8 +161,5 @@ class HttpResponse implements HttpResponseInterface
      * @access public
      * @return boolean
      */
-    public function isServerError()
-    {
-        return in_array($this->getStatusCode(), HttpStatusCode::SERVER_ERRORS);
-    }
+    public function isServerError();
 }

@@ -32,15 +32,18 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Adapters;
 
+use Comertis\Http\Adapters\HttpAdapterInterface;
+use Comertis\Http\Exceptions\HttpNotImplementedException;
 use Comertis\Http\HttpRequest;
 
 /**
- * Defines the minimum necessary for a HttpExecutor
- * implementation regardless of used library or extension
+ * Undocumented class
  *
+ * @uses Comertis\Http\Exceptions\HttpNotImplementedException
  * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\Adapters\HttpAdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -49,45 +52,64 @@ use Comertis\Http\HttpRequest;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface IHttpExecutor
+class HttpPeclAdapter implements HttpAdapterInterface
 {
-    /**
-     * Make any necessary changes to the HttpRequest URL before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareUrl(HttpRequest &$request);
 
     /**
-     * Make any necessary changes to the HttpRequest headers before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
+     * Expected extensions for this HttpAdapterInterface implementation
+     * to work properly
      *
      * @access public
-     * @return void
+     * @var    array
      */
-    public function prepareHeaders(HttpRequest &$request);
+    const EXPECTED_EXTENSIONS = [
+
+    ];
 
     /**
-     * Make any necessary changes to the HttpRequest parameters before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
+     * Expected functions for this HttpAdapterInterface implementation
+     * to work properly
      *
      * @access public
-     * @return void
+     * @var    array
      */
-    public function prepareParams(HttpRequest &$request);
+    const EXPECTED_FUNCTIONS = [
+
+    ];
 
     /**
-     * Execute the HttpRequest and return a HttpResponse
-     *
-     * @param HttpRequest $request HttpRequest instance
-     *
-     * @access public
-     * @return HttpResponse
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
      */
-    public function execute(HttpRequest $request);
+    public function prepareUrl(HttpRequest &$request)
+    {
+        throw new HttpNotImplementedException("This function is not yet implemented");
+    }
+
+    /**
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
+     */
+    public function prepareHeaders(HttpRequest &$request)
+    {
+        throw new HttpNotImplementedException();
+    }
+
+    /**
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
+     */
+    public function prepareParams(HttpRequest &$request)
+    {
+        throw new HttpNotImplementedException();
+    }
+
+    /**
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
+     */
+    public function execute(HttpRequest $request)
+    {
+        throw new HttpNotImplementedException();
+    }
 }

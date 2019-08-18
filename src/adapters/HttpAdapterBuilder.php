@@ -32,21 +32,15 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Adapters;
 
+use Comertis\Http\Adapters\HttpCurlAdapter;
+use Comertis\Http\Adapters\HttpPeclAdapter;
+use Comertis\Http\Adapters\HttpStreamAdapter;
 use Comertis\Http\Exceptions\HttpExecutorException;
-use Comertis\Http\Internal\Executors\HttpCurlExecutor;
-use Comertis\Http\Internal\Executors\HttpPeclExecutor;
-use Comertis\Http\Internal\Executors\HttpStreamExecutor;
 
 /**
- * Responsible for creating an implementation of IHttpExecutor
- * based on available PHP extensions and/or functions
- *
- * @uses Comertis\Http\Exceptions\HttpExecutorException
- * @uses Comertis\Http\Internal\Executors\HttpCurlExecutor
- * @uses Comertis\Http\Internal\Executors\HttpPeclExecutor
- * @uses Comertis\Http\Internal\Executors\HttpStreamExecutor
+ * Undocumented class
  *
  * @category Http
  * @package  Comertis\Http
@@ -55,18 +49,18 @@ use Comertis\Http\Internal\Executors\HttpStreamExecutor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpExecutorFactory
+class HttpAdapterBuilder
 {
     /**
-     * Create an instance of a IHttpExecutor based on loaded extensions
+     * Create an instance of a HttpAdapterInterface based on loaded extensions
      * and/or available functions
      *
-     * @param string|array $implementation Explicit IHttpExecutor implementation
+     * @param string|array $implementation Explicit HttpAdapterInterface implementation
      *
      * @static
      * @access public
      * @throws HttpExecutorException
-     * @return IHttpExecutor
+     * @return HttpAdapterInterface
      */
     public static function build($implementation = null)
     {
@@ -87,100 +81,99 @@ class HttpExecutorFactory
     }
 
     /**
-     * Create an explicit implementation of IHttpExecutor
+     * Create an explicit implementation of HttpAdapterInterface
      *
      * @param string|array $implementation Executor implementation
      *
      * @static
      * @access public
-     * @return IHttpExecutor|null
+     * @return HttpAdapterInterface|null
      */
     public static function getExplicitExecutor($implementation)
     {
         /**
-         * Implementation of IHttpExecutor
+         * Implementation of HttpAdapterInterface
          *
-         * @var IHttpExecutor|null
+         * @var HttpAdapterInterface|null
          */
-        $executor = null;
+        $adapter = null;
 
         if (is_array($implementation)) {
             foreach ($implementation as $key => $value) {
-
                 // Recursive call until one executor implementation is returned
-                $executor = self::getExplicitExecutor($value);
+                $adapter = self::getExplicitExecutor($value);
 
-                if (!is_null($executor)) {
-                    return $executor;
+                if (!is_null($adapter)) {
+                    return $adapter;
                 }
             }
         }
 
         switch ($implementation) {
-            case HttpCurlExecutor::class:
-                if (self::_checkCurlImplementation()) {
-                    $executor = new HttpCurlExecutor();
+            case HttpCurlAdapter::class:
+                if (self::checkCurlImplementation()) {
+                    $adapter = new HttpCurlAdapter();
                 }
                 break;
 
-            case HttpPeclExecutor::class:
-                if (self::_checkPeclImplementation()) {
-                    $executor = new HttpPeclExecutor();
+            case HttpPeclAdapter::class:
+                if (self::checkPeclImplementation()) {
+                    $adapter = new HttpPeclAdapter();
                 }
                 break;
 
-            case HttpStreamExecutor::class:
-                if (self::_checkStreamImplementation()) {
-                    $executor = new HttpStreamExecutor();
+            case HttpStreamAdapter::class:
+                if (self::checkStreamImplementation()) {
+                    $adapter = new HttpStreamAdapter();
                 }
                 break;
             default:
                 break;
         }
 
-        return $executor;
+        return $adapter;
     }
 
     /**
-     * ATTENTION: Do NOT use this method to generate a IHttpExecutor
+     * ATTENTION: Do NOT use this method to generate a HttpAdapterInterface
      * instance, use HttpExecutorFactory::build() instead
      *
-     * Load an instance of IHttpExecutor based on installed
+     * Load an instance of HttpAdapterInterface based on installed
      * PHP extensions and/or available functions
      *
      * @static
      * @access public
      * @see    HttpExecutorFactory::build()
-     * @return IHttpExecutor|null
+     * @return HttpAdapterInterface|null
      */
     public static function getExecutor()
     {
         /**
-         * IHttpExecutor implementation
+         * HttpAdapterInterface implementation
          *
-         * @var IHttpExecutor|null
+         * @var HttpAdapterInterface|null
          */
         $executor = null;
 
-        if (self::_checkCurlImplementation()) {
-            $executor = new HttpCurlExecutor();
-        } else if (self::_checkPeclImplementation()) {
-            $executor = new HttpPeclExecutor();
-        } else if (self::_checkStreamImplementation()) {
-            $executor = new HttpStreamExecutor();
+        if (self::checkCurlImplementation()) {
+            $executor = new HttpCurlAdapter();
+        } elseif (self::checkPeclImplementation()) {
+            $executor = new HttpPeclAdapter();
+        } elseif (self::checkStreamImplementation()) {
+            $executor = new HttpStreamAdapter();
         }
 
         return $executor;
     }
 
     /**
-     * Check the requirements for the HttpCurlExecutor
+     * Check the requirements for the HttpCurlAdapter
      *
      * @static
      * @access private
      * @return bool
      */
-    private static function _checkCurlImplementation()
+    private static function checkCurlImplementation()
     {
         /**
          * Conditional
@@ -189,14 +182,14 @@ class HttpExecutorFactory
          */
         $toReturn = true;
 
-        foreach (HttpCurlExecutor::EXPECTED_EXTENSIONS as $extension) {
+        foreach (HttpCurlAdapter::EXPECTED_EXTENSIONS as $extension) {
             if (!extension_loaded($extension)) {
                 $toReturn = false;
                 break;
             }
         }
 
-        foreach (HttpCurlExecutor::EXPECTED_FUNCTIONS as $function) {
+        foreach (HttpCurlAdapter::EXPECTED_FUNCTIONS as $function) {
             if (!function_exists($function)) {
                 $toReturn = false;
                 break;
@@ -207,13 +200,13 @@ class HttpExecutorFactory
     }
 
     /**
-     * Check the requirements for HttpPeclExecutor
+     * Check the requirements for HttpPeclAdapter
      *
      * @static
      * @access private
      * @return bool
      */
-    private static function _checkPeclImplementation()
+    private static function checkPeclImplementation()
     {
         /**
          * Conditional
@@ -222,14 +215,14 @@ class HttpExecutorFactory
          */
         $toReturn = true;
 
-        foreach (HttpPeclExecutor::EXPECTED_EXTENSIONS as $extension) {
+        foreach (HttpPeclAdapter::EXPECTED_EXTENSIONS as $extension) {
             if (!extension_loaded($extension)) {
                 $toReturn = false;
                 break;
             }
         }
 
-        foreach (HttpPeclExecutor::EXPECTED_FUNCTIONS as $function) {
+        foreach (HttpPeclAdapter::EXPECTED_FUNCTIONS as $function) {
             if (!function_exists($function)) {
                 $toReturn = false;
                 break;
@@ -246,7 +239,7 @@ class HttpExecutorFactory
      * @access private
      * @return bool
      */
-    private static function _checkStreamImplementation()
+    private static function checkStreamImplementation()
     {
         /**
          * Conditional
@@ -255,14 +248,14 @@ class HttpExecutorFactory
          */
         $toReturn = true;
 
-        foreach (HttpStreamExecutor::EXPECTED_EXTENSIONS as $extension) {
+        foreach (HttpStreamAdapter::EXPECTED_EXTENSIONS as $extension) {
             if (!extension_loaded($extension)) {
                 $toReturn = false;
                 break;
             }
         }
 
-        foreach (HttpStreamExecutor::EXPECTED_FUNCTIONS as $function) {
+        foreach (HttpStreamAdapter::EXPECTED_FUNCTIONS as $function) {
             if (!function_exists($function)) {
                 $toReturn = false;
                 break;

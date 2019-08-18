@@ -34,6 +34,7 @@
 
 namespace Comertis\Http;
 
+use Comertis\Http\Adapters\HttpAdapterBuilder;
 use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
@@ -67,7 +68,7 @@ class HttpClient
      * @see    HttpRequest
      * @var    HttpRequest
      */
-    private $_request;
+    private $request;
 
     /**
      * Holds the response information once a request has been executed
@@ -76,7 +77,7 @@ class HttpClient
      * @see    HttpResponse
      * @var    HttpResponse
      */
-    private $_response;
+    private $response;
 
     /**
      * Responsible for executing a HttpRequest
@@ -85,7 +86,16 @@ class HttpClient
      * @see    HttpHandler
      * @var    HttpHandler
      */
-    private $_handler;
+    private $handler;
+
+    /**
+     * Responsible for executing a HttpRequest
+     *
+     * @access private
+     * @see    HttpAdapterInterface
+     * @var    HttpAdapterInterface
+     */
+    private $adapter;
 
     /**
      * Base URL for all requests
@@ -93,17 +103,18 @@ class HttpClient
      * @access private
      * @var    string|null
      */
-    private $_baseUrl;
+    private $baseUrl;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->_request = new HttpRequest();
-        $this->_response = new HttpResponse();
-        $this->_handler = new HttpHandler();
-        $this->_baseUrl = null;
+        $this->request = new HttpRequest();
+        $this->response = new HttpResponse();
+        $this->handler = new HttpHandler();
+        $this->adapter = HttpAdapterBuilder::build();
+        $this->baseUrl = null;
     }
 
     /**
@@ -124,7 +135,7 @@ class HttpClient
      */
     public function getBaseUrl()
     {
-        return $this->_baseUrl;
+        return $this->baseUrl;
     }
 
     /**
@@ -137,8 +148,8 @@ class HttpClient
      */
     public function setBaseUrl($url)
     {
-        $this->_baseUrl = $url;
-        $this->_request->setUrl($this->getBaseUrl());
+        $this->baseUrl = $url;
+        $this->request->setUrl($this->getBaseUrl());
 
         return $this;
     }
@@ -152,7 +163,7 @@ class HttpClient
      */
     public function getUrl()
     {
-        return $this->_request->getUrl();
+        return $this->request->getUrl();
     }
 
     /**
@@ -174,7 +185,7 @@ class HttpClient
             $url = $this->getBaseUrl() . $url;
         }
 
-        $this->_request->setUrl($url);
+        $this->request->setUrl($url);
 
         return $this;
     }
@@ -188,7 +199,7 @@ class HttpClient
      */
     public function getHeaders()
     {
-        return $this->_request->getHeaders();
+        return $this->request->getHeaders();
     }
 
     /**
@@ -202,7 +213,7 @@ class HttpClient
      */
     public function setHeaders(array $headers)
     {
-        $this->_request->setHeaders($headers);
+        $this->request->setHeaders($headers);
 
         return $this;
     }
@@ -218,7 +229,7 @@ class HttpClient
      */
     public function addHeaders(array $headers)
     {
-        $this->_request->addHeaders($headers);
+        $this->request->addHeaders($headers);
 
         return $this;
     }
@@ -232,7 +243,7 @@ class HttpClient
      */
     public function clearHeaders()
     {
-        $this->_request->setHeaders([]);
+        $this->request->setHeaders([]);
 
         return $this;
     }
@@ -246,7 +257,7 @@ class HttpClient
      */
     public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
     /**
@@ -260,7 +271,7 @@ class HttpClient
      */
     public function setRequest(HttpRequest $request)
     {
-        $this->_request = $request;
+        $this->request = $request;
 
         return $this;
     }
@@ -277,7 +288,7 @@ class HttpClient
      */
     public function getResponse()
     {
-        return $this->_response;
+        return $this->response;
     }
 
     /**
@@ -294,7 +305,7 @@ class HttpClient
      */
     public function setResponse(HttpResponse $httpResponse)
     {
-        $this->_response = $httpResponse;
+        $this->response = $httpResponse;
 
         return $this;
     }
@@ -308,7 +319,7 @@ class HttpClient
      */
     public function getRetryCount()
     {
-        return $this->_handler->getRetryCount();
+        return $this->handler->getRetryCount();
     }
 
     /**
@@ -322,7 +333,7 @@ class HttpClient
      */
     public function setRetryCount($retryCount)
     {
-        $this->_handler->setRetryCount($retryCount);
+        $this->handler->setRetryCount($retryCount);
 
         return $this;
     }
@@ -336,7 +347,7 @@ class HttpClient
      */
     public function getExplicitExecutor()
     {
-        return $this->_handler->getExplicitExecutor();
+        return $this->handler->getExplicitExecutor();
     }
 
     /**
@@ -353,7 +364,7 @@ class HttpClient
      */
     public function setImplementation($implementation)
     {
-        $this->_handler->setImplementation($implementation);
+        $this->handler->setImplementation($implementation);
 
         return $this;
     }
@@ -369,11 +380,11 @@ class HttpClient
      */
     public function head($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::HEAD)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -388,11 +399,11 @@ class HttpClient
      */
     public function get($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -407,11 +418,11 @@ class HttpClient
      */
     public function post($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -427,12 +438,12 @@ class HttpClient
      */
     public function postJson($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::POST)
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -447,11 +458,11 @@ class HttpClient
      */
     public function put($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -466,12 +477,12 @@ class HttpClient
      */
     public function putJson($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::PUT)
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -486,11 +497,11 @@ class HttpClient
      */
     public function delete($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }
@@ -506,12 +517,12 @@ class HttpClient
      */
     public function deleteJson($params = [])
     {
-        $this->_request
+        $this->request
             ->setMethod(HttpRequestMethod::DELETE)
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->_response = $this->_handler->execute($this->_request);
+        $this->response = $this->handler->execute($this->request);
 
         return $this->getResponse();
     }

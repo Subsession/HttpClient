@@ -32,25 +32,23 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Adapters;
 
+use Comertis\Http\Adapters\HttpAdapterInterface;
 use Comertis\Http\Exceptions\HttpExecutorException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\Executors\IHttpExecutor;
 
 /**
- * IHttpExecutor implementation using the CURL
- * PHP extension
+ * Undocumented class
  *
- * @uses Comertis\Http\Exceptions\HttpExecutorException
  * @uses Comertis\Http\HttpRequest
  * @uses Comertis\Http\HttpRequestMethod
  * @uses Comertis\Http\HttpRequestType
  * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Internal\Executors\IHttpExecutor
+ * @uses Comertis\Http\Adapters\HttpAdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -59,86 +57,65 @@ use Comertis\Http\Internal\Executors\IHttpExecutor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpCurlExecutor implements IHttpExecutor
+class HttpStreamAdapter implements HttpAdapterInterface
 {
     /**
-     * CURL instance
+     * Stream context options
      *
      * @access private
-     * @var    resource
+     * @var    array
      */
-    private $_ch;
+    private $options;
 
     /**
-     * Expected extensions for this IHttpExecutor implementation
+     * Expected extensions for this HttpAdapterInterface implementation
      * to work properly
      *
      * @access public
      * @var    array
      */
     const EXPECTED_EXTENSIONS = [
-        "curl",
+
     ];
 
     /**
-     * Expected functions for this IHttpExecutor implementation
+     * Expected functions for this HttpAdapterInterface implementation
      * to work properly
      *
      * @access public
      * @var    array
      */
     const EXPECTED_FUNCTIONS = [
-        "curl_init",
-        "curl_close",
-        "curl_setopt",
-        "curl_exec",
-        "curl_errno",
-        "curl_getinfo",
+        "stream_context_create",
+        "fopen",
+        "fclose",
+        "stream_get_meta_data",
+        "stream_get_contents",
     ];
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->_ch = curl_init();
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        curl_close($this->_ch);
-    }
 
     /**
      * @inheritDoc
      */
     public function prepareUrl(HttpRequest &$request)
     {
-        $method = $request->getMethod();
+        if ($request->getMethod() !== HttpRequestMethod::GET) {
+            return;
+        }
 
-        if ($method !== HttpRequestMethod::GET || $method !== HttpRequestMethod::HEAD) {
+        if (empty($request->getParams())) {
             return;
         }
 
         $params = $request->getParams();
 
-        if (empty($params) | is_null($params)) {
-            return;
-        }
-
         $url = $request->getUrl();
+        $url .= "?";
 
-        $separator = "?";
-
-        // If "?" already exists in the url
-        if (strpos($url, $separator) !== false) {
-            $separator = "&";
+        foreach ($params as $key => $value) {
+            $url .= $key . "=" . $value . "&";
         }
 
-        $url .= $separator . http_build_query($params);
+        $url = trim($url, "&");
 
         $request->setUrl($url);
     }
@@ -148,43 +125,19 @@ class HttpCurlExecutor implements IHttpExecutor
      */
     public function prepareHeaders(HttpRequest &$request)
     {
-        if (empty($request->getParams())) {
-            return;
+        $this->options = [
+            "http" => [
+                "method" => $request->getMethod(),
+                "header" => "",
+            ],
+        ];
+
+        foreach ($request->getHeaders() as $key => $value) {
+            $this->options["http"]["header"] .= $key . "=" . $value . ";";
         }
 
-        $method = $request->getMethod();
-
-        if ($method == HttpRequestMethod::GET | $method == HttpRequestMethod::HEAD) {
-            return;
-        }
-
-        $params = $request->getParams();
-        $contentLength = 0;
-
-        if (is_array($params)) {
-
-            foreach ($params as $key => $value) {
-                if (is_object($value)) {
-                    $contentLength += strlen(serialize($value));
-                } else {
-                    $contentLength += strlen($value);
-                }
-            }
-        } else if (is_object($params)) {
-            $contentLength = strlen(serialize($params));
-        } else {
-            $contentLength = strlen($params);
-        }
-
-        $request->addHeaders(["Content-Length" => $contentLength]);
-
-        switch ($request->getBodyType()) {
-            case HttpRequestType::JSON:
-                $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
-                break;
-
-            default:
-                break;
+        if (!empty($bodyType = $request->getBodyType())) {
+            $this->options["http"]["header"] .= "Content-Type: " . $bodyType . ";";
         }
     }
 
@@ -194,12 +147,6 @@ class HttpCurlExecutor implements IHttpExecutor
     public function prepareParams(HttpRequest &$request)
     {
         if (empty($request->getParams())) {
-            return;
-        }
-
-        $method = $request->getMethod();
-
-        if ($method == HttpRequestMethod::GET | $method == HttpRequestMethod::HEAD) {
             return;
         }
 
@@ -220,7 +167,7 @@ class HttpCurlExecutor implements IHttpExecutor
             throw new HttpExecutorException("Failed to parse request parameters");
         }
 
-        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
+        $this->options["http"]["content"] = $params;
     }
 
     /**
@@ -263,45 +210,42 @@ class HttpCurlExecutor implements IHttpExecutor
          */
         $responseError = null;
 
-        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->_ch, CURLOPT_FOLLOWLOCATION, true);
+        $context = stream_context_create($this->options);
 
-        curl_setopt($this->_ch, CURLOPT_URL, $request->getUrl());
-        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
-        curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+        $stream = @fopen($request->getUrl(), "r", false, $context);
 
-        curl_setopt(
-            $this->_ch,
-            CURLOPT_HEADERFUNCTION,
-            function ($curl, $header) use (&$responseHeaders) {
-                $headerLength = strlen($header);
-                $header = explode(':', $header, 2);
-
-                if (count($header) < 2) {
-                    return $headerLength;
-                }
-
-                $responseHeaders[trim($header[0])] = trim($header[1]);
-
-                return $headerLength;
-            }
-        );
-
-        $responseBody = curl_exec($this->_ch);
-
-        if (curl_errno($this->_ch)) {
-            $responseError = curl_error($this->_ch);
+        if ($stream) {
+            $responseInfo = stream_get_meta_data($stream);
+            $responseBody = stream_get_contents($stream);
+            fclose($stream);
+        } elseif (isset($http_response_header)) {
+            $responseInfo["wrapper_data"] = $http_response_header;
         }
 
-        $responseInfo = curl_getinfo($this->_ch);
-        $responseStatusCode = $responseInfo['http_code'];
+        if (isset($responseInfo["wrapper_data"])) {
+            $headers = $responseInfo["wrapper_data"];
 
-        $response = new HttpResponse($responseHeaders, $responseStatusCode);
+            // Set headers
+            for ($i = 1; $i < count($headers); $i++) {
+                $currentHeader = explode(":", $headers[$i], 2);
+                $responseHeaders[trim($currentHeader[0])] = trim($currentHeader[1]);
+            }
+
+            // Set status code
+            $match = [];
+            $status_line = $responseInfo["wrapper_data"][0];
+
+            preg_match("{HTTP\/\S*\s(\d{3})}", $status_line, $match);
+
+            if (isset($match[1])) {
+                $responseStatusCode = (integer) $match[1];
+            }
+        }
+
+        $response = new HttpResponse();
         $response->setBody($responseBody)
-            ->setTransactionTime($responseInfo['total_time'])
-            ->setDownloadSpeed($responseInfo['speed_download'])
-            ->setUploadSpeed($responseInfo['speed_upload'])
-            ->setHeadersSize($responseInfo['header_size'])
+            ->setHeaders($responseHeaders)
+            ->setStatusCode($responseStatusCode)
             ->setError($responseError);
 
         return $response;
