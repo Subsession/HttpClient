@@ -34,13 +34,14 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\HttpRequest;
-
 /**
- * Defines the minimum necessary for a HttpExecutor
- * implementation regardless of used library or extension
+ * Undocumented class
  *
  * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpRequestMethod
+ * @uses Comertis\Http\HttpRequestType
+ * @uses Comertis\Http\HttpResponse
+ * @uses Comertis\Http\Adapters\HttpAdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -49,70 +50,44 @@ use Comertis\Http\HttpRequest;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface HttpAdapterInterface
+abstract class AbstractAdapter implements HttpAdapterInterface
 {
     /**
-     * Make any necessary changes to the HttpRequest URL before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
+     * Expected extensions for this HttpAdapterInterface implementation
+     * to work properly
      *
      * @access public
-     * @return void
+     * @var    array
      */
-    public function prepareUrl(HttpRequest &$request);
+    const EXPECTED_EXTENSIONS = [
+
+    ];
 
     /**
-     * Make any necessary changes to the HttpRequest headers before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
+     * Expected functions for this HttpAdapterInterface implementation
+     * to work properly
      *
      * @access public
-     * @return void
+     * @var    array
      */
-    public function prepareHeaders(HttpRequest &$request);
+    const EXPECTED_FUNCTIONS = [
 
-    /**
-     * Make any necessary changes to the HttpRequest parameters before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareParams(HttpRequest &$request);
+    ];
 
-    /**
-     * Get the configured retry count for requests
-     *
-     * @access public
-     * @return integer
-     */
-    public function getRetryCount();
+    public static function isAvailable()
+    {
+        foreach (static::EXPECTED_EXTENSIONS as $extension) {
+            if (!extension_loaded($extension)) {
+                return false;
+            }
+        }
 
-    /**
-     * Set the number of times to retry a request
-     * in case of failing to get a response
-     *
-     * @access public
-     * @return integer
-     */
-    public function setRetryCount();
+        foreach (static::EXPECTED_FUNCTIONS as $function) {
+            if (!function_exists($function)) {
+                return false;
+            }
+        }
 
-    /**
-     * Checks if the adapter can be used
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isAvailable();
-
-    /**
-     * Execute the HttpRequest and return a HttpResponse
-     *
-     * @param HttpRequest $request HttpRequest instance
-     *
-     * @access public
-     * @return HttpResponse
-     */
-    public function handle(HttpRequest $request);
+        return true;
+    }
 }

@@ -46,7 +46,7 @@ use Exception;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpExecutorException extends Exception
+class HttpAdapterException extends Exception
 {
     /**
      * Constructor

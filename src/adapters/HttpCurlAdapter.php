@@ -34,23 +34,16 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Adapters\HttpAdapterInterface;
-use Comertis\Http\Exceptions\HttpExecutorException;
-use Comertis\Http\HttpRequest;
+use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
+use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * HttpAdapterInterface implementation using the CURL
  * PHP extension
- *
- * @uses Comertis\Http\Exceptions\HttpExecutorException
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Adapters\HttpAdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -59,7 +52,7 @@ use Comertis\Http\HttpResponse;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpCurlAdapter implements HttpAdapterInterface
+class HttpCurlAdapter extends AbstractAdapter
 {
     /**
      * CURL instance
@@ -101,7 +94,11 @@ class HttpCurlAdapter implements HttpAdapterInterface
      */
     public function __construct()
     {
-        $this->ch = curl_init();
+        try {
+            $this->ch = curl_init();
+        } catch (\Throwable $exception) {
+            // Ignored for now
+        }
     }
 
     /**
@@ -109,13 +106,17 @@ class HttpCurlAdapter implements HttpAdapterInterface
      */
     public function __destruct()
     {
-        curl_close($this->ch);
+        if (is_resource($this->ch)) {
+            curl_close($this->ch);
+        }
     }
 
     /**
      * @inheritDoc
+     *
+     * @return void
      */
-    public function prepareUrl(HttpRequest &$request)
+    public function prepareUrl(HttpRequestInterface &$request)
     {
         $method = $request->getMethod();
 
@@ -125,7 +126,7 @@ class HttpCurlAdapter implements HttpAdapterInterface
 
         $params = $request->getParams();
 
-        if (empty($params) | is_null($params)) {
+        if (empty($params) || is_null($params)) {
             return;
         }
 
@@ -145,8 +146,10 @@ class HttpCurlAdapter implements HttpAdapterInterface
 
     /**
      * @inheritDoc
+     *
+     * @return void
      */
-    public function prepareHeaders(HttpRequest &$request)
+    public function prepareHeaders(HttpRequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -189,8 +192,10 @@ class HttpCurlAdapter implements HttpAdapterInterface
 
     /**
      * @inheritDoc
+     *
+     * @return void
      */
-    public function prepareParams(HttpRequest &$request)
+    public function prepareParams(HttpRequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -216,7 +221,7 @@ class HttpCurlAdapter implements HttpAdapterInterface
         }
 
         if (empty($params) | is_null($params)) {
-            throw new HttpExecutorException("Failed to parse request parameters");
+            throw new HttpAdapterException("Failed to parse request parameters");
         }
 
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $params);
@@ -225,7 +230,7 @@ class HttpCurlAdapter implements HttpAdapterInterface
     /**
      * @inheritDoc
      */
-    public function execute(HttpRequest $request)
+    public function execute(HttpRequestInterface $request)
     {
         /**
          * Response headers

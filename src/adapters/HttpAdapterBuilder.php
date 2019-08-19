@@ -37,7 +37,7 @@ namespace Comertis\Http\Adapters;
 use Comertis\Http\Adapters\HttpCurlAdapter;
 use Comertis\Http\Adapters\HttpPeclAdapter;
 use Comertis\Http\Adapters\HttpStreamAdapter;
-use Comertis\Http\Exceptions\HttpExecutorException;
+use Comertis\Http\Exceptions\HttpAdapterException;
 
 /**
  * Undocumented class
@@ -59,25 +59,25 @@ class HttpAdapterBuilder
      *
      * @static
      * @access public
-     * @throws HttpExecutorException
+     * @throws HttpAdapterException
      * @return HttpAdapterInterface
      */
     public static function build($implementation = null)
     {
-        $executor = null;
+        $adapter = null;
 
         if (!is_null($implementation)) {
-            $executor = self::getExplicitExecutor($implementation);
+            $adapter = self::getAdapter($implementation);
         } else {
-            $executor = self::getExecutor();
+            $adapter = self::getExecutor();
         }
 
-        if (is_null($executor)) {
-            $message = "Failed to create an executor, missing necessary extensions/functions";
-            throw new HttpExecutorException($message);
+        if (is_null($adapter)) {
+            $message = "Failed to create an adapter, missing necessary extensions/functions";
+            throw new HttpAdapterException($message);
         }
 
-        return $executor;
+        return $adapter;
     }
 
     /**
@@ -89,49 +89,39 @@ class HttpAdapterBuilder
      * @access public
      * @return HttpAdapterInterface|null
      */
-    public static function getExplicitExecutor($implementation)
+    public static function getAdapter($implementation)
     {
-        /**
-         * Implementation of HttpAdapterInterface
-         *
-         * @var HttpAdapterInterface|null
-         */
-        $adapter = null;
-
         if (is_array($implementation)) {
             foreach ($implementation as $key => $value) {
                 // Recursive call until one executor implementation is returned
-                $adapter = self::getExplicitExecutor($value);
-
-                if (!is_null($adapter)) {
-                    return $adapter;
-                }
+                return self::getAdapter($value);
             }
         }
 
         switch ($implementation) {
             case HttpCurlAdapter::class:
-                if (self::checkCurlImplementation()) {
-                    $adapter = new HttpCurlAdapter();
+                if (HttpCurlAdapter::isAvailable()) {
+                    return new HttpCurlAdapter();
                 }
                 break;
 
             case HttpPeclAdapter::class:
-                if (self::checkPeclImplementation()) {
-                    $adapter = new HttpPeclAdapter();
+                if (HttpPeclAdapter::isAvailable()) {
+                    return new HttpPeclAdapter();
                 }
                 break;
 
             case HttpStreamAdapter::class:
-                if (self::checkStreamImplementation()) {
-                    $adapter = new HttpStreamAdapter();
+                if (HttpStreamAdapter::isAvailable()) {
+                    return new HttpStreamAdapter();
                 }
                 break;
             default:
+                return null;
                 break;
         }
 
-        return $adapter;
+        return null;
     }
 
     /**
@@ -148,120 +138,14 @@ class HttpAdapterBuilder
      */
     public static function getExecutor()
     {
-        /**
-         * HttpAdapterInterface implementation
-         *
-         * @var HttpAdapterInterface|null
-         */
-        $executor = null;
-
-        if (self::checkCurlImplementation()) {
-            $executor = new HttpCurlAdapter();
+        if (HttpCurlAdapter::isAvailable()) {
+            return new HttpCurlAdapter();
         } elseif (self::checkPeclImplementation()) {
-            $executor = new HttpPeclAdapter();
-        } elseif (self::checkStreamImplementation()) {
-            $executor = new HttpStreamAdapter();
+            return new HttpPeclAdapter();
+        } elseif (HttpStreamAdapter::isAvailable()) {
+            return new HttpStreamAdapter();
         }
 
-        return $executor;
-    }
-
-    /**
-     * Check the requirements for the HttpCurlAdapter
-     *
-     * @static
-     * @access private
-     * @return bool
-     */
-    private static function checkCurlImplementation()
-    {
-        /**
-         * Conditional
-         *
-         * @var bool
-         */
-        $toReturn = true;
-
-        foreach (HttpCurlAdapter::EXPECTED_EXTENSIONS as $extension) {
-            if (!extension_loaded($extension)) {
-                $toReturn = false;
-                break;
-            }
-        }
-
-        foreach (HttpCurlAdapter::EXPECTED_FUNCTIONS as $function) {
-            if (!function_exists($function)) {
-                $toReturn = false;
-                break;
-            }
-        }
-
-        return $toReturn;
-    }
-
-    /**
-     * Check the requirements for HttpPeclAdapter
-     *
-     * @static
-     * @access private
-     * @return bool
-     */
-    private static function checkPeclImplementation()
-    {
-        /**
-         * Conditional
-         *
-         * @var bool
-         */
-        $toReturn = true;
-
-        foreach (HttpPeclAdapter::EXPECTED_EXTENSIONS as $extension) {
-            if (!extension_loaded($extension)) {
-                $toReturn = false;
-                break;
-            }
-        }
-
-        foreach (HttpPeclAdapter::EXPECTED_FUNCTIONS as $function) {
-            if (!function_exists($function)) {
-                $toReturn = false;
-                break;
-            }
-        }
-
-        return $toReturn;
-    }
-
-    /**
-     * Check the requirements for HttpContextExecutor
-     *
-     * @static
-     * @access private
-     * @return bool
-     */
-    private static function checkStreamImplementation()
-    {
-        /**
-         * Conditional
-         *
-         * @var bool
-         */
-        $toReturn = true;
-
-        foreach (HttpStreamAdapter::EXPECTED_EXTENSIONS as $extension) {
-            if (!extension_loaded($extension)) {
-                $toReturn = false;
-                break;
-            }
-        }
-
-        foreach (HttpStreamAdapter::EXPECTED_FUNCTIONS as $function) {
-            if (!function_exists($function)) {
-                $toReturn = false;
-                break;
-            }
-        }
-
-        return $toReturn;
+        return null;
     }
 }

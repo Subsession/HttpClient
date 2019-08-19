@@ -34,9 +34,9 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Adapters\HttpAdapterInterface;
+use Comertis\Http\Adapters\AbstractAdapter;
 use Comertis\Http\Exceptions\HttpNotImplementedException;
-use Comertis\Http\HttpRequest;
+use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * Undocumented class
@@ -52,7 +52,7 @@ use Comertis\Http\HttpRequest;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpPeclAdapter implements HttpAdapterInterface
+class HttpPeclAdapter extends AbstractAdapter
 {
 
     /**
@@ -81,7 +81,7 @@ class HttpPeclAdapter implements HttpAdapterInterface
      * @inheritDoc
      * @throws     HttpNotImplementedException
      */
-    public function prepareUrl(HttpRequest &$request)
+    public function prepareUrl(HttpRequestInterface &$request)
     {
         throw new HttpNotImplementedException("This function is not yet implemented");
     }
@@ -90,7 +90,7 @@ class HttpPeclAdapter implements HttpAdapterInterface
      * @inheritDoc
      * @throws     HttpNotImplementedException
      */
-    public function prepareHeaders(HttpRequest &$request)
+    public function prepareHeaders(HttpRequestInterface &$request)
     {
         throw new HttpNotImplementedException();
     }
@@ -99,7 +99,7 @@ class HttpPeclAdapter implements HttpAdapterInterface
      * @inheritDoc
      * @throws     HttpNotImplementedException
      */
-    public function prepareParams(HttpRequest &$request)
+    public function prepareParams(HttpRequestInterface &$request)
     {
         throw new HttpNotImplementedException();
     }
@@ -108,7 +108,7 @@ class HttpPeclAdapter implements HttpAdapterInterface
      * @inheritDoc
      * @throws     HttpNotImplementedException
      */
-    public function execute(HttpRequest $request)
+    public function execute(HttpRequestInterface $request)
     {
         throw new HttpNotImplementedException();
     }

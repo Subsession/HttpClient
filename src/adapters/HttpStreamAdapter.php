@@ -34,8 +34,8 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Adapters\HttpAdapterInterface;
-use Comertis\Http\Exceptions\HttpExecutorException;
+use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
@@ -44,12 +44,6 @@ use Comertis\Http\HttpResponse;
 /**
  * Undocumented class
  *
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Adapters\HttpAdapterInterface
- *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
@@ -57,7 +51,7 @@ use Comertis\Http\HttpResponse;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpStreamAdapter implements HttpAdapterInterface
+class HttpStreamAdapter extends AbstractAdapter
 {
     /**
      * Stream context options
@@ -164,7 +158,7 @@ class HttpStreamAdapter implements HttpAdapterInterface
         }
 
         if (empty($params) | is_null($params)) {
-            throw new HttpExecutorException("Failed to parse request parameters");
+            throw new HttpAdapterException("Failed to parse request parameters");
         }
 
         $this->options["http"]["content"] = $params;
