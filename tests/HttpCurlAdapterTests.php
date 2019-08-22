@@ -2,21 +2,22 @@
 
 namespace Comertis\Http\Tests;
 
+use Comertis\Http\Adapters\HttpAdapterBuilder;
+use Comertis\Http\Adapters\HttpCurlAdapter;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\Internal\Executors\HttpCurlExecutor;
-use PHPUnit\Framework\TestCase;
 use Comertis\Http\HttpRequestMethod;
+use PHPUnit\Framework\TestCase;
 
-final class HttpCurlExecutorTests extends TestCase
+final class HttpCurlAdapterTests extends TestCase
 {
     /**
-     * @var HttpCurlExecutor
+     * @var HttpAdapterInterface
      */
-    private $_httpCurlExecutor;
+    private $adapter;
 
     public function __construct()
     {
-        $this->_httpCurlExecutor = new HttpCurlExecutor();
+        $this->adapter = HttpAdapterBuilder::build(HttpCurlAdapter::class);
 
         parent::__construct();
     }

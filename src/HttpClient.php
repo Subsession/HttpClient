@@ -35,12 +35,14 @@
 namespace Comertis\Http;
 
 use Comertis\Http\Adapters\HttpAdapterBuilder;
+use Comertis\Http\Adapters\HttpAdapterInterface;
 use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\HttpHandler;
+use Comertis\Http\Internal\HttpRequestInterface;
+use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class
@@ -66,7 +68,7 @@ class HttpClient
      *
      * @access private
      * @see    HttpRequest
-     * @var    HttpRequest
+     * @var    HttpRequestInterface
      */
     private $request;
 
@@ -75,18 +77,9 @@ class HttpClient
      *
      * @access private
      * @see    HttpResponse
-     * @var    HttpResponse
+     * @var    HttpResponseInterface
      */
     private $response;
-
-    /**
-     * Responsible for executing a HttpRequest
-     *
-     * @access private
-     * @see    HttpHandler
-     * @var    HttpHandler
-     */
-    private $handler;
 
     /**
      * Responsible for executing a HttpRequest
@@ -112,19 +105,8 @@ class HttpClient
     {
         $this->request = new HttpRequest();
         $this->response = new HttpResponse();
-        $this->handler = new HttpHandler();
         $this->adapter = HttpAdapterBuilder::build();
         $this->baseUrl = null;
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        foreach ($this as $key => $value) {
-            unset($this->$key);
-        }
     }
 
     /**
@@ -144,7 +126,7 @@ class HttpClient
      * @param string|null $url Base URL | Null to remove
      *
      * @access public
-     * @return HttpClient
+     * @return self
      */
     public function setBaseUrl($url)
     {
@@ -177,11 +159,11 @@ class HttpClient
      * @access public
      * @see    HttpClient::setBaseUrl()
      * @see    HttpRequest::setUrl()
-     * @return HttpClient
+     * @return self
      */
     public function setUrl($url)
     {
-        if (!is_null($this->getBaseUrl())) {
+        if (null !== $this->getBaseUrl()) {
             $url = $this->getBaseUrl() . $url;
         }
 
@@ -205,11 +187,11 @@ class HttpClient
     /**
      * Set the request headers
      *
-     * @param array $headers Key => Value pair array of headers
+     * @param array $headers Array of (Key => Value) pairs
      *
      * @access public
      * @see    HttpRequest::setHeaders()
-     * @return HttpClient
+     * @return self
      */
     public function setHeaders(array $headers)
     {
@@ -221,11 +203,11 @@ class HttpClient
     /**
      * Add headers to the request
      *
-     * @param array $headers Key => Value pair array of headers
+     * @param array $headers Array of (Key => Value) pairs
      *
      * @access public
      * @see    HttpRequest::addHeaders()
-     * @return HttpClient
+     * @return self
      */
     public function addHeaders(array $headers)
     {
@@ -239,7 +221,7 @@ class HttpClient
      *
      * @access public
      * @see    HttpRequest::setHeaders()
-     * @return HttpClient
+     * @return self
      */
     public function clearHeaders()
     {
@@ -249,11 +231,10 @@ class HttpClient
     }
 
     /**
-     * Get the HttpClient request
+     * Get the HttpRequestInterface instance
      *
      * @access public
-     * @see    HttpClient
-     * @return HttpRequest
+     * @return HttpRequestInterface
      */
     public function getRequest()
     {
@@ -261,15 +242,14 @@ class HttpClient
     }
 
     /**
-     * Set the HttpClient request
+     * Set the HttpRequestInterface instance
      *
-     * @param HttpRequest $request HttpRequest instance
+     * @param HttpRequestInterface $request HttpRequestInterface instance
      *
      * @access public
-     * @see    HttpRequest
-     * @return HttpClient
+     * @return self
      */
-    public function setRequest(HttpRequest $request)
+    public function setRequest(HttpRequestInterface $request)
     {
         $this->request = $request;
 
@@ -278,13 +258,13 @@ class HttpClient
 
     /**
      * Get the HttpResponse instance after executing
-     * a HttpRequest
+     * a HttpRequestInterface
      *
      * This returns null if called before executing
-     * the HttpRequest.
+     * the HttpRequestInterface.
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function getResponse()
     {
@@ -292,79 +272,54 @@ class HttpClient
     }
 
     /**
-     * Set the HttpResponse instance
+     * Set the HttpResponseInterface instance
      *
      * This should never be used explicitly in
      * normal use-cases, this method exists for
      * consistency reasons.
      *
-     * @param HttpResponse $httpResponse HttpResponse instance
+     * @param HttpResponseInterface $response HttpResponseInterface instance
      *
      * @access public
-     * @return HttpClient
+     * @return self
      */
-    public function setResponse(HttpResponse $httpResponse)
+    public function setResponse(HttpResponseInterface $response)
     {
-        $this->response = $httpResponse;
+        $this->response = $response;
 
         return $this;
     }
 
     /**
-     * Get the configured retry count for requests
-     *
-     * @access public
-     * @see    HttpHandler::getRetryCount()
-     * @return integer
-     */
-    public function getRetryCount()
-    {
-        return $this->handler->getRetryCount();
-    }
-
-    /**
-     * Set the retry count for requests
-     *
-     * @param integer $retryCount Number of retries on a connection before giving up
-     *
-     * @access public
-     * @see    HttpHandler::setRetryCount()
-     * @return HttpClient
-     */
-    public function setRetryCount($retryCount)
-    {
-        $this->handler->setRetryCount($retryCount);
-
-        return $this;
-    }
-
-    /**
-     * Get the explicitly specified IHttpExecutor implementation
+     * Get the explicitly specified HttpAdapterInterface implementation
      * used for requests
      *
      * @access public
-     * @return string|null
+     * @return HttpAdapterInterface|null
      */
-    public function getExplicitExecutor()
+    public function getAdapter()
     {
-        return $this->handler->getExplicitExecutor();
+        return $this->adapter;
     }
 
     /**
-     * Specify an explicit IHttpExecutor implementation to use
+     * Specify an explicit HttpAdapterInterface implementation to use
      * for requests, either just one, or a array with the preferred
      * order of the available implementations.
      *
-     * @param string|array $implementation Single|Array of available
-     *                                     IHttpExecutor implementations
+     * @param string|HttpAdapterInterface $adapter
      *
      * @access public
-     * @see    IHttpExecutor
-     * @return HttpClient
+     * @see    HttpAdapterInterface
+     * @return self
      */
-    public function setImplementation($implementation)
+    public function setAdapter($adapter)
     {
-        $this->handler->setImplementation($implementation);
+        if ($adapter instanceof HttpAdapterInterface) {
+            $this->adapter = $adapter;
+        } else {
+            $this->adapter = HttpAdapterBuilder::build($adapter);
+        }
 
         return $this;
     }
@@ -376,7 +331,7 @@ class HttpClient
      *                      These parameters will be added to the URL
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function head($params = [])
     {
@@ -384,7 +339,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::HEAD)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -395,7 +350,7 @@ class HttpClient
      * @param array $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function get($params = [])
     {
@@ -403,7 +358,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -414,7 +369,7 @@ class HttpClient
      * @param array $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function post($params = [])
     {
@@ -422,7 +377,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -434,7 +389,7 @@ class HttpClient
      *
      * @access public
      * @throws HttpClientException
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function postJson($params = [])
     {
@@ -443,7 +398,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -454,7 +409,7 @@ class HttpClient
      * @param array|mixed|object $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function put($params = [])
     {
@@ -462,7 +417,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -473,7 +428,7 @@ class HttpClient
      * @param array|mixed|object $params Parameters to be json encoded
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function putJson($params = [])
     {
@@ -482,7 +437,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -493,7 +448,7 @@ class HttpClient
      * @param array $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function delete($params = [])
     {
@@ -501,7 +456,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }
@@ -513,7 +468,7 @@ class HttpClient
      *
      * @access public
      * @throws HttpClientException
-     * @return HttpResponse
+     * @return HttpResponseInterface
      */
     public function deleteJson($params = [])
     {
@@ -522,7 +477,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->response = $this->handler->execute($this->request);
+        $this->response = $this->adapter->handle($this->request);
 
         return $this->getResponse();
     }

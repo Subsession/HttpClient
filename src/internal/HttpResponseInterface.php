@@ -37,9 +37,7 @@ namespace Comertis\Http\Internal;
 use Comertis\Http\HttpStatusCode;
 
 /**
- * Undocumented class
- *
- * @uses Comertis\Http\HttpStatusCode
+ * Undocumented interface
  *
  * @category Http
  * @package  Comertis\Http
@@ -64,7 +62,7 @@ interface HttpResponseInterface
      * @param array $headers Response headers
      *
      * @access public
-     * @return HttpResponse
+     * @return self
      */
     public function setHeaders($headers);
 
@@ -83,7 +81,7 @@ interface HttpResponseInterface
      *
      * @access public
      * @see    HttpStatusCode
-     * @return HttpResponse
+     * @return self
      */
     public function setStatusCode($statusCode);
 
@@ -91,7 +89,7 @@ interface HttpResponseInterface
      * Get the response body
      *
      * @access public
-     * @return mixed
+     * @return mixed|null
      */
     public function getBody();
 
@@ -101,7 +99,7 @@ interface HttpResponseInterface
      * @param string|mixed $body Response body
      *
      * @access public
-     * @return HttpResponse
+     * @return self
      */
     public function setBody($body);
 
@@ -109,17 +107,17 @@ interface HttpResponseInterface
      * Get the response error
      *
      * @access public
-     * @return string
+     * @return string|null
      */
     public function getError();
 
     /**
      * Set the response error
      *
-     * @param integer $error Error message
+     * @param string $error Error message
      *
      * @access public
-     * @return HttpResponse
+     * @return self
      */
     public function setError($error);
 

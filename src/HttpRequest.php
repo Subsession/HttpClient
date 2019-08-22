@@ -140,7 +140,7 @@ class HttpRequest implements HttpRequestInterface
      * @param array $headers Request headers
      *
      * @access public
-     * @return HttpRequest
+     * @return self
      */
     public function setHeaders($headers)
     {
@@ -182,7 +182,7 @@ class HttpRequest implements HttpRequestInterface
      *
      * @access public
      * @see    HttpRequestMethod
-     * @return HttpRequest
+     * @return self
      */
     public function setMethod($requestMethod)
     {
@@ -209,7 +209,7 @@ class HttpRequest implements HttpRequestInterface
      *
      * @access public
      * @throws HttpClientException If the URL is null or empty
-     * @return HttpRequest
+     * @return self
      */
     public function setUrl($url)
     {
@@ -243,7 +243,7 @@ class HttpRequest implements HttpRequestInterface
      * @param array $params Request parameters
      *
      * @access public
-     * @return HttpRequest
+     * @return self
      */
     public function setParams($params)
     {
@@ -270,7 +270,7 @@ class HttpRequest implements HttpRequestInterface
      *
      * @access public
      * @see    HttpRequestType
-     * @return HttpRequest
+     * @return self
      */
     public function setBodyType($bodyType)
     {

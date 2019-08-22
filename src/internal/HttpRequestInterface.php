@@ -38,10 +38,7 @@ use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequestMethod;
 
 /**
- * Undocumented class
- *
- * @uses Comertis\Http\Exceptions\HttpClientException
- * @uses Comertis\Http\HttpRequestMethod
+ * Undocumented interface
  *
  * @category Http
  * @package  Comertis\Http
@@ -66,7 +63,7 @@ interface HttpRequestInterface
      * @param array $headers Request headers
      *
      * @access public
-     * @return HttpRequest
+     * @return self
      */
     public function setHeaders($headers);
 
@@ -97,7 +94,7 @@ interface HttpRequestInterface
      *
      * @access public
      * @see    HttpRequestMethod
-     * @return HttpRequest
+     * @return self
      */
     public function setMethod($requestMethod);
     /**
@@ -115,7 +112,7 @@ interface HttpRequestInterface
      *
      * @access public
      * @throws HttpClientException If the URL is null or empty
-     * @return HttpRequest
+     * @return self
      */
     public function setUrl($url);
 
@@ -133,7 +130,7 @@ interface HttpRequestInterface
      * @param array $params Request parameters
      *
      * @access public
-     * @return HttpRequest
+     * @return self
      */
     public function setParams($params);
 
@@ -152,7 +149,7 @@ interface HttpRequestInterface
      *
      * @access public
      * @see    HttpRequestType
-     * @return HttpRequest
+     * @return self
      */
     public function setBodyType($bodyType);
 }

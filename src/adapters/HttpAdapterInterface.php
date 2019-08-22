@@ -34,13 +34,14 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\HttpRequest;
+use Comertis\Http\Internal\HttpRequestInterface;
+use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Defines the minimum necessary for a HttpExecutor
  * implementation regardless of used library or extension
  *
- * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\HttpRequestInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -52,67 +53,42 @@ use Comertis\Http\HttpRequest;
 interface HttpAdapterInterface
 {
     /**
-     * Make any necessary changes to the HttpRequest URL before executing
+     * Make any necessary changes to the HttpRequestInterface URL before executing
      *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareUrl(HttpRequest &$request);
-
-    /**
-     * Make any necessary changes to the HttpRequest headers before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
+     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
      *
      * @access public
      * @return void
      */
-    public function prepareHeaders(HttpRequest &$request);
+    public function prepareUrl(HttpRequestInterface &$request);
 
     /**
-     * Make any necessary changes to the HttpRequest parameters before executing
+     * Make any necessary changes to the HttpRequestInterface headers before executing
      *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
+     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
      *
      * @access public
      * @return void
      */
-    public function prepareParams(HttpRequest &$request);
+    public function prepareHeaders(HttpRequestInterface &$request);
 
     /**
-     * Get the configured retry count for requests
+     * Make any necessary changes to the HttpRequestInterface parameters before executing
+     *
+     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
      *
      * @access public
-     * @return integer
+     * @return void
      */
-    public function getRetryCount();
+    public function prepareParams(HttpRequestInterface &$request);
 
     /**
-     * Set the number of times to retry a request
-     * in case of failing to get a response
+     * Execute the HttpRequestInterface and return a HttpResponseInterface instance
+     *
+     * @param HttpRequestInterface $request HttpRequestInterface instance
      *
      * @access public
-     * @return integer
+     * @return HttpResponseInterface
      */
-    public function setRetryCount();
-
-    /**
-     * Checks if the adapter can be used
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isAvailable();
-
-    /**
-     * Execute the HttpRequest and return a HttpResponse
-     *
-     * @param HttpRequest $request HttpRequest instance
-     *
-     * @access public
-     * @return HttpResponse
-     */
-    public function handle(HttpRequest $request);
+    public function handle(HttpRequestInterface $request);
 }
