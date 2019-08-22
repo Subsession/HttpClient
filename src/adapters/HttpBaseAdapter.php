@@ -34,6 +34,8 @@
 
 namespace Comertis\Http\Adapters;
 
+use Comertis\Http\Internal\HttpRequestInterface;
+
 /**
  * Undocumented class
  *
@@ -50,7 +52,7 @@ namespace Comertis\Http\Adapters;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-abstract class AbstractAdapter implements HttpAdapterInterface
+abstract class HttpBaseAdapter implements HttpAdapterInterface
 {
     /**
      * Expected extensions for this HttpAdapterInterface implementation
@@ -74,6 +76,12 @@ abstract class AbstractAdapter implements HttpAdapterInterface
 
     ];
 
+    /**
+     * @inheritDoc
+     *
+     * @access public
+     * @return boolean
+     */
     public static function isAvailable()
     {
         foreach (static::EXPECTED_EXTENSIONS as $extension) {
@@ -89,5 +97,20 @@ abstract class AbstractAdapter implements HttpAdapterInterface
         }
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param HttpRequestInterface $request
+     *
+     * @access public
+     * @return HttpResponseInterface
+     */
+    public function handle(HttpRequestInterface $request)
+    {
+        $this->prepareUrl($request);
+        $this->prepareHeaders($request);
+        $this->prepareParams($request);
     }
 }

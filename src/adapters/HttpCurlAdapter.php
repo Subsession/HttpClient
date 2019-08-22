@@ -34,7 +34,7 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Adapters\HttpBaseAdapter;
 use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
@@ -52,7 +52,7 @@ use Comertis\Http\Internal\HttpRequestInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpCurlAdapter extends AbstractAdapter
+class HttpCurlAdapter extends HttpBaseAdapter
 {
     /**
      * CURL instance
@@ -230,8 +230,10 @@ class HttpCurlAdapter extends AbstractAdapter
     /**
      * @inheritDoc
      */
-    public function execute(HttpRequestInterface $request)
+    public function handle(HttpRequestInterface $request)
     {
+        parent::handle($request);
+
         /**
          * Response headers
          *
@@ -242,9 +244,9 @@ class HttpCurlAdapter extends AbstractAdapter
         /**
          * Response body
          *
-         * @var string|bool
+         * @var string|null
          */
-        $responseBody = false;
+        $responseBody = null;
 
         /**
          * Response metadata
@@ -300,12 +302,11 @@ class HttpCurlAdapter extends AbstractAdapter
         $responseInfo = curl_getinfo($this->ch);
         $responseStatusCode = $responseInfo['http_code'];
 
-        $response = new HttpResponse($responseHeaders, $responseStatusCode);
-        $response->setBody($responseBody)
-            ->setTransactionTime($responseInfo['total_time'])
-            ->setDownloadSpeed($responseInfo['speed_download'])
-            ->setUploadSpeed($responseInfo['speed_upload'])
-            ->setHeadersSize($responseInfo['header_size'])
+        $response = new HttpResponse();
+        $response
+            ->setHeaders($responseHeaders)
+            ->setStatusCode($responseStatusCode)
+            ->setBody($responseBody)
             ->setError($responseError);
 
         return $response;

@@ -118,7 +118,7 @@ class HttpResponse implements HttpResponseInterface
      * @param array $headers Response headers
      *
      * @access public
-     * @return HttpResponse
+     * @return self
      */
     public function setHeaders($headers)
     {
@@ -145,7 +145,7 @@ class HttpResponse implements HttpResponseInterface
      *
      * @access public
      * @see    HttpStatusCode
-     * @return HttpResponse
+     * @return self
      */
     public function setStatusCode($statusCode)
     {
@@ -171,7 +171,7 @@ class HttpResponse implements HttpResponseInterface
      * @param string|mixed $body Response body
      *
      * @access public
-     * @return HttpResponse
+     * @return self
      */
     public function setBody($body)
     {
@@ -197,7 +197,7 @@ class HttpResponse implements HttpResponseInterface
      * @param integer $error Error message
      *
      * @access public
-     * @return HttpResponse
+     * @return self
      */
     public function setError($error)
     {

@@ -2,6 +2,7 @@
 
 namespace Comertis\Http\Tests;
 
+use Comertis\Http\Adapters\HttpCurlAdapter;
 use Comertis\Http\HttpClient;
 use Comertis\Http\HttpStatusCode;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,9 @@ final class HttpClientTests extends TestCase
     public function __construct()
     {
         $this->_httpClient = new HttpClient();
-        $this->_httpClient->setBaseUrl(self::BASE_URL);
+        $this->_httpClient
+            ->setBaseUrl(self::BASE_URL)
+            ->setAdapter(HttpCurlAdapter::class);
 
         parent::__construct();
     }
@@ -79,7 +82,7 @@ final class HttpClientTests extends TestCase
         );
 
         $this->assertEquals(
-            '{}',
+            null,
             $response->getBody()
         );
     }

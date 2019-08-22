@@ -34,12 +34,12 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Adapters\HttpBaseAdapter;
 use Comertis\Http\Exceptions\HttpAdapterException;
-use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
+use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * Undocumented class
@@ -51,7 +51,7 @@ use Comertis\Http\HttpResponse;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpStreamAdapter extends AbstractAdapter
+class HttpStreamAdapter extends HttpBaseAdapter
 {
     /**
      * Stream context options
@@ -90,7 +90,7 @@ class HttpStreamAdapter extends AbstractAdapter
     /**
      * @inheritDoc
      */
-    public function prepareUrl(HttpRequest &$request)
+    public function prepareUrl(HttpRequestInterface &$request)
     {
         if ($request->getMethod() !== HttpRequestMethod::GET) {
             return;
@@ -117,7 +117,7 @@ class HttpStreamAdapter extends AbstractAdapter
     /**
      * @inheritDoc
      */
-    public function prepareHeaders(HttpRequest &$request)
+    public function prepareHeaders(HttpRequestInterface &$request)
     {
         $this->options = [
             "http" => [
@@ -138,7 +138,7 @@ class HttpStreamAdapter extends AbstractAdapter
     /**
      * @inheritDoc
      */
-    public function prepareParams(HttpRequest &$request)
+    public function prepareParams(HttpRequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -167,8 +167,10 @@ class HttpStreamAdapter extends AbstractAdapter
     /**
      * @inheritDoc
      */
-    public function execute(HttpRequest $request)
+    public function handle(HttpRequestInterface $request)
     {
+        parent::handle($request);
+
         /**
          * Response headers
          *
@@ -179,9 +181,9 @@ class HttpStreamAdapter extends AbstractAdapter
         /**
          * Response body
          *
-         * @var string|bool
+         * @var string|null
          */
-        $responseBody = false;
+        $responseBody = null;
 
         /**
          * Response metadata
@@ -237,9 +239,10 @@ class HttpStreamAdapter extends AbstractAdapter
         }
 
         $response = new HttpResponse();
-        $response->setBody($responseBody)
+        $response
             ->setHeaders($responseHeaders)
             ->setStatusCode($responseStatusCode)
+            ->setBody($responseBody)
             ->setError($responseError);
 
         return $response;

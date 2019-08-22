@@ -34,7 +34,7 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Adapters\HttpBaseAdapter;
 use Comertis\Http\Exceptions\HttpNotImplementedException;
 use Comertis\Http\Internal\HttpRequestInterface;
 
@@ -52,7 +52,7 @@ use Comertis\Http\Internal\HttpRequestInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpPeclAdapter extends AbstractAdapter
+class HttpPeclAdapter extends HttpBaseAdapter
 {
 
     /**
