@@ -39,12 +39,6 @@ use Comertis\Http\Abstraction\HttpRequestInterface;
 /**
  * Undocumented class
  *
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Adapters\HttpAdapterInterface
- *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>

@@ -40,7 +40,7 @@ use Comertis\Http\Adapters\HttpStreamAdapter;
 use Comertis\Http\Exceptions\HttpAdapterException;
 
 /**
- * Undocumented class
+ * Builder class for HttpAdapterInterface implementations
  *
  * @category Http
  * @package  Comertis\Http
@@ -66,13 +66,13 @@ class HttpAdapterBuilder
     {
         $adapter = null;
 
-        if (!is_null($implementation)) {
-            $adapter = self::getAdapter($implementation);
+        if (null !== $implementation) {
+            $adapter = static::getAdapterImplementation($implementation);
         } else {
-            $adapter = self::getExecutor();
+            $adapter = static::getAdapter();
         }
 
-        if (is_null($adapter)) {
+        if (null === $adapter) {
             $message = "Failed to create an adapter, missing necessary extensions/functions";
             throw new HttpAdapterException($message);
         }
@@ -83,22 +83,22 @@ class HttpAdapterBuilder
     /**
      * Create an explicit implementation of HttpAdapterInterface
      *
-     * @param string|array $implementation Executor implementation
+     * @param string|array $adapter Adapter implementation
      *
      * @static
      * @access public
      * @return HttpAdapterInterface|null
      */
-    public static function getAdapter($implementation)
+    public static function getAdapterImplementation($adapter)
     {
-        if (is_array($implementation)) {
-            foreach ($implementation as $key => $value) {
-                // Recursive call until one executor implementation is returned
-                return self::getAdapter($value);
+        if (is_array($adapter)) {
+            foreach ($adapter as $key => $value) {
+                // Recursive call until one adapter | null is returned
+                return self::getAdapterImplementation($value);
             }
         }
 
-        switch ($implementation) {
+        switch ($adapter) {
             case HttpCurlAdapter::class:
                 if (HttpCurlAdapter::isAvailable()) {
                     return new HttpCurlAdapter();
@@ -125,18 +125,14 @@ class HttpAdapterBuilder
     }
 
     /**
-     * ATTENTION: Do NOT use this method to generate a HttpAdapterInterface
-     * instance, use HttpExecutorFactory::build() instead
-     *
      * Load an instance of HttpAdapterInterface based on installed
      * PHP extensions and/or available functions
      *
      * @static
-     * @access public
-     * @see    HttpExecutorFactory::build()
+     * @access private
      * @return HttpAdapterInterface|null
      */
-    public static function getExecutor()
+    private static function getAdapter()
     {
         if (HttpCurlAdapter::isAvailable()) {
             return new HttpCurlAdapter();
