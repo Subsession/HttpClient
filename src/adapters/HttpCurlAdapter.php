@@ -32,25 +32,18 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Exceptions\HttpExecutorException;
-use Comertis\Http\HttpRequest;
+use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\Executors\IHttpExecutor;
+use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
- * IHttpExecutor implementation using the CURL
+ * HttpAdapterInterface implementation using the CURL
  * PHP extension
- *
- * @uses Comertis\Http\Exceptions\HttpExecutorException
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Internal\Executors\IHttpExecutor
  *
  * @category Http
  * @package  Comertis\Http
@@ -59,7 +52,7 @@ use Comertis\Http\Internal\Executors\IHttpExecutor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpCurlExecutor implements IHttpExecutor
+class HttpCurlAdapter extends AbstractAdapter
 {
     /**
      * CURL instance
@@ -67,10 +60,10 @@ class HttpCurlExecutor implements IHttpExecutor
      * @access private
      * @var    resource
      */
-    private $_ch;
+    private $ch;
 
     /**
-     * Expected extensions for this IHttpExecutor implementation
+     * Expected extensions for this HttpAdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -81,7 +74,7 @@ class HttpCurlExecutor implements IHttpExecutor
     ];
 
     /**
-     * Expected functions for this IHttpExecutor implementation
+     * Expected functions for this HttpAdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -101,7 +94,11 @@ class HttpCurlExecutor implements IHttpExecutor
      */
     public function __construct()
     {
-        $this->_ch = curl_init();
+        try {
+            $this->ch = curl_init();
+        } catch (\Throwable $exception) {
+            // Ignored for now
+        }
     }
 
     /**
@@ -109,13 +106,17 @@ class HttpCurlExecutor implements IHttpExecutor
      */
     public function __destruct()
     {
-        curl_close($this->_ch);
+        if (is_resource($this->ch)) {
+            curl_close($this->ch);
+        }
     }
 
     /**
      * @inheritDoc
+     *
+     * @return void
      */
-    public function prepareUrl(HttpRequest &$request)
+    public function prepareUrl(HttpRequestInterface &$request)
     {
         $method = $request->getMethod();
 
@@ -125,7 +126,7 @@ class HttpCurlExecutor implements IHttpExecutor
 
         $params = $request->getParams();
 
-        if (empty($params) | is_null($params)) {
+        if (empty($params) || is_null($params)) {
             return;
         }
 
@@ -145,8 +146,10 @@ class HttpCurlExecutor implements IHttpExecutor
 
     /**
      * @inheritDoc
+     *
+     * @return void
      */
-    public function prepareHeaders(HttpRequest &$request)
+    public function prepareHeaders(HttpRequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -162,7 +165,6 @@ class HttpCurlExecutor implements IHttpExecutor
         $contentLength = 0;
 
         if (is_array($params)) {
-
             foreach ($params as $key => $value) {
                 if (is_object($value)) {
                     $contentLength += strlen(serialize($value));
@@ -170,7 +172,7 @@ class HttpCurlExecutor implements IHttpExecutor
                     $contentLength += strlen($value);
                 }
             }
-        } else if (is_object($params)) {
+        } elseif (is_object($params)) {
             $contentLength = strlen(serialize($params));
         } else {
             $contentLength = strlen($params);
@@ -190,8 +192,10 @@ class HttpCurlExecutor implements IHttpExecutor
 
     /**
      * @inheritDoc
+     *
+     * @return void
      */
-    public function prepareParams(HttpRequest &$request)
+    public function prepareParams(HttpRequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -217,16 +221,16 @@ class HttpCurlExecutor implements IHttpExecutor
         }
 
         if (empty($params) | is_null($params)) {
-            throw new HttpExecutorException("Failed to parse request parameters");
+            throw new HttpAdapterException("Failed to parse request parameters");
         }
 
-        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $params);
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(HttpRequest $request)
+    public function execute(HttpRequestInterface $request)
     {
         /**
          * Response headers
@@ -263,15 +267,15 @@ class HttpCurlExecutor implements IHttpExecutor
          */
         $responseError = null;
 
-        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->_ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
 
-        curl_setopt($this->_ch, CURLOPT_URL, $request->getUrl());
-        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $request->getHeaders());
-        curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+        curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $request->getHeaders());
+        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
 
         curl_setopt(
-            $this->_ch,
+            $this->ch,
             CURLOPT_HEADERFUNCTION,
             function ($curl, $header) use (&$responseHeaders) {
                 $headerLength = strlen($header);
@@ -287,13 +291,13 @@ class HttpCurlExecutor implements IHttpExecutor
             }
         );
 
-        $responseBody = curl_exec($this->_ch);
+        $responseBody = curl_exec($this->ch);
 
-        if (curl_errno($this->_ch)) {
-            $responseError = curl_error($this->_ch);
+        if (curl_errno($this->ch)) {
+            $responseError = curl_error($this->ch);
         }
 
-        $responseInfo = curl_getinfo($this->_ch);
+        $responseInfo = curl_getinfo($this->ch);
         $responseStatusCode = $responseInfo['http_code'];
 
         $response = new HttpResponse($responseHeaders, $responseStatusCode);

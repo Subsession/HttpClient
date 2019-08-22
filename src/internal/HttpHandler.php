@@ -34,7 +34,7 @@
 
 namespace Comertis\Http\Internal;
 
-use Comertis\Http\Exceptions\HttpExecutorException;
+use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Internal\Executors\HttpExecutorFactory;
@@ -42,7 +42,7 @@ use Comertis\Http\Internal\Executors\HttpExecutorFactory;
 /**
  * Undocumented class
  *
- * @uses Comertis\Http\Exceptions\HttpExecutorException
+ * @uses Comertis\Http\Exceptions\HttpAdapterException
  * @uses Comertis\Http\HttpRequest
  * @uses Comertis\Http\HttpStatusCode
  * @uses Comertis\Http\Internal\Executors\HttpExecutorFactory
@@ -194,6 +194,6 @@ class HttpHandler
         }
 
         $message = "Failed to get response after " . $this->getRetryCount() . " tries.";
-        throw new HttpExecutorException($message);
+        throw new HttpAdapterException($message);
     }
 }

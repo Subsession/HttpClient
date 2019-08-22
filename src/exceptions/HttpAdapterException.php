@@ -32,15 +32,12 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Exceptions;
 
-use Comertis\Http\HttpRequest;
+use Exception;
 
 /**
- * Defines the minimum necessary for a HttpExecutor
- * implementation regardless of used library or extension
- *
- * @uses Comertis\Http\HttpRequest
+ * Undocumented class
  *
  * @category Http
  * @package  Comertis\Http
@@ -49,45 +46,27 @@ use Comertis\Http\HttpRequest;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface IHttpExecutor
+class HttpAdapterException extends Exception
 {
     /**
-     * Make any necessary changes to the HttpRequest URL before executing
+     * Constructor
      *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @return void
+     * @param string    $message  Error message
+     * @param integer   $code     Error code
+     * @param Exception $previous Previous Exception
      */
-    public function prepareUrl(HttpRequest &$request);
+    public function __construct($message, $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 
     /**
-     * Make any necessary changes to the HttpRequest headers before executing
+     * __toString() override
      *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @return void
+     * @return string
      */
-    public function prepareHeaders(HttpRequest &$request);
-
-    /**
-     * Make any necessary changes to the HttpRequest parameters before executing
-     *
-     * @param HttpRequest $request HttpRequest instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareParams(HttpRequest &$request);
-
-    /**
-     * Execute the HttpRequest and return a HttpResponse
-     *
-     * @param HttpRequest $request HttpRequest instance
-     *
-     * @access public
-     * @return HttpResponse
-     */
-    public function execute(HttpRequest $request);
+    public function __toString()
+    {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
 }

@@ -32,11 +32,10 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Internal;
 
 use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * Undocumented class
@@ -51,88 +50,15 @@ use Comertis\Http\Internal\HttpRequestInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpRequest implements HttpRequestInterface
+interface HttpRequestInterface
 {
-    /**
-     * Base url
-     *
-     * @access private
-     * @var    string
-     */
-    private $url;
-
-    /**
-     * HTTP headers
-     *
-     * @access private
-     * @var    array
-     */
-    private $headers;
-
-    /**
-     * HTTP request method
-     *
-     * @access private
-     * @var    string
-     */
-    private $method;
-
-    /**
-     * Http request type
-     *
-     * @access private
-     * @var    string
-     */
-    private $bodyType;
-
-    /**
-     * Request parameters
-     *
-     * @access private
-     * @var    array
-     */
-    private $params;
-
-    /**
-     * Constructor
-     *
-     * @param string $url     Request URL
-     * @param array  $headers Request headers
-     * @param string $method  Request method
-     * @param array  $params  Request parameters
-     */
-    public function __construct($url = null, $headers = [], $method = null, $params = [])
-    {
-        if (is_null($method)) {
-            $method = HttpRequestMethod::GET;
-        }
-
-        $this->url = $url;
-        $this->headers = $headers;
-        $this->method = $method;
-        $this->params = $params;
-
-        $this->addHeaders(
-            [
-                "Cache-Control" => "max-age=0",
-                "Connection" => "keep-alive",
-                "Keep-Alive" => "300",
-                "Accept" => "application/json,text/xml,application/xml,application/xhtml+xml,text/plain,image/png,*/*",
-                "Accept-Charset" => "utf-8,ISO-8859-1",
-            ]
-        );
-    }
-
     /**
      * Get the HttpRequest headers
      *
      * @access public
      * @return array
      */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
+    public function getHeaders();
 
     /**
      * Set the HttpRequest headers
@@ -142,12 +68,7 @@ class HttpRequest implements HttpRequestInterface
      * @access public
      * @return HttpRequest
      */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
+    public function setHeaders($headers);
 
     /**
      * Add headers to the request.
@@ -159,10 +80,7 @@ class HttpRequest implements HttpRequestInterface
      * @access public
      * @return void
      */
-    public function addHeaders($headers)
-    {
-        $this->headers = array_merge($this->headers, $headers);
-    }
+    public function addHeaders($headers);
 
     /**
      * Get the HttpRequest method
@@ -170,10 +88,7 @@ class HttpRequest implements HttpRequestInterface
      * @access public
      * @return string
      */
-    public function getMethod()
-    {
-        return $this->method;
-    }
+    public function getMethod();
 
     /**
      * Set the request method
@@ -184,23 +99,14 @@ class HttpRequest implements HttpRequestInterface
      * @see    HttpRequestMethod
      * @return HttpRequest
      */
-    public function setMethod($requestMethod)
-    {
-        $this->method = $requestMethod;
-
-        return $this;
-    }
-
+    public function setMethod($requestMethod);
     /**
      * Get the request URL
      *
      * @access public
      * @return string
      */
-    public function getUrl()
-    {
-        return $this->url;
-    }
+    public function getUrl();
 
     /**
      * Set the request URL
@@ -211,20 +117,7 @@ class HttpRequest implements HttpRequestInterface
      * @throws HttpClientException If the URL is null or empty
      * @return HttpRequest
      */
-    public function setUrl($url)
-    {
-        if (is_null($url)) {
-            throw new HttpClientException("URL cannot be null");
-        }
-
-        if (empty($url)) {
-            throw new HttpClientException("URL cannot be empty");
-        }
-
-        $this->url = $url;
-
-        return $this;
-    }
+    public function setUrl($url);
 
     /**
      * Get the HttpRequest parameters
@@ -232,10 +125,7 @@ class HttpRequest implements HttpRequestInterface
      * @access public
      * @return array
      */
-    public function getParams()
-    {
-        return $this->params;
-    }
+    public function getParams();
 
     /**
      * Set the HttpRequest parameters
@@ -245,12 +135,7 @@ class HttpRequest implements HttpRequestInterface
      * @access public
      * @return HttpRequest
      */
-    public function setParams($params)
-    {
-        $this->params = $params;
-
-        return $this;
-    }
+    public function setParams($params);
 
     /**
      * Get the request body type
@@ -258,10 +143,7 @@ class HttpRequest implements HttpRequestInterface
      * @access public
      * @return string
      */
-    public function getBodyType()
-    {
-        return $this->bodyType;
-    }
+    public function getBodyType();
 
     /**
      * Set the request body type
@@ -272,10 +154,5 @@ class HttpRequest implements HttpRequestInterface
      * @see    HttpRequestType
      * @return HttpRequest
      */
-    public function setBodyType($bodyType)
-    {
-        $this->bodyType = $bodyType;
-
-        return $this;
-    }
+    public function setBodyType($bodyType);
 }

@@ -32,12 +32,18 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Exceptions;
+namespace Comertis\Http\Adapters;
 
-use Exception;
+use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Exceptions\HttpNotImplementedException;
+use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * Undocumented class
+ *
+ * @uses Comertis\Http\Exceptions\HttpNotImplementedException
+ * @uses Comertis\Http\HttpRequest
+ * @uses Comertis\Http\Adapters\HttpAdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -46,27 +52,64 @@ use Exception;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpExecutorException extends Exception
+class HttpPeclAdapter extends AbstractAdapter
 {
+
     /**
-     * Constructor
+     * Expected extensions for this HttpAdapterInterface implementation
+     * to work properly
      *
-     * @param string    $message  Error message
-     * @param integer   $code     Error code
-     * @param Exception $previous Previous Exception
+     * @access public
+     * @var    array
      */
-    public function __construct($message, $code = 0, Exception $previous = null)
+    const EXPECTED_EXTENSIONS = [
+
+    ];
+
+    /**
+     * Expected functions for this HttpAdapterInterface implementation
+     * to work properly
+     *
+     * @access public
+     * @var    array
+     */
+    const EXPECTED_FUNCTIONS = [
+
+    ];
+
+    /**
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
+     */
+    public function prepareUrl(HttpRequestInterface &$request)
     {
-        parent::__construct($message, $code, $previous);
+        throw new HttpNotImplementedException("This function is not yet implemented");
     }
 
     /**
-     * __toString() override
-     *
-     * @return string
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
      */
-    public function __toString()
+    public function prepareHeaders(HttpRequestInterface &$request)
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        throw new HttpNotImplementedException();
+    }
+
+    /**
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
+     */
+    public function prepareParams(HttpRequestInterface &$request)
+    {
+        throw new HttpNotImplementedException();
+    }
+
+    /**
+     * @inheritDoc
+     * @throws     HttpNotImplementedException
+     */
+    public function execute(HttpRequestInterface $request)
+    {
+        throw new HttpNotImplementedException();
     }
 }

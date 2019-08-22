@@ -32,22 +32,17 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Adapters;
 
+use Comertis\Http\Adapters\AbstractAdapter;
+use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\Executors\IHttpExecutor;
 
 /**
  * Undocumented class
- *
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Internal\Executors\IHttpExecutor
  *
  * @category Http
  * @package  Comertis\Http
@@ -56,7 +51,7 @@ use Comertis\Http\Internal\Executors\IHttpExecutor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpStreamExecutor implements IHttpExecutor
+class HttpStreamAdapter extends AbstractAdapter
 {
     /**
      * Stream context options
@@ -64,10 +59,10 @@ class HttpStreamExecutor implements IHttpExecutor
      * @access private
      * @var    array
      */
-    private $_options;
+    private $options;
 
     /**
-     * Expected extensions for this IHttpExecutor implementation
+     * Expected extensions for this HttpAdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -78,18 +73,18 @@ class HttpStreamExecutor implements IHttpExecutor
     ];
 
     /**
-     * Expected functions for this IHttpExecutor implementation
+     * Expected functions for this HttpAdapterInterface implementation
      * to work properly
      *
      * @access public
      * @var    array
      */
     const EXPECTED_FUNCTIONS = [
-        'stream_context_create',
-        'fopen',
-        'fclose',
-        'stream_get_meta_data',
-        'stream_get_contents',
+        "stream_context_create",
+        "fopen",
+        "fclose",
+        "stream_get_meta_data",
+        "stream_get_contents",
     ];
 
     /**
@@ -124,19 +119,19 @@ class HttpStreamExecutor implements IHttpExecutor
      */
     public function prepareHeaders(HttpRequest &$request)
     {
-        $this->_options = [
-            'http' => [
-                'method' => $request->getMethod(),
-                'header' => '',
+        $this->options = [
+            "http" => [
+                "method" => $request->getMethod(),
+                "header" => "",
             ],
         ];
 
         foreach ($request->getHeaders() as $key => $value) {
-            $this->_options['http']['header'] .= $key . "=" . $value . ";";
+            $this->options["http"]["header"] .= $key . "=" . $value . ";";
         }
 
         if (!empty($bodyType = $request->getBodyType())) {
-            $this->_options['http']['header'] .= "Content-Type: " . $bodyType . ";";
+            $this->options["http"]["header"] .= "Content-Type: " . $bodyType . ";";
         }
     }
 
@@ -163,10 +158,10 @@ class HttpStreamExecutor implements IHttpExecutor
         }
 
         if (empty($params) | is_null($params)) {
-            throw new HttpExecutorException("Failed to parse request parameters");
+            throw new HttpAdapterException("Failed to parse request parameters");
         }
 
-        $this->_options['http']['content'] = $params;
+        $this->options["http"]["content"] = $params;
     }
 
     /**
@@ -209,20 +204,20 @@ class HttpStreamExecutor implements IHttpExecutor
          */
         $responseError = null;
 
-        $context = stream_context_create($this->_options);
+        $context = stream_context_create($this->options);
 
-        $stream = @fopen($request->getUrl(), 'r', false, $context);
+        $stream = @fopen($request->getUrl(), "r", false, $context);
 
         if ($stream) {
             $responseInfo = stream_get_meta_data($stream);
             $responseBody = stream_get_contents($stream);
             fclose($stream);
-        } else if (isset($http_response_header)) {
-            $responseInfo['wrapper_data'] = $http_response_header;
+        } elseif (isset($http_response_header)) {
+            $responseInfo["wrapper_data"] = $http_response_header;
         }
 
-        if (isset($responseInfo['wrapper_data'])) {
-            $headers = $responseInfo['wrapper_data'];
+        if (isset($responseInfo["wrapper_data"])) {
+            $headers = $responseInfo["wrapper_data"];
 
             // Set headers
             for ($i = 1; $i < count($headers); $i++) {
@@ -232,9 +227,9 @@ class HttpStreamExecutor implements IHttpExecutor
 
             // Set status code
             $match = [];
-            $status_line = $responseInfo['wrapper_data'][0];
+            $status_line = $responseInfo["wrapper_data"][0];
 
-            preg_match('{HTTP\/\S*\s(\d{3})}', $status_line, $match);
+            preg_match("{HTTP\/\S*\s(\d{3})}", $status_line, $match);
 
             if (isset($match[1])) {
                 $responseStatusCode = (integer) $match[1];

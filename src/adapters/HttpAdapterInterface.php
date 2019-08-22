@@ -32,18 +32,15 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal\Executors;
+namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Exceptions\HttpNotImplementedException;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\Internal\IHttpExecutor;
 
 /**
- * Undocumented class
+ * Defines the minimum necessary for a HttpExecutor
+ * implementation regardless of used library or extension
  *
- * @uses Comertis\Http\Exceptions\HttpNotImplementedException
  * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\Internal\IHttpExecutor
  *
  * @category Http
  * @package  Comertis\Http
@@ -52,64 +49,70 @@ use Comertis\Http\Internal\IHttpExecutor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpPeclExecutor implements IHttpExecutor
+interface HttpAdapterInterface
 {
-
     /**
-     * Expected extensions for this IHttpExecutor implementation
-     * to work properly
+     * Make any necessary changes to the HttpRequest URL before executing
+     *
+     * @param HttpRequest $request HttpRequest instance, passed by reference
      *
      * @access public
-     * @var    array
+     * @return void
      */
-    const EXPECTED_EXTENSIONS = [
-
-    ];
+    public function prepareUrl(HttpRequest &$request);
 
     /**
-     * Expected functions for this IHttpExecutor implementation
-     * to work properly
+     * Make any necessary changes to the HttpRequest headers before executing
+     *
+     * @param HttpRequest $request HttpRequest instance, passed by reference
      *
      * @access public
-     * @var    array
+     * @return void
      */
-    const EXPECTED_FUNCTIONS = [
-
-    ];
+    public function prepareHeaders(HttpRequest &$request);
 
     /**
-     * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * Make any necessary changes to the HttpRequest parameters before executing
+     *
+     * @param HttpRequest $request HttpRequest instance, passed by reference
+     *
+     * @access public
+     * @return void
      */
-    public function prepareUrl(HttpRequest &$request)
-    {
-        throw new HttpNotImplementedException("This function is not yet implemented");
-    }
+    public function prepareParams(HttpRequest &$request);
 
     /**
-     * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * Get the configured retry count for requests
+     *
+     * @access public
+     * @return integer
      */
-    public function prepareHeaders(HttpRequest &$request)
-    {
-        throw new HttpNotImplementedException();
-    }
+    public function getRetryCount();
 
     /**
-     * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * Set the number of times to retry a request
+     * in case of failing to get a response
+     *
+     * @access public
+     * @return integer
      */
-    public function prepareParams(HttpRequest &$request)
-    {
-        throw new HttpNotImplementedException();
-    }
+    public function setRetryCount();
 
     /**
-     * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * Checks if the adapter can be used
+     *
+     * @access public
+     * @return boolean
      */
-    public function execute(HttpRequest $request)
-    {
-        throw new HttpNotImplementedException();
-    }
+    public function isAvailable();
+
+    /**
+     * Execute the HttpRequest and return a HttpResponse
+     *
+     * @param HttpRequest $request HttpRequest instance
+     *
+     * @access public
+     * @return HttpResponse
+     */
+    public function handle(HttpRequest $request);
 }
