@@ -36,24 +36,14 @@ namespace Comertis\Http;
 
 use Comertis\Http\Adapters\HttpAdapterBuilder;
 use Comertis\Http\Adapters\HttpAdapterInterface;
-use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Interceptors\HttpInterceptor;
 use Comertis\Http\Internal\HttpRequestInterface;
 use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class
- *
- * @uses Comertis\Http\Exceptions\HttpClientException
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Internal\Executors\HttpHandler
  *
  * @category Http
  * @package  Comertis\Http
@@ -64,6 +54,9 @@ use Comertis\Http\Internal\HttpResponseInterface;
  */
 class HttpClient
 {
+    use \Comertis\Http\Extensions\HttpClientRequestExtensions;
+    use \Comertis\Http\Extensions\HttpClientInterceptorExtension;
+
     /**
      * Holds the request information
      *
@@ -92,23 +85,6 @@ class HttpClient
     private $adapter;
 
     /**
-     * HttpRequest & HttpResponse interceptors
-     *
-     * @access private
-     * @see HttpInterceptor
-     * @var HttpInterceptor
-     */
-    private $interceptors;
-
-    /**
-     * Base URL for all requests
-     *
-     * @access private
-     * @var    string|null
-     */
-    private $baseUrl;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -116,129 +92,6 @@ class HttpClient
         $this->request = new HttpRequest();
         $this->response = new HttpResponse();
         $this->adapter = HttpAdapterBuilder::build();
-        $this->interceptors = new HttpInterceptor();
-        $this->baseUrl = null;
-    }
-
-    /**
-     * Get the configured base URL for all requests
-     *
-     * @access public
-     * @return string|null
-     */
-    public function getBaseUrl()
-    {
-        return $this->baseUrl;
-    }
-
-    /**
-     * Set the base URL for all requests
-     *
-     * @param string|null $url Base URL | Null to remove
-     *
-     * @access public
-     * @return self
-     */
-    public function setBaseUrl($url)
-    {
-        $this->baseUrl = $url;
-        $this->request->setUrl($this->getBaseUrl());
-
-        return $this;
-    }
-
-    /**
-     * Get the request URL
-     *
-     * @access public
-     * @see    HttpRequest::getUrl()
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->request->getUrl();
-    }
-
-    /**
-     * Set the request URL.
-     *
-     * Absolute URL if base url is null,
-     * Relative URL if base url is set
-     *
-     * @param string $url Request URL
-     *
-     * @access public
-     * @see    HttpClient::setBaseUrl()
-     * @see    HttpRequest::setUrl()
-     * @return self
-     */
-    public function setUrl($url)
-    {
-        if (null !== $this->getBaseUrl()) {
-            $url = $this->getBaseUrl() . $url;
-        }
-
-        $this->request->setUrl($url);
-
-        return $this;
-    }
-
-    /**
-     * Get the request headers
-     *
-     * @access public
-     * @see    HttpRequest::getHeaders()
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->request->getHeaders();
-    }
-
-    /**
-     * Set the request headers
-     *
-     * @param array $headers Array of (Key => Value) pairs
-     *
-     * @access public
-     * @see    HttpRequest::setHeaders()
-     * @return self
-     */
-    public function setHeaders(array $headers)
-    {
-        $this->request->setHeaders($headers);
-
-        return $this;
-    }
-
-    /**
-     * Add headers to the request
-     *
-     * @param array $headers Array of (Key => Value) pairs
-     *
-     * @access public
-     * @see    HttpRequest::addHeaders()
-     * @return self
-     */
-    public function addHeaders(array $headers)
-    {
-        $this->request->addHeaders($headers);
-
-        return $this;
-    }
-
-    /**
-     * Clear all headers from the request
-     *
-     * @access public
-     * @see    HttpRequest::setHeaders()
-     * @return self
-     */
-    public function clearHeaders()
-    {
-        $this->request->setHeaders([]);
-
-        return $this;
     }
 
     /**
@@ -336,36 +189,6 @@ class HttpClient
     }
 
     /**
-     * Intercept all HttpRequestInterface before they are processed
-     *
-     * @param callable $callable
-     *
-     * @access public
-     * @return self
-     */
-    public function beforeRequest(callable $callable)
-    {
-        $this->interceptors->request->intercept($callable);
-
-        return $this;
-    }
-
-    /**
-     * Intercept all HttpResponseInterface before they are returned
-     *
-     * @param callable $callable
-     *
-     * @access public
-     * @return self
-     */
-    public function beforeResponse(callable $callable)
-    {
-        $this->interceptors->response->intercept($callable);
-
-        return $this;
-    }
-
-    /**
      * Handle the HttpRequestInterface
      *
      * This handles the HttpInterceptor calls and the
@@ -378,159 +201,9 @@ class HttpClient
      */
     private function handle(HttpRequestInterface $request)
     {
-        // Handle HttpRequestInterceptor call
-        $this->interceptors->request->handle($request);
-
-        // Get HttpResponseInterface from the HttpAdapterInterface
         $response = $this->adapter->handle($request);
         $this->setResponse($response);
 
-        // Handle HttpResponseInterceptor call
-        $this->interceptors->response->handle($response);
-
-        // Return HttpResponseInterface
         return $response;
-    }
-
-    /**
-     * Execute a HEAD request
-     *
-     * @param array $params Parameters to include in the request.
-     *                      These parameters will be added to the URL
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function head($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::HEAD)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a GET request
-     *
-     * @param array $params Parameters to include in the request
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function get($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::GET)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a POST request
-     *
-     * @param array $params Parameters to include in the request
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function post($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::POST)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a POST request with JSON formatted parameters
-     *
-     * @param array|mixed|object $params Parameters to include in the request
-     *
-     * @access public
-     * @throws HttpClientException
-     * @return HttpResponseInterface
-     */
-    public function postJson($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::POST)
-            ->setBodyType(HttpRequestType::JSON)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a PUT request
-     *
-     * @param array|mixed|object $params Parameters to include in the request
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function put($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::PUT)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a PUT request with JSON formatted parameters
-     *
-     * @param array|mixed|object $params Parameters to be json encoded
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function putJson($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::PUT)
-            ->setBodyType(HttpRequestType::JSON)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a DELETE request
-     *
-     * @param array $params Parameters to include in the request
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function delete($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::DELETE)
-            ->setParams($params);
-
-        return $this->handle($this->request);
-    }
-
-    /**
-     * Execute a DELETE request with JSON encoded parameters
-     *
-     * @param array $params Parameters to be json encoded
-     *
-     * @access public
-     * @throws HttpClientException
-     * @return HttpResponseInterface
-     */
-    public function deleteJson($params = [])
-    {
-        $this->request
-            ->setMethod(HttpRequestMethod::DELETE)
-            ->setBodyType(HttpRequestType::JSON)
-            ->setParams($params);
-
-        return $this->handle($this->request);
     }
 }

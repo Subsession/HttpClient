@@ -51,13 +51,8 @@ use Comertis\Http\Internal\HttpResponseInterface;
  */
 class HttpResponse implements HttpResponseInterface
 {
-    /**
-     * Response headers
-     *
-     * @access private
-     * @var    array
-     */
-    private $headers;
+    use \Comertis\Http\Traits\HttpHeaders;
+    use \Comertis\Http\Traits\HttpBody;
 
     /**
      * Response HTTP status code
@@ -66,14 +61,6 @@ class HttpResponse implements HttpResponseInterface
      * @var    integer
      */
     private $statusCode;
-
-    /**
-     * Response body
-     *
-     * @access private
-     * @var    mixed
-     */
-    private $body;
 
     /**
      * Response error message
@@ -102,32 +89,6 @@ class HttpResponse implements HttpResponseInterface
     }
 
     /**
-     * Get the response headers
-     *
-     * @access public
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
-     * Set the response headers
-     *
-     * @param array $headers Response headers
-     *
-     * @access public
-     * @return self
-     */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
-
-    /**
      * Get the response status code
      *
      * @access public
@@ -150,32 +111,6 @@ class HttpResponse implements HttpResponseInterface
     public function setStatusCode($statusCode)
     {
         $this->statusCode = $statusCode;
-
-        return $this;
-    }
-
-    /**
-     * Get the response body
-     *
-     * @access public
-     * @return mixed
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Set the response body
-     *
-     * @param string|mixed $body Response body
-     *
-     * @access public
-     * @return self
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
 
         return $this;
     }

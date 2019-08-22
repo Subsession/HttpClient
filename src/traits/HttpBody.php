@@ -32,10 +32,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Interceptors;
-
-use Comertis\Http\Interceptors\HttpRequestInterceptor;
-use Comertis\Http\Interceptors\HttpResponseInterceptor;
+namespace Comertis\Http\Traits;
 
 /**
  * Undocumented class
@@ -47,45 +44,39 @@ use Comertis\Http\Interceptors\HttpResponseInterceptor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpInterceptor
+trait HttpBody
 {
     /**
-     * Request interceptor
+     * Response body
      *
      * @access private
-     * @var    HttpRequestInterceptor
+     * @var    mixed
      */
-    private $request;
+    private $body;
 
     /**
-     * Response interceptor
+     * Get the response body
      *
-     * @access private
-     * @var    HttpResponseInterceptor
+     * @access public
+     * @return mixed
      */
-    private $response;
-
-    public function getRequest()
+    public function getBody()
     {
-        return $this->request;
-    }
-
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    public static function build()
-    {
-        return new self();
+        return $this->body;
     }
 
     /**
-     * Constructor
+     * Set the response body
+     *
+     * @param string|mixed $body Response body
+     *
+     * @access public
+     * @return self
      */
-    public function __construct()
+    public function setBody($body)
     {
-        $this->request = new HttpRequestInterceptor();
-        $this->response = new HttpResponseInterceptor();
+        $this->body = $body;
+
+        return $this;
     }
 }

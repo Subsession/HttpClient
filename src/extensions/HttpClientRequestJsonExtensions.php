@@ -32,10 +32,11 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Interceptors;
+namespace Comertis\Http\Extensions;
 
-use Comertis\Http\Interceptors\HttpRequestInterceptor;
-use Comertis\Http\Interceptors\HttpResponseInterceptor;
+use Comertis\Http\HttpRequestMethod;
+use Comertis\Http\HttpRequestType;
+use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class
@@ -47,45 +48,59 @@ use Comertis\Http\Interceptors\HttpResponseInterceptor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpInterceptor
+trait HttpClientRequestJsonExtensions
 {
     /**
-     * Request interceptor
+     * Execute a POST request with JSON formatted parameters
      *
-     * @access private
-     * @var    HttpRequestInterceptor
-     */
-    private $request;
-
-    /**
-     * Response interceptor
+     * @param array|mixed|object $params Parameters to include in the request
      *
-     * @access private
-     * @var    HttpResponseInterceptor
+     * @access public
+     * @return HttpResponseInterface
      */
-    private $response;
-
-    public function getRequest()
+    public function postJson($params = [])
     {
-        return $this->request;
-    }
+        $this->request
+            ->setMethod(HttpRequestMethod::POST)
+            ->setBodyType(HttpRequestType::JSON)
+            ->setParams($params);
 
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    public static function build()
-    {
-        return new self();
+        return $this->handle($this->request);
     }
 
     /**
-     * Constructor
+     * Execute a PUT request with JSON formatted parameters
+     *
+     * @param array|mixed|object $params Parameters to be json encoded
+     *
+     * @access public
+     * @return HttpResponseInterface
      */
-    public function __construct()
+    public function putJson($params = [])
     {
-        $this->request = new HttpRequestInterceptor();
-        $this->response = new HttpResponseInterceptor();
+        $this->request
+            ->setMethod(HttpRequestMethod::PUT)
+            ->setBodyType(HttpRequestType::JSON)
+            ->setParams($params);
+
+        return $this->handle($this->request);
+    }
+
+    /**
+     * Execute a DELETE request with JSON encoded parameters
+     *
+     * @param array $params Parameters to be json encoded
+     *
+     * @access public
+     * @return HttpResponseInterface
+     */
+    public function deleteJson($params = [])
+    {
+        $this->request
+            ->setMethod(HttpRequestMethod::DELETE)
+            ->setBodyType(HttpRequestType::JSON)
+            ->setParams($params);
+
+        return $this->handle($this->request);
     }
 }

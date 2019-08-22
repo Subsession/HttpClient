@@ -53,6 +53,8 @@ use Comertis\Http\Internal\HttpRequestInterface;
  */
 class HttpRequest implements HttpRequestInterface
 {
+    use \Comertis\Http\Traits\HttpHeaders;
+
     /**
      * Base url
      *
@@ -60,14 +62,6 @@ class HttpRequest implements HttpRequestInterface
      * @var    string
      */
     private $url;
-
-    /**
-     * HTTP headers
-     *
-     * @access private
-     * @var    array
-     */
-    private $headers;
 
     /**
      * HTTP request method
@@ -121,47 +115,6 @@ class HttpRequest implements HttpRequestInterface
                 "Accept-Charset" => "utf-8,ISO-8859-1",
             ]
         );
-    }
-
-    /**
-     * Get the HttpRequest headers
-     *
-     * @access public
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
-     * Set the HttpRequest headers
-     *
-     * @param array $headers Request headers
-     *
-     * @access public
-     * @return self
-     */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
-
-    /**
-     * Add headers to the request.
-     * IMPORTANT: Overrides existing headers if
-     * duplicate found
-     *
-     * @param array $headers Request headers
-     *
-     * @access public
-     * @return void
-     */
-    public function addHeaders($headers)
-    {
-        $this->headers = array_merge($this->headers, $headers);
     }
 
     /**

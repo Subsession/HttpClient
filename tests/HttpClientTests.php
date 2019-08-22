@@ -8,6 +8,7 @@ use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Internal\HttpRequestInterface;
 use Comertis\Http\Internal\HttpResponseInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 final class HttpClientTests extends TestCase
 {
@@ -15,6 +16,11 @@ final class HttpClientTests extends TestCase
      * @var HttpClient
      */
     private $client;
+
+    /**
+     * @var stdClass
+     */
+    private $mockPost;
 
     const BASE_URL = "http://jsonplaceholder.typicode.com/";
 
@@ -24,12 +30,18 @@ final class HttpClientTests extends TestCase
         $this->client
             ->setBaseUrl(self::BASE_URL)
             ->setAdapter(HttpCurlAdapter::class)
-            ->beforeRequest(function (HttpRequestInterface $request) {
+            ->beforeRequest(function (HttpRequestInterface &$request) {
                 print_r("Request interceptor called" . PHP_EOL);
             })
-            ->beforeResponse(function (HttpResponseInterface $response) {
+            ->beforeResponse(function (HttpResponseInterface &$response) {
                 print_r("Response interceptor called" . PHP_EOL);
             });
+
+        $this->mockPost = new stdClass();
+        $this->mockPost->id = 1;
+        $this->mockPost->title = "Test title";
+        $this->mockPost->body = "Test body";
+        $this->mockPost->userId = 1;
 
         parent::__construct();
     }
@@ -88,11 +100,6 @@ final class HttpClientTests extends TestCase
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
-
-        // $this->assertEquals(
-        //     null,
-        //     $response->getBody()
-        // );
     }
 
     public function testExpectResponseHeadersToContainContentTypeApplicationJson()
@@ -114,6 +121,42 @@ final class HttpClientTests extends TestCase
         $this->assertEquals(
             $responseHeaders[$contentType],
             $applicationJson
+        );
+    }
+
+    public function testExpectHttpClientToHavePostJsonExtensionMethod()
+    {
+        $response = $this->client
+            ->setUrl("posts")
+            ->postJson([$this->mockPost]);
+
+        $this->assertEquals(
+            HttpStatusCode::CREATED,
+            $response->getStatusCode()
+        );
+    }
+
+    public function testExpectHttpClientToHavePutJsonExtensionMethod()
+    {
+        $response = $this->client
+            ->setUrl("posts/1")
+            ->putJson([$this->mockPost]);
+
+        $this->assertEquals(
+            HttpStatusCode::OK,
+            $response->getStatusCode()
+        );
+    }
+
+    public function testExpectHttpClientToHaveDeleteJsonExtensionMethod()
+    {
+        $response = $this->client
+            ->setUrl("posts/1")
+            ->deleteJson();
+
+        $this->assertEquals(
+            HttpStatusCode::OK,
+            $response->getStatusCode()
         );
     }
 }

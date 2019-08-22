@@ -32,10 +32,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Interceptors;
-
-use Comertis\Http\Interceptors\HttpRequestInterceptor;
-use Comertis\Http\Interceptors\HttpResponseInterceptor;
+namespace Comertis\Http\Traits;
 
 /**
  * Undocumented class
@@ -47,45 +44,54 @@ use Comertis\Http\Interceptors\HttpResponseInterceptor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpInterceptor
+trait HttpHeaders
 {
     /**
-     * Request interceptor
+     * HTTP headers
      *
      * @access private
-     * @var    HttpRequestInterceptor
+     * @var    array
      */
-    private $request;
+    private $headers;
 
     /**
-     * Response interceptor
+     * Get the request headers
      *
-     * @access private
-     * @var    HttpResponseInterceptor
+     * @access public
+     * @return array
      */
-    private $response;
-
-    public function getRequest()
+    public function getHeaders()
     {
-        return $this->request;
-    }
-
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    public static function build()
-    {
-        return new self();
+        return $this->headers;
     }
 
     /**
-     * Constructor
+     * Set the request headers
+     *
+     * @param array $headers Request headers
+     *
+     * @access public
+     * @return self
      */
-    public function __construct()
+    public function setHeaders($headers)
     {
-        $this->request = new HttpRequestInterceptor();
-        $this->response = new HttpResponseInterceptor();
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+    /**
+     * Add headers to the request.
+     * IMPORTANT: Overrides existing headers if
+     * duplicate found
+     *
+     * @param array $headers Request headers
+     *
+     * @access public
+     * @return void
+     */
+    public function addHeaders($headers)
+    {
+        $this->headers = array_merge($this->headers, $headers);
     }
 }
