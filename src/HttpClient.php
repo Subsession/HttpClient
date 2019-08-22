@@ -41,6 +41,7 @@ use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 use Comertis\Http\HttpResponse;
+use Comertis\Http\Interceptors\HttpInterceptor;
 use Comertis\Http\Internal\HttpRequestInterface;
 use Comertis\Http\Internal\HttpResponseInterface;
 
@@ -91,6 +92,15 @@ class HttpClient
     private $adapter;
 
     /**
+     * HttpRequest & HttpResponse interceptors
+     *
+     * @access private
+     * @see HttpInterceptor
+     * @var HttpInterceptor
+     */
+    private $interceptors;
+
+    /**
      * Base URL for all requests
      *
      * @access private
@@ -106,6 +116,7 @@ class HttpClient
         $this->request = new HttpRequest();
         $this->response = new HttpResponse();
         $this->adapter = HttpAdapterBuilder::build();
+        $this->interceptors = new HttpInterceptor();
         $this->baseUrl = null;
     }
 
@@ -325,6 +336,63 @@ class HttpClient
     }
 
     /**
+     * Intercept all HttpRequestInterface before they are processed
+     *
+     * @param callable $callable
+     *
+     * @access public
+     * @return self
+     */
+    public function beforeRequest(callable $callable)
+    {
+        $this->interceptors->request->intercept($callable);
+
+        return $this;
+    }
+
+    /**
+     * Intercept all HttpResponseInterface before they are returned
+     *
+     * @param callable $callable
+     *
+     * @access public
+     * @return self
+     */
+    public function beforeResponse(callable $callable)
+    {
+        $this->interceptors->response->intercept($callable);
+
+        return $this;
+    }
+
+    /**
+     * Handle the HttpRequestInterface
+     *
+     * This handles the HttpInterceptor calls and the
+     * HttpAdapterInterface::handle() call.
+     *
+     * @param HttpRequestInterface $request
+     *
+     * @access private
+     * @return HttpResponseInterface
+     */
+    private function handle(HttpRequestInterface $request)
+    {
+        // Handle HttpRequestInterceptor call
+        $this->interceptors->request->handle($request);
+
+        // Get HttpResponseInterface from the HttpAdapterInterface
+        $response = $this->adapter->handle($request);
+        $this->setResponse($response);
+
+        // Handle HttpResponseInterceptor call
+        $this->interceptors->response->handle($response);
+
+        // Return HttpResponseInterface
+        return $response;
+    }
+
+    /**
      * Execute a HEAD request
      *
      * @param array $params Parameters to include in the request.
@@ -339,9 +407,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::HEAD)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -358,9 +424,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -377,9 +441,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -398,9 +460,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -417,9 +477,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -437,9 +495,7 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -456,9 +512,7 @@ class HttpClient
             ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 
     /**
@@ -477,8 +531,6 @@ class HttpClient
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        $this->response = $this->adapter->handle($this->request);
-
-        return $this->getResponse();
+        return $this->handle($this->request);
     }
 }
