@@ -32,14 +32,16 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Adapters;
+namespace Comertis\Http\Abstraction;
 
-use Comertis\Http\Abstraction\HttpAdapterInterface;
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Abstraction\HttpResponseInterface;
 
 /**
- * Undocumented class
+ * Defines the minimum necessary for a HttpExecutor
+ * implementation regardless of used library or extension
+ *
+ * @uses Comertis\Http\HttpRequestInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -48,65 +50,45 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-abstract class HttpBaseAdapter implements HttpAdapterInterface
+interface HttpAdapterInterface
 {
     /**
-     * Expected extensions for this HttpAdapterInterface implementation
-     * to work properly
+     * Make any necessary changes to the HttpRequestInterface URL before executing
+     *
+     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
      *
      * @access public
-     * @var    array
+     * @return void
      */
-    const EXPECTED_EXTENSIONS = [
-
-    ];
+    public function prepareUrl(HttpRequestInterface &$request);
 
     /**
-     * Expected functions for this HttpAdapterInterface implementation
-     * to work properly
+     * Make any necessary changes to the HttpRequestInterface headers before executing
+     *
+     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
      *
      * @access public
-     * @var    array
+     * @return void
      */
-    const EXPECTED_FUNCTIONS = [
-
-    ];
+    public function prepareHeaders(HttpRequestInterface &$request);
 
     /**
-     * @inheritDoc
+     * Make any necessary changes to the HttpRequestInterface parameters before executing
+     *
+     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
      *
      * @access public
-     * @return boolean
+     * @return void
      */
-    public static function isAvailable()
-    {
-        foreach (static::EXPECTED_EXTENSIONS as $extension) {
-            if (!extension_loaded($extension)) {
-                return false;
-            }
-        }
-
-        foreach (static::EXPECTED_FUNCTIONS as $function) {
-            if (!function_exists($function)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    public function prepareParams(HttpRequestInterface &$request);
 
     /**
-     * @inheritDoc
+     * Execute the HttpRequestInterface and return a HttpResponseInterface instance
      *
-     * @param HttpRequestInterface $request
+     * @param HttpRequestInterface $request HttpRequestInterface instance
      *
      * @access public
      * @return HttpResponseInterface
      */
-    public function handle(HttpRequestInterface $request)
-    {
-        $this->prepareUrl($request);
-        $this->prepareHeaders($request);
-        $this->prepareParams($request);
-    }
+    public function handle(HttpRequestInterface $request);
 }

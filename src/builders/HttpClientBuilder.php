@@ -32,14 +32,12 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Adapters;
+namespace Comertis\Http\Builders;
 
-use Comertis\Http\Abstraction\HttpAdapterInterface;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\HttpClient;
 
 /**
- * Undocumented class
+ * Builder class for HttpClient
  *
  * @category Http
  * @package  Comertis\Http
@@ -48,65 +46,17 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-abstract class HttpBaseAdapter implements HttpAdapterInterface
+class HttpClientBuilder
 {
     /**
-     * Expected extensions for this HttpAdapterInterface implementation
-     * to work properly
+     * Build a HttpClient instance
      *
+     * @static
      * @access public
-     * @var    array
+     * @return HttpClient
      */
-    const EXPECTED_EXTENSIONS = [
-
-    ];
-
-    /**
-     * Expected functions for this HttpAdapterInterface implementation
-     * to work properly
-     *
-     * @access public
-     * @var    array
-     */
-    const EXPECTED_FUNCTIONS = [
-
-    ];
-
-    /**
-     * @inheritDoc
-     *
-     * @access public
-     * @return boolean
-     */
-    public static function isAvailable()
+    public static function build()
     {
-        foreach (static::EXPECTED_EXTENSIONS as $extension) {
-            if (!extension_loaded($extension)) {
-                return false;
-            }
-        }
-
-        foreach (static::EXPECTED_FUNCTIONS as $function) {
-            if (!function_exists($function)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @param HttpRequestInterface $request
-     *
-     * @access public
-     * @return HttpResponseInterface
-     */
-    public function handle(HttpRequestInterface $request)
-    {
-        $this->prepareUrl($request);
-        $this->prepareHeaders($request);
-        $this->prepareParams($request);
+        return new HttpClient();
     }
 }

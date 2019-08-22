@@ -36,10 +36,10 @@ namespace Comertis\Http;
 
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\Adapters\HttpAdapterBuilder;
 use Comertis\Http\Adapters\HttpAdapterInterface;
-use Comertis\Http\HttpRequest;
-use Comertis\Http\HttpResponse;
+use Comertis\Http\Builders\HttpAdapterBuilder;
+use Comertis\Http\Builders\HttpRequestBuilder;
+use Comertis\Http\Builders\HttpResponseBuilder;
 
 /**
  * Undocumented class
@@ -88,8 +88,8 @@ class HttpClient
      */
     public function __construct()
     {
-        $this->request = new HttpRequest();
-        $this->response = new HttpResponse();
+        $this->request = HttpRequestBuilder::build();
+        $this->response = HttpResponseBuilder::build();
         $this->adapter = HttpAdapterBuilder::build();
     }
 

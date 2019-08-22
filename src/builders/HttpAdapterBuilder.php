@@ -32,7 +32,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Adapters;
+namespace Comertis\Http\Builders;
 
 use Comertis\Http\Adapters\HttpCurlAdapter;
 use Comertis\Http\Adapters\HttpPeclAdapter;

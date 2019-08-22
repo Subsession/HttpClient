@@ -2,11 +2,12 @@
 
 namespace Comertis\Http\Tests;
 
-use Comertis\Http\Adapters\HttpCurlAdapter;
-use Comertis\Http\HttpClient;
-use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Adapters\HttpCurlAdapter;
+use Comertis\Http\Builders\HttpClientBuilder;
+use Comertis\Http\HttpClient;
+use Comertis\Http\HttpStatusCode;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -26,7 +27,7 @@ final class HttpClientTests extends TestCase
 
     public function __construct()
     {
-        $this->client = new HttpClient();
+        $this->client = HttpClientBuilder::build();
         $this->client
             ->setBaseUrl(self::BASE_URL)
             ->setAdapter(HttpCurlAdapter::class)

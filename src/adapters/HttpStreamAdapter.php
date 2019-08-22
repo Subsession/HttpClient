@@ -36,10 +36,10 @@ namespace Comertis\Http\Adapters;
 
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Adapters\HttpBaseAdapter;
+use Comertis\Http\Builders\HttpResponseBuilder;
 use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
-use Comertis\Http\HttpResponse;
 
 /**
  * Undocumented class
@@ -102,14 +102,20 @@ class HttpStreamAdapter extends HttpBaseAdapter
 
         $params = $request->getParams();
 
-        $url = $request->getUrl();
-        $url .= "?";
-
-        foreach ($params as $key => $value) {
-            $url .= $key . "=" . $value . "&";
+        if (empty($params) || null === $params) {
+            return;
         }
 
-        $url = trim($url, "&");
+        $url = $request->getUrl();
+
+        $separator = "?";
+
+        // If "?" already exists in the url
+        if (strpos($url, $separator) !== false) {
+            $separator = "&";
+        }
+
+        $url .= $separator . http_build_query($params);
 
         $request->setUrl($url);
     }
@@ -157,7 +163,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
                 break;
         }
 
-        if (empty($params) | is_null($params)) {
+        if (empty($params) || null === $params) {
             throw new HttpAdapterException("Failed to parse request parameters");
         }
 
@@ -238,7 +244,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
             }
         }
 
-        $response = new HttpResponse();
+        $response = HttpResponseBuilder::build();
         $response
             ->setHeaders($responseHeaders)
             ->setStatusCode($responseStatusCode)

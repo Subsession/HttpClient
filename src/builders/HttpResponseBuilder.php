@@ -32,16 +32,12 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Adapters;
+namespace Comertis\Http\Builders;
 
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\HttpResponse;
 
 /**
- * Defines the minimum necessary for a HttpExecutor
- * implementation regardless of used library or extension
- *
- * @uses Comertis\Http\HttpRequestInterface
+ * Undocumented class
  *
  * @category Http
  * @package  Comertis\Http
@@ -50,45 +46,17 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface HttpAdapterInterface
+class HttpResponseBuilder
 {
     /**
-     * Make any necessary changes to the HttpRequestInterface URL before executing
+     * Build a HttpResponseInterface implementation
      *
-     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareUrl(HttpRequestInterface &$request);
-
-    /**
-     * Make any necessary changes to the HttpRequestInterface headers before executing
-     *
-     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareHeaders(HttpRequestInterface &$request);
-
-    /**
-     * Make any necessary changes to the HttpRequestInterface parameters before executing
-     *
-     * @param HttpRequestInterface $request HttpRequestInterface instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareParams(HttpRequestInterface &$request);
-
-    /**
-     * Execute the HttpRequestInterface and return a HttpResponseInterface instance
-     *
-     * @param HttpRequestInterface $request HttpRequestInterface instance
-     *
+     * @static
      * @access public
      * @return HttpResponseInterface
      */
-    public function handle(HttpRequestInterface $request);
+    public static function build()
+    {
+        return new HttpResponse();
+    }
 }

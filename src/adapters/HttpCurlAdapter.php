@@ -36,10 +36,10 @@ namespace Comertis\Http\Adapters;
 
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Adapters\HttpBaseAdapter;
+use Comertis\Http\Builders\HttpResponseBuilder;
 use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
-use Comertis\Http\HttpResponse;
 
 /**
  * HttpAdapterInterface implementation using the CURL
@@ -126,7 +126,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
 
         $params = $request->getParams();
 
-        if (empty($params) || is_null($params)) {
+        if (empty($params) || null === $params) {
             return;
         }
 
@@ -157,7 +157,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
 
         $method = $request->getMethod();
 
-        if ($method == HttpRequestMethod::GET | $method == HttpRequestMethod::HEAD) {
+        if ($method === HttpRequestMethod::GET || $method === HttpRequestMethod::HEAD) {
             return;
         }
 
@@ -203,7 +203,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
 
         $method = $request->getMethod();
 
-        if ($method == HttpRequestMethod::GET | $method == HttpRequestMethod::HEAD) {
+        if ($method === HttpRequestMethod::GET || $method === HttpRequestMethod::HEAD) {
             return;
         }
 
@@ -302,7 +302,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
         $responseInfo = curl_getinfo($this->ch);
         $responseStatusCode = $responseInfo['http_code'];
 
-        $response = new HttpResponse();
+        $response = HttpResponseBuilder::build();
         $response
             ->setHeaders($responseHeaders)
             ->setStatusCode($responseStatusCode)
