@@ -34,8 +34,8 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Internal\HttpRequestInterface;
-use Comertis\Http\Internal\HttpResponseInterface;
+use Comertis\Http\Abstraction\HttpRequestInterface;
+use Comertis\Http\Abstraction\HttpResponseInterface;
 
 /**
  * Defines the minimum necessary for a HttpExecutor

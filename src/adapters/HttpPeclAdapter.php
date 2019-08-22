@@ -34,9 +34,9 @@
 
 namespace Comertis\Http\Adapters;
 
+use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Adapters\HttpBaseAdapter;
 use Comertis\Http\Exceptions\HttpNotImplementedException;
-use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * Undocumented class

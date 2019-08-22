@@ -34,8 +34,8 @@
 
 namespace Comertis\Http;
 
+use Comertis\Http\Abstraction\HttpResponseInterface;
 use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class

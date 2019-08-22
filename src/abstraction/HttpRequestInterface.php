@@ -32,9 +32,10 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Internal;
+namespace Comertis\Http\Abstraction;
 
-use Comertis\Http\HttpStatusCode;
+use Comertis\Http\Exceptions\HttpClientException;
+use Comertis\Http\HttpRequestMethod;
 
 /**
  * Undocumented interface
@@ -46,10 +47,10 @@ use Comertis\Http\HttpStatusCode;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface HttpResponseInterface
+interface HttpRequestInterface
 {
     /**
-     * Get the response headers
+     * Get the HttpRequest headers
      *
      * @access public
      * @return array
@@ -57,9 +58,9 @@ interface HttpResponseInterface
     public function getHeaders();
 
     /**
-     * Set the response headers
+     * Set the HttpRequest headers
      *
-     * @param array $headers Response headers
+     * @param array $headers Request headers
      *
      * @access public
      * @return self
@@ -67,97 +68,88 @@ interface HttpResponseInterface
     public function setHeaders($headers);
 
     /**
-     * Get the response status code
+     * Add headers to the request.
+     * IMPORTANT: Overrides existing headers if
+     * duplicate found
+     *
+     * @param array $headers Request headers
      *
      * @access public
-     * @return integer
+     * @return void
      */
-    public function getStatusCode();
+    public function addHeaders($headers);
 
     /**
-     * Set the response status code
-     *
-     * @param integer $statusCode Status code
+     * Get the HttpRequest method
      *
      * @access public
-     * @see    HttpStatusCode
+     * @return string
+     */
+    public function getMethod();
+
+    /**
+     * Set the request method
+     *
+     * @param string $requestMethod Request method: GET|POST|PUT|DELETE
+     *
+     * @access public
+     * @see    HttpRequestMethod
      * @return self
      */
-    public function setStatusCode($statusCode);
-
+    public function setMethod($requestMethod);
     /**
-     * Get the response body
+     * Get the request URL
      *
      * @access public
-     * @return mixed|null
+     * @return string
      */
-    public function getBody();
+    public function getUrl();
 
     /**
-     * Set the response body
+     * Set the request URL
      *
-     * @param string|mixed $body Response body
+     * @param string $url URL
+     *
+     * @access public
+     * @throws HttpClientException If the URL is null or empty
+     * @return self
+     */
+    public function setUrl($url);
+
+    /**
+     * Get the HttpRequest parameters
+     *
+     * @access public
+     * @return array
+     */
+    public function getParams();
+
+    /**
+     * Set the HttpRequest parameters
+     *
+     * @param array $params Request parameters
      *
      * @access public
      * @return self
      */
-    public function setBody($body);
+    public function setParams($params);
 
     /**
-     * Get the response error
+     * Get the request body type
      *
      * @access public
-     * @return string|null
+     * @return string
      */
-    public function getError();
+    public function getBodyType();
 
     /**
-     * Set the response error
+     * Set the request body type
      *
-     * @param string $error Error message
+     * @param string $bodyType Request body type
      *
      * @access public
+     * @see    HttpRequestType
      * @return self
      */
-    public function setError($error);
-
-    /**
-     * Flag indicating that the response is in the 1xx status range
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isInformational();
-
-    /**
-     * Flag indicating that the response is in the 2xx status range
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isSuccess();
-
-    /**
-     * Flag indicating that the response is in the 3xx status range
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isRedirect();
-
-    /**
-     * Flag indicating that the response is in the 4xx status range
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isClientError();
-
-    /**
-     * Flag indicating that the response is in the 5xx status range
-     *
-     * @access public
-     * @return boolean
-     */
-    public function isServerError();
+    public function setBodyType($bodyType);
 }

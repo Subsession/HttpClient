@@ -34,9 +34,9 @@
 
 namespace Comertis\Http;
 
+use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\Internal\HttpRequestInterface;
 
 /**
  * Undocumented class

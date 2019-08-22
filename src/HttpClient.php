@@ -34,13 +34,12 @@
 
 namespace Comertis\Http;
 
+use Comertis\Http\Abstraction\HttpRequestInterface;
+use Comertis\Http\Abstraction\HttpResponseInterface;
 use Comertis\Http\Adapters\HttpAdapterBuilder;
 use Comertis\Http\Adapters\HttpAdapterInterface;
 use Comertis\Http\HttpRequest;
-use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpResponse;
-use Comertis\Http\Internal\HttpRequestInterface;
-use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class

@@ -34,7 +34,7 @@
 
 namespace Comertis\Http\Interceptors;
 
-use Comertis\Http\Internal\HttpResponseInterface;
+use Comertis\Http\Abstraction\HttpResponseInterface;
 
 /**
  * Undocumented class

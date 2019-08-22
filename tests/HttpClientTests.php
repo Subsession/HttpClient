@@ -5,8 +5,8 @@ namespace Comertis\Http\Tests;
 use Comertis\Http\Adapters\HttpCurlAdapter;
 use Comertis\Http\HttpClient;
 use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Internal\HttpRequestInterface;
-use Comertis\Http\Internal\HttpResponseInterface;
+use Comertis\Http\Abstraction\HttpRequestInterface;
+use Comertis\Http\Abstraction\HttpResponseInterface;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
