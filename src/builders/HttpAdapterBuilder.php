@@ -10,7 +10,7 @@
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
- * @license  https://opensource.org/licenses/MIT MIT
+ * @license  Proprietary
  * @version  GIT: &Id&
  * @link     https://github.com/Comertis/HttpClient
  */
@@ -28,7 +28,7 @@ use Comertis\Http\Exceptions\HttpAdapterException;
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
- * @license  https://opensource.org/licenses/MIT MIT
+ * @license  Proprietary
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
