@@ -32,11 +32,9 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Extensions;
+namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\HttpRequestType;
+use Comertis\Http\Abstraction\HttpRequestInterface;
 
 /**
  * Undocumented class
@@ -48,59 +46,65 @@ use Comertis\Http\HttpRequestType;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-trait HttpClientRequestJsonExtensions
+trait RequestRetryExtension
 {
     /**
-     * Execute a POST request with JSON formatted parameters
+     * Retry count for requests
      *
-     * @param array|mixed|object $params Parameters to include in the request
+     * @access private
+     * @var    int
+     */
+    private $retryCount = 1;
+
+    /**
+     * Get the configured retry count for requests
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return int
      */
-    public function postJson($params = [])
+    public function getRetryCount()
     {
-        $this->request
-            ->setMethod(HttpRequestMethod::POST)
-            ->setBodyType(HttpRequestType::JSON)
-            ->setParams($params);
-
-        return $this->handle($this->request);
+        return $this->retryCount;
     }
 
     /**
-     * Execute a PUT request with JSON formatted parameters
+     * Set the retry count for requests
      *
-     * @param array|mixed|object $params Parameters to be json encoded
+     * @param int $retryCount
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return self
      */
-    public function putJson($params = [])
+    public function setRetryCount($retryCount)
     {
-        $this->request
-            ->setMethod(HttpRequestMethod::PUT)
-            ->setBodyType(HttpRequestType::JSON)
-            ->setParams($params);
+        $this->retryCount = $retryCount;
 
-        return $this->handle($this->request);
+        return $this;
     }
 
     /**
-     * Execute a DELETE request with JSON encoded parameters
+     * Retry a HttpRequestInterface
      *
-     * @param array $params Parameters to be json encoded
+     * @param HttpRequestInterface $request
      *
      * @access public
      * @return HttpResponseInterface
      */
-    public function deleteJson($params = [])
+    public function retry(callable $failCondition)
     {
-        $this->request
-            ->setMethod(HttpRequestMethod::DELETE)
-            ->setBodyType(HttpRequestType::JSON)
-            ->setParams($params);
+        for ($i = 0; $i < $this->getRetryCount(); $i++) {
+            /**
+             * @var HttpResponseInterface $response
+             */
+            $response = $this->adapter->handle($this->request);
 
-        return $this->handle($this->request);
+            $isValid = $failCondition($response);
+
+            if ($isValid) {
+                return $response;
+            }
+        }
+
+        return $response;
     }
 }

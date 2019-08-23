@@ -32,15 +32,11 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Abstraction;
 
-use Comertis\Http\Abstraction\HttpClientInterface;
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Abstraction\HttpResponseInterface;
 use Comertis\Http\Adapters\HttpAdapterInterface;
-use Comertis\Http\Builders\HttpAdapterBuilder;
-use Comertis\Http\Builders\HttpRequestBuilder;
-use Comertis\Http\Builders\HttpResponseBuilder;
 
 /**
  * Undocumented class
@@ -52,58 +48,15 @@ use Comertis\Http\Builders\HttpResponseBuilder;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpClient implements HttpClientInterface
+interface HttpClientInterface
 {
-    use \Comertis\Http\Extensions\Client\RequestExtensions;
-    use \Comertis\Http\Extensions\Client\InterceptorExtension;
-
-    /**
-     * Holds the request information
-     *
-     * @access private
-     * @see    HttpRequest
-     * @var    HttpRequestInterface
-     */
-    private $request;
-
-    /**
-     * Holds the response information once a request has been executed
-     *
-     * @access private
-     * @see    HttpResponse
-     * @var    HttpResponseInterface
-     */
-    private $response;
-
-    /**
-     * Responsible for executing a HttpRequest
-     *
-     * @access private
-     * @see    HttpAdapterInterface
-     * @var    HttpAdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->request = HttpRequestBuilder::build();
-        $this->response = HttpResponseBuilder::build();
-        $this->adapter = HttpAdapterBuilder::build();
-    }
-
     /**
      * Get the HttpRequestInterface instance
      *
      * @access public
      * @return HttpRequestInterface
      */
-    public function getRequest()
-    {
-        return $this->request;
-    }
+    public function getRequest();
 
     /**
      * Set the HttpRequestInterface instance
@@ -113,12 +66,7 @@ class HttpClient implements HttpClientInterface
      * @access public
      * @return self
      */
-    public function setRequest(HttpRequestInterface $request)
-    {
-        $this->request = $request;
-
-        return $this;
-    }
+    public function setRequest(HttpRequestInterface $request);
 
     /**
      * Get the HttpResponse instance after executing
@@ -130,10 +78,7 @@ class HttpClient implements HttpClientInterface
      * @access public
      * @return HttpResponseInterface
      */
-    public function getResponse()
-    {
-        return $this->response;
-    }
+    public function getResponse();
 
     /**
      * Set the HttpResponseInterface instance
@@ -147,12 +92,7 @@ class HttpClient implements HttpClientInterface
      * @access public
      * @return self
      */
-    public function setResponse(HttpResponseInterface $response)
-    {
-        $this->response = $response;
-
-        return $this;
-    }
+    public function setResponse(HttpResponseInterface $response);
 
     /**
      * Get the explicitly specified HttpAdapterInterface implementation
@@ -161,10 +101,7 @@ class HttpClient implements HttpClientInterface
      * @access public
      * @return HttpAdapterInterface|null
      */
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
+    public function getAdapter();
 
     /**
      * Specify an explicit HttpAdapterInterface implementation to use
@@ -177,16 +114,7 @@ class HttpClient implements HttpClientInterface
      * @see    HttpAdapterInterface
      * @return self
      */
-    public function setAdapter($adapter)
-    {
-        if ($adapter instanceof HttpAdapterInterface) {
-            $this->adapter = $adapter;
-        } else {
-            $this->adapter = HttpAdapterBuilder::build($adapter);
-        }
-
-        return $this;
-    }
+    public function setAdapter($adapter);
 
     /**
      * Handle the HttpRequestInterface
@@ -196,14 +124,8 @@ class HttpClient implements HttpClientInterface
      *
      * @param HttpRequestInterface $request
      *
-     * @access private
+     * @access public
      * @return HttpResponseInterface
      */
-    private function handle(HttpRequestInterface $request)
-    {
-        $response = $this->adapter->handle($request);
-        $this->setResponse($response);
-
-        return $response;
-    }
+    public function handle(HttpRequestInterface $request);
 }

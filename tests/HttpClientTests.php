@@ -14,7 +14,7 @@ use stdClass;
 final class HttpClientTests extends TestCase
 {
     /**
-     * @var HttpClient
+     * @var HttpClientInterface
      */
     private $client;
 

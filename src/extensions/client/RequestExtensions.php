@@ -32,7 +32,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Extensions;
+namespace Comertis\Http\Extensions\Client;
 
 use Comertis\Http\Abstraction\HttpResponseInterface;
 use Comertis\Http\HttpRequestMethod;
@@ -47,9 +47,9 @@ use Comertis\Http\HttpRequestMethod;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-trait HttpClientRequestExtensions
+trait RequestExtensions
 {
-    use \Comertis\Http\Extensions\HttpClientRequestJsonExtensions;
+    use \Comertis\Http\Extensions\Client\RequestJsonExtensions;
 
     /**
      * Base URL for all requests

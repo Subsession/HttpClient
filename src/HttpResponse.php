@@ -51,8 +51,8 @@ use Comertis\Http\HttpStatusCode;
  */
 class HttpResponse implements HttpResponseInterface
 {
-    use \Comertis\Http\Traits\HttpHeaders;
-    use \Comertis\Http\Traits\HttpBody;
+    use \Comertis\Http\Extensions\Traits\HttpHeaders;
+    use \Comertis\Http\Extensions\Traits\HttpBody;
 
     /**
      * Response HTTP status code

@@ -32,7 +32,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Traits;
+namespace Comertis\Http\Extensions\Traits;
 
 /**
  * Undocumented class
@@ -44,39 +44,54 @@ namespace Comertis\Http\Traits;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-trait HttpBody
+trait HttpHeaders
 {
     /**
-     * Response body
+     * HTTP headers
      *
      * @access private
-     * @var    mixed
+     * @var    array
      */
-    private $body;
+    private $headers;
 
     /**
-     * Get the response body
+     * Get the request headers
      *
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function getBody()
+    public function getHeaders()
     {
-        return $this->body;
+        return $this->headers;
     }
 
     /**
-     * Set the response body
+     * Set the request headers
      *
-     * @param string|mixed $body Response body
+     * @param array $headers Request headers
      *
      * @access public
      * @return self
      */
-    public function setBody($body)
+    public function setHeaders($headers)
     {
-        $this->body = $body;
+        $this->headers = $headers;
 
         return $this;
+    }
+
+    /**
+     * Add headers to the request.
+     * IMPORTANT: Overrides existing headers if
+     * duplicate found
+     *
+     * @param array $headers Request headers
+     *
+     * @access public
+     * @return void
+     */
+    public function addHeaders($headers)
+    {
+        $this->headers = array_merge($this->headers, $headers);
     }
 }

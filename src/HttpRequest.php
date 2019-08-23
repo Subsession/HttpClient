@@ -53,7 +53,7 @@ use Comertis\Http\HttpRequestMethod;
  */
 class HttpRequest implements HttpRequestInterface
 {
-    use \Comertis\Http\Traits\HttpHeaders;
+    use \Comertis\Http\Extensions\Traits\HttpHeaders;
 
     /**
      * Base url

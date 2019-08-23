@@ -32,7 +32,11 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Traits;
+namespace Comertis\Http\Extensions\Client;
+
+use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\HttpRequestMethod;
+use Comertis\Http\HttpRequestType;
 
 /**
  * Undocumented class
@@ -44,54 +48,59 @@ namespace Comertis\Http\Traits;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-trait HttpHeaders
+trait RequestJsonExtensions
 {
     /**
-     * HTTP headers
+     * Execute a POST request with JSON formatted parameters
      *
-     * @access private
-     * @var    array
-     */
-    private $headers;
-
-    /**
-     * Get the request headers
+     * @param array|mixed|object $params Parameters to include in the request
      *
      * @access public
-     * @return array
+     * @return HttpResponseInterface
      */
-    public function getHeaders()
+    public function postJson($params = [])
     {
-        return $this->headers;
+        $this->request
+            ->setMethod(HttpRequestMethod::POST)
+            ->setBodyType(HttpRequestType::JSON)
+            ->setParams($params);
+
+        return $this->handle($this->request);
     }
 
     /**
-     * Set the request headers
+     * Execute a PUT request with JSON formatted parameters
      *
-     * @param array $headers Request headers
+     * @param array|mixed|object $params Parameters to be json encoded
      *
      * @access public
-     * @return self
+     * @return HttpResponseInterface
      */
-    public function setHeaders($headers)
+    public function putJson($params = [])
     {
-        $this->headers = $headers;
+        $this->request
+            ->setMethod(HttpRequestMethod::PUT)
+            ->setBodyType(HttpRequestType::JSON)
+            ->setParams($params);
 
-        return $this;
+        return $this->handle($this->request);
     }
 
     /**
-     * Add headers to the request.
-     * IMPORTANT: Overrides existing headers if
-     * duplicate found
+     * Execute a DELETE request with JSON encoded parameters
      *
-     * @param array $headers Request headers
+     * @param array $params Parameters to be json encoded
      *
      * @access public
-     * @return void
+     * @return HttpResponseInterface
      */
-    public function addHeaders($headers)
+    public function deleteJson($params = [])
     {
-        $this->headers = array_merge($this->headers, $headers);
+        $this->request
+            ->setMethod(HttpRequestMethod::DELETE)
+            ->setBodyType(HttpRequestType::JSON)
+            ->setParams($params);
+
+        return $this->handle($this->request);
     }
 }

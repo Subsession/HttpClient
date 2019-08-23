@@ -80,13 +80,13 @@ abstract class HttpBaseAdapter implements HttpAdapterInterface
      */
     public static function isAvailable()
     {
-        foreach (static::EXPECTED_EXTENSIONS as $extension) {
+        foreach (static::EXPECTED_EXTENSIONS as $key => $extension) {
             if (!extension_loaded($extension)) {
                 return false;
             }
         }
 
-        foreach (static::EXPECTED_FUNCTIONS as $function) {
+        foreach (static::EXPECTED_FUNCTIONS as $key => $function) {
             if (!function_exists($function)) {
                 return false;
             }
