@@ -3,39 +3,22 @@
  * PHP Version 7
  *
  * LICENSE:
- * Permission is hereby granted, free of charge, to any
- * person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the
- * Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Proprietary, see the LICENSE file that was provided with the software.
  *
- * The above copyright notice and this permission notice shall
- * be included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * Copyright (c) 2019 - present Comertis <info@comertis.com>
  *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
- * @license  https://opensource.org/licenses/MIT MIT
+ * @license  Proprietary
  * @version  GIT: &Id&
  * @link     https://github.com/Comertis/HttpClient
  */
 
 namespace Comertis\Http;
 
+use Comertis\Http\Abstraction\HttpResponseInterface;
 use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Internal\HttpResponseInterface;
 
 /**
  * Undocumented class
@@ -45,19 +28,14 @@ use Comertis\Http\Internal\HttpResponseInterface;
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
- * @license  https://opensource.org/licenses/MIT MIT
+ * @license  Proprietary
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
 class HttpResponse implements HttpResponseInterface
 {
-    /**
-     * Response headers
-     *
-     * @access private
-     * @var    array
-     */
-    private $headers;
+    use \Comertis\Http\Extensions\Traits\HttpHeaders;
+    use \Comertis\Http\Extensions\Traits\HttpBody;
 
     /**
      * Response HTTP status code
@@ -66,14 +44,6 @@ class HttpResponse implements HttpResponseInterface
      * @var    integer
      */
     private $statusCode;
-
-    /**
-     * Response body
-     *
-     * @access private
-     * @var    mixed
-     */
-    private $body;
 
     /**
      * Response error message
@@ -102,32 +72,6 @@ class HttpResponse implements HttpResponseInterface
     }
 
     /**
-     * Get the response headers
-     *
-     * @access public
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
-     * Set the response headers
-     *
-     * @param array $headers Response headers
-     *
-     * @access public
-     * @return self
-     */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
-
-    /**
      * Get the response status code
      *
      * @access public
@@ -150,32 +94,6 @@ class HttpResponse implements HttpResponseInterface
     public function setStatusCode($statusCode)
     {
         $this->statusCode = $statusCode;
-
-        return $this;
-    }
-
-    /**
-     * Get the response body
-     *
-     * @access public
-     * @return mixed
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Set the response body
-     *
-     * @param string|mixed $body Response body
-     *
-     * @access public
-     * @return self
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
 
         return $this;
     }

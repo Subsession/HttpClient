@@ -28,12 +28,5 @@ The example shown above assumes that composer is on your \$PATH.
 Below you see an alternative output which is based on the idea that the name of a test can be used to document the behavior that is verified by the test:
 
 ```
-./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests
+./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/HttpClientTests
 ```
-
-### Test results
-
-| Iterations | Average execution time in seconds |
-| ---------- | --------------------------------- |
-| 10         | 1.1462                            |
-| 100        | 1.116                             |

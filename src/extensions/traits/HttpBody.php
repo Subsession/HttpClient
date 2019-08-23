@@ -15,7 +15,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Extensions\Traits;
 
 /**
  * Undocumented class
@@ -27,11 +27,39 @@ namespace Comertis\Http;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpRequestMethod
+trait HttpBody
 {
-    const HEAD = "HEAD";
-    const GET = "GET";
-    const POST = "POST";
-    const PUT = "PUT";
-    const DELETE = "DELETE";
+    /**
+     * Response body
+     *
+     * @access private
+     * @var    mixed
+     */
+    private $body;
+
+    /**
+     * Get the response body
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * Set the response body
+     *
+     * @param string|mixed $body Response body
+     *
+     * @access public
+     * @return self
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+
+        return $this;
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace Comertis\Http\Tests;
 
-use Comertis\Http\Adapters\HttpAdapterBuilder;
 use Comertis\Http\Adapters\HttpCurlAdapter;
+use Comertis\Http\Builders\HttpAdapterBuilder;
 use Comertis\Http\HttpRequest;
 use Comertis\Http\HttpRequestMethod;
 use PHPUnit\Framework\TestCase;

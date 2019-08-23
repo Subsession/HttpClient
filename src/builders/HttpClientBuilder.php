@@ -15,10 +15,13 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Builders;
+
+use Comertis\Http\Abstraction\HttpClientInterface;
+use Comertis\Http\HttpClient;
 
 /**
- * Undocumented class
+ * Builder class for HttpClientInterface implementations
  *
  * @category Http
  * @package  Comertis\Http
@@ -27,11 +30,17 @@ namespace Comertis\Http;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpRequestMethod
+class HttpClientBuilder
 {
-    const HEAD = "HEAD";
-    const GET = "GET";
-    const POST = "POST";
-    const PUT = "PUT";
-    const DELETE = "DELETE";
+    /**
+     * Build a HttpClientInterface instance
+     *
+     * @static
+     * @access public
+     * @return HttpClientInterface
+     */
+    public static function build()
+    {
+        return new HttpClient();
+    }
 }

@@ -3,52 +3,31 @@
  * PHP Version 7
  *
  * LICENSE:
- * Permission is hereby granted, free of charge, to any
- * person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the
- * Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Proprietary, see the LICENSE file that was provided with the software.
  *
- * The above copyright notice and this permission notice shall
- * be included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * Copyright (c) 2019 - present Comertis <info@comertis.com>
  *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
- * @license  https://opensource.org/licenses/MIT MIT
+ * @license  Proprietary
  * @version  GIT: &Id&
  * @link     https://github.com/Comertis/HttpClient
  */
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Internal\HttpRequestInterface;
+use Comertis\Http\Abstraction\HttpAdapterInterface;
+use Comertis\Http\Abstraction\HttpRequestInterface;
+use Comertis\Http\Abstraction\HttpResponseInterface;
 
 /**
  * Undocumented class
  *
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\HttpRequestMethod
- * @uses Comertis\Http\HttpRequestType
- * @uses Comertis\Http\HttpResponse
- * @uses Comertis\Http\Adapters\HttpAdapterInterface
- *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>
- * @license  https://opensource.org/licenses/MIT MIT
+ * @license  Proprietary
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
@@ -84,13 +63,13 @@ abstract class HttpBaseAdapter implements HttpAdapterInterface
      */
     public static function isAvailable()
     {
-        foreach (static::EXPECTED_EXTENSIONS as $extension) {
+        foreach (static::EXPECTED_EXTENSIONS as $key => $extension) {
             if (!extension_loaded($extension)) {
                 return false;
             }
         }
 
-        foreach (static::EXPECTED_FUNCTIONS as $function) {
+        foreach (static::EXPECTED_FUNCTIONS as $key => $function) {
             if (!function_exists($function)) {
                 return false;
             }

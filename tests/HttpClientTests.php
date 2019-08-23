@@ -2,17 +2,18 @@
 
 namespace Comertis\Http\Tests;
 
+use Comertis\Http\Abstraction\HttpRequestInterface;
+use Comertis\Http\Abstraction\HttpResponseInterface;
 use Comertis\Http\Adapters\HttpCurlAdapter;
-use Comertis\Http\HttpClient;
+use Comertis\Http\Builders\HttpClientBuilder;
 use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Internal\HttpRequestInterface;
-use Comertis\Http\Internal\HttpResponseInterface;
+use Comertis\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
 
 final class HttpClientTests extends TestCase
 {
     /**
-     * @var HttpClient
+     * @var HttpClientInterface
      */
     private $client;
 
@@ -20,14 +21,14 @@ final class HttpClientTests extends TestCase
 
     public function __construct()
     {
-        $this->client = new HttpClient();
+        $this->client = HttpClientBuilder::build();
         $this->client
             ->setBaseUrl(self::BASE_URL)
             ->setAdapter(HttpCurlAdapter::class)
-            ->beforeRequest(function (HttpRequestInterface $request) {
+            ->beforeRequest(function (HttpRequestInterface &$request) {
                 print_r("Request interceptor called" . PHP_EOL);
             })
-            ->beforeResponse(function (HttpResponseInterface $response) {
+            ->beforeResponse(function (HttpResponseInterface &$response) {
                 print_r("Response interceptor called" . PHP_EOL);
             });
 
@@ -88,11 +89,6 @@ final class HttpClientTests extends TestCase
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
-
-        // $this->assertEquals(
-        //     null,
-        //     $response->getBody()
-        // );
     }
 
     public function testExpectResponseHeadersToContainContentTypeApplicationJson()
@@ -114,6 +110,42 @@ final class HttpClientTests extends TestCase
         $this->assertEquals(
             $responseHeaders[$contentType],
             $applicationJson
+        );
+    }
+
+    public function testExpectHttpClientToHavePostJsonExtensionMethod()
+    {
+        $response = $this->client
+            ->setUrl("posts")
+            ->postJson([(new Post())]);
+
+        $this->assertEquals(
+            HttpStatusCode::CREATED,
+            $response->getStatusCode()
+        );
+    }
+
+    public function testExpectHttpClientToHavePutJsonExtensionMethod()
+    {
+        $response = $this->client
+            ->setUrl("posts/1")
+            ->putJson([(new Post())]);
+
+        $this->assertEquals(
+            HttpStatusCode::OK,
+            $response->getStatusCode()
+        );
+    }
+
+    public function testExpectHttpClientToHaveDeleteJsonExtensionMethod()
+    {
+        $response = $this->client
+            ->setUrl("posts/1")
+            ->deleteJson();
+
+        $this->assertEquals(
+            HttpStatusCode::OK,
+            $response->getStatusCode()
         );
     }
 }
