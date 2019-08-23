@@ -66,10 +66,10 @@ class HttpAdapterBuilder
     {
         $adapter = null;
 
-        if (null !== $implementation) {
-            $adapter = static::getAdapterImplementation($implementation);
-        } else {
+        if (null === $implementation) {
             $adapter = static::getAdapter();
+        } else {
+            $adapter = static::getAdapterImplementation($implementation);
         }
 
         if (null === $adapter) {

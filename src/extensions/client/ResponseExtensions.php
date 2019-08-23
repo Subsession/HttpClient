@@ -32,11 +32,10 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpClientInterface;
-use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Builders\HttpResponseBuilder;
 
 /**
  * Undocumented class
@@ -48,29 +47,52 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpClient implements HttpClientInterface
+trait ResponseExtensions
 {
-    use \Comertis\Http\Extensions\Client\RequestExtensions;
-    use \Comertis\Http\Extensions\Client\ResponseExtensions;
-    use \Comertis\Http\Extensions\Client\InterceptorExtension;
-    use \Comertis\Http\Extensions\Client\AdapterExtensions;
+    /**
+     * Holds the response information once a request has been executed
+     *
+     * @access private
+     * @see    HttpResponse
+     * @var    HttpResponseInterface
+     */
+    private $response;
 
     /**
-     * Handle the HttpRequestInterface
+     * Get the HttpResponse instance after executing
+     * a HttpRequestInterface
      *
-     * This handles the HttpInterceptor calls and the
-     * HttpAdapterInterface::handle() call.
-     *
-     * @param HttpRequestInterface $request
+     * This returns null if called before executing
+     * the HttpRequestInterface.
      *
      * @access public
      * @return HttpResponseInterface
      */
-    public function handle(HttpRequestInterface $request)
+    public function getResponse()
     {
-        $response = $this->getAdapter()->handle($request);
-        $this->setResponse($response);
+        if (null === $this->response) {
+            $this->setResponse(HttpResponseBuilder::build());
+        }
 
-        return $response;
+        return $this->response;
+    }
+
+    /**
+     * Set the HttpResponseInterface instance
+     *
+     * This should never be used explicitly in
+     * normal use-cases, this method exists for
+     * consistency reasons.
+     *
+     * @param HttpResponseInterface $response HttpResponseInterface instance
+     *
+     * @access public
+     * @return self
+     */
+    public function setResponse(HttpResponseInterface $response)
+    {
+        $this->response = $response;
+
+        return $this;
     }
 }

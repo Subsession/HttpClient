@@ -34,6 +34,7 @@
 
 namespace Comertis\Http\Builders;
 
+use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\HttpRequest;
 
 /**

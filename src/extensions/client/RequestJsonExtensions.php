@@ -60,12 +60,12 @@ trait RequestJsonExtensions
      */
     public function postJson($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::POST)
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 
     /**
@@ -78,12 +78,12 @@ trait RequestJsonExtensions
      */
     public function putJson($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::PUT)
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 
     /**
@@ -96,11 +96,11 @@ trait RequestJsonExtensions
      */
     public function deleteJson($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::DELETE)
             ->setBodyType(HttpRequestType::JSON)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 }

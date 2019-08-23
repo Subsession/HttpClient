@@ -32,11 +32,9 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpClientInterface;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Builders\HttpAdapterBuilder;
 
 /**
  * Undocumented class
@@ -48,29 +46,63 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpClient implements HttpClientInterface
+trait AdapterExtensions
 {
-    use \Comertis\Http\Extensions\Client\RequestExtensions;
-    use \Comertis\Http\Extensions\Client\ResponseExtensions;
-    use \Comertis\Http\Extensions\Client\InterceptorExtension;
-    use \Comertis\Http\Extensions\Client\AdapterExtensions;
+    /**
+     * Responsible for executing a HttpRequest
+     *
+     * @access private
+     * @see    HttpAdapterInterface
+     * @var    HttpAdapterInterface
+     */
+    private $adapter;
 
     /**
-     * Handle the HttpRequestInterface
-     *
-     * This handles the HttpInterceptor calls and the
-     * HttpAdapterInterface::handle() call.
-     *
-     * @param HttpRequestInterface $request
+     * Get the explicitly specified HttpAdapterInterface implementation
+     * used for requests
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return HttpAdapterInterface|null
      */
-    public function handle(HttpRequestInterface $request)
+    public function getAdapter()
     {
-        $response = $this->getAdapter()->handle($request);
-        $this->setResponse($response);
+        if (null === $this->adapter) {
+            $this->setAdapter(HttpAdapterBuilder::build());
+        }
 
-        return $response;
+        return $this->adapter;
+    }
+
+    /**
+     * Set the HttpAdapterInterface implementation to use
+     *
+     * Either pass an implementation of HttpAdapterInterface or
+     * the fully qualified class name of an implementation.
+     *
+     * Ex:
+     * ```php
+     *    // With class name
+     *    $client->setAdapter(HttpCurlAdapter::class);
+     *
+     *    // With implementation
+     *    $adapter = HttpAdapterBuilder::build();
+     *    $client->setAdapter($adapter);
+     * ```
+     *
+     * @param string|HttpAdapterInterface $adapter
+     *
+     * @access public
+     * @see    HttpAdapterInterface
+     * @return self
+     */
+    public function setAdapter($adapter)
+    {
+        if ($adapter instanceof HttpAdapterInterface) {
+            $this->adapter = $adapter;
+        } else {
+            $this->adapter = HttpAdapterBuilder::build($adapter);
+        }
+
+        return $this;
     }
 }

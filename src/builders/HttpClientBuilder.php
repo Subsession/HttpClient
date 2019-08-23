@@ -35,6 +35,7 @@
 namespace Comertis\Http\Builders;
 
 use Comertis\Http\Abstraction\HttpClientInterface;
+use Comertis\Http\HttpClient;
 
 /**
  * Builder class for HttpClientInterface implementations

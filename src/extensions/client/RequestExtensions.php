@@ -34,7 +34,9 @@
 
 namespace Comertis\Http\Extensions\Client;
 
+use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Builders\HttpRequestBuilder;
 use Comertis\Http\HttpRequestMethod;
 
 /**
@@ -60,6 +62,15 @@ trait RequestExtensions
     private $baseUrl = null;
 
     /**
+     * Holds the request information
+     *
+     * @access private
+     * @see    HttpRequest
+     * @var    HttpRequestInterface
+     */
+    private $request;
+
+    /**
      * Get the request URL
      *
      * @access public
@@ -68,7 +79,7 @@ trait RequestExtensions
      */
     public function getUrl()
     {
-        return $this->request->getUrl();
+        return $this->getRequest()->getUrl();
     }
 
     /**
@@ -90,7 +101,7 @@ trait RequestExtensions
             $url = $this->getBaseUrl() . $url;
         }
 
-        $this->request->setUrl($url);
+        $this->getRequest()->setUrl($url);
 
         return $this;
     }
@@ -104,7 +115,7 @@ trait RequestExtensions
      */
     public function getHeaders()
     {
-        return $this->request->getHeaders();
+        return $this->getRequest()->getHeaders();
     }
 
     /**
@@ -118,7 +129,7 @@ trait RequestExtensions
      */
     public function setHeaders(array $headers)
     {
-        $this->request->setHeaders($headers);
+        $this->getRequest()->setHeaders($headers);
 
         return $this;
     }
@@ -134,7 +145,7 @@ trait RequestExtensions
      */
     public function addHeaders(array $headers)
     {
-        $this->request->addHeaders($headers);
+        $this->getRequest()->addHeaders($headers);
 
         return $this;
     }
@@ -148,7 +159,7 @@ trait RequestExtensions
      */
     public function clearHeaders()
     {
-        $this->request->setHeaders([]);
+        $this->getRequest()->setHeaders([]);
 
         return $this;
     }
@@ -175,7 +186,37 @@ trait RequestExtensions
     public function setBaseUrl($url)
     {
         $this->baseUrl = $url;
-        $this->request->setUrl($this->getBaseUrl());
+        $this->getRequest()->setUrl($this->getBaseUrl());
+
+        return $this;
+    }
+
+    /**
+     * Get the HttpRequestInterface instance
+     *
+     * @access public
+     * @return HttpRequestInterface
+     */
+    public function getRequest()
+    {
+        if (null === $this->request) {
+            $this->setRequest(HttpRequestBuilder::build());
+        }
+
+        return $this->request;
+    }
+
+    /**
+     * Set the HttpRequestInterface instance
+     *
+     * @param HttpRequestInterface $request HttpRequestInterface instance
+     *
+     * @access public
+     * @return self
+     */
+    public function setRequest(HttpRequestInterface $request)
+    {
+        $this->request = $request;
 
         return $this;
     }
@@ -191,11 +232,11 @@ trait RequestExtensions
      */
     public function head($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::HEAD)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 
     /**
@@ -208,11 +249,11 @@ trait RequestExtensions
      */
     public function get($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::GET)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 
     /**
@@ -225,11 +266,11 @@ trait RequestExtensions
      */
     public function post($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::POST)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 
     /**
@@ -242,11 +283,11 @@ trait RequestExtensions
      */
     public function put($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::PUT)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 
     /**
@@ -259,10 +300,10 @@ trait RequestExtensions
      */
     public function delete($params = [])
     {
-        $this->request
+        $this->getRequest()
             ->setMethod(HttpRequestMethod::DELETE)
             ->setParams($params);
 
-        return $this->handle($this->request);
+        return $this->handle($this->getRequest());
     }
 }
