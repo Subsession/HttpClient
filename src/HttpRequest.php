@@ -17,15 +17,12 @@
 
 namespace Comertis\Http;
 
+use Comertis\Exceptions\ArgumentNullException;
 use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Exceptions\HttpClientException;
 use Comertis\Http\HttpRequestMethod;
 
 /**
  * Undocumented class
- *
- * @uses Comertis\Http\Exceptions\HttpClientException
- * @uses Comertis\Http\HttpRequestMethod
  *
  * @category Http
  * @package  Comertis\Http
@@ -144,17 +141,17 @@ class HttpRequest implements HttpRequestInterface
      * @param string $url URL
      *
      * @access public
-     * @throws HttpClientException If the URL is null or empty
+     * @throws ArgumentNullException If the URL is null or empty
      * @return self
      */
     public function setUrl($url)
     {
         if (is_null($url)) {
-            throw new HttpClientException("URL cannot be null");
+            throw new ArgumentNullException("URL cannot be null");
         }
 
         if (empty($url)) {
-            throw new HttpClientException("URL cannot be empty");
+            throw new ArgumentNullException("URL cannot be empty");
         }
 
         $this->url = $url;

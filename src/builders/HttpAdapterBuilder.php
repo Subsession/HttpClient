@@ -17,10 +17,11 @@
 
 namespace Comertis\Http\Builders;
 
+use Comertis\Exceptions\NullReferenceException;
+use Comertis\Http\Abstraction\HttpAdapterInterface;
 use Comertis\Http\Adapters\HttpCurlAdapter;
 use Comertis\Http\Adapters\HttpPeclAdapter;
 use Comertis\Http\Adapters\HttpStreamAdapter;
-use Comertis\Http\Exceptions\HttpAdapterException;
 
 /**
  * Builder class for HttpAdapterInterface implementations
@@ -42,7 +43,7 @@ class HttpAdapterBuilder
      *
      * @static
      * @access public
-     * @throws HttpAdapterException
+     * @throws NullReferenceException
      * @return HttpAdapterInterface
      */
     public static function build($implementation = null)
@@ -57,7 +58,7 @@ class HttpAdapterBuilder
 
         if (null === $adapter) {
             $message = "Failed to create an adapter, missing necessary extensions/functions";
-            throw new HttpAdapterException($message);
+            throw new NullReferenceException($message);
         }
 
         return $adapter;
@@ -76,8 +77,12 @@ class HttpAdapterBuilder
     {
         if (is_array($adapter)) {
             foreach ($adapter as $key => $value) {
-                // Recursive call until one adapter | null is returned
-                return self::getAdapterImplementation($value);
+                // Recursive call until one adapter || null is returned
+                $implementation = self::getAdapterImplementation($value);
+
+                if ($implementation instanceof HttpAdapterInterface) {
+                    return $implementation;
+                }
             }
         }
 

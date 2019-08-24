@@ -17,7 +17,7 @@
 
 namespace Comertis\Http\Abstraction;
 
-use Comertis\Http\Exceptions\HttpClientException;
+use Comertis\Exceptions\ArgumentNullException;
 use Comertis\Http\HttpRequestMethod;
 
 /**
@@ -94,7 +94,7 @@ interface HttpRequestInterface
      * @param string $url URL
      *
      * @access public
-     * @throws HttpClientException If the URL is null or empty
+     * @throws ArgumentNullException If the URL is null or empty
      * @return self
      */
     public function setUrl($url);

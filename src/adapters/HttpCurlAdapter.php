@@ -17,10 +17,10 @@
 
 namespace Comertis\Http\Adapters;
 
+use Comertis\Exceptions\ArgumentException;
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Adapters\HttpBaseAdapter;
 use Comertis\Http\Builders\HttpResponseBuilder;
-use Comertis\Http\Exceptions\HttpAdapterException;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 
@@ -204,7 +204,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
         }
 
         if (empty($params) | is_null($params)) {
-            throw new HttpAdapterException("Failed to parse request parameters");
+            throw new ArgumentException("Failed to parse request parameters");
         }
 
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $params);

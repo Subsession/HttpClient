@@ -17,14 +17,14 @@
 
 namespace Comertis\Http\Adapters;
 
+use Comertis\Exceptions\NotImplementedException;
 use Comertis\Http\Abstraction\HttpRequestInterface;
 use Comertis\Http\Adapters\HttpBaseAdapter;
-use Comertis\Http\Exceptions\HttpNotImplementedException;
 
 /**
  * Undocumented class
  *
- * @uses Comertis\Http\Exceptions\HttpNotImplementedException
+ * @uses Comertis\Http\Exceptions\NotImplementedException
  * @uses Comertis\Http\HttpRequest
  * @uses Comertis\Http\Adapters\HttpAdapterInterface
  *
@@ -62,37 +62,37 @@ class HttpPeclAdapter extends HttpBaseAdapter
 
     /**
      * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * @throws     NotImplementedException
      */
     public function prepareUrl(HttpRequestInterface &$request)
     {
-        throw new HttpNotImplementedException("This function is not yet implemented");
+        throw new NotImplementedException("This function is not yet implemented");
     }
 
     /**
      * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * @throws     NotImplementedException
      */
     public function prepareHeaders(HttpRequestInterface &$request)
     {
-        throw new HttpNotImplementedException();
+        throw new NotImplementedException();
     }
 
     /**
      * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * @throws     NotImplementedException
      */
     public function prepareParams(HttpRequestInterface &$request)
     {
-        throw new HttpNotImplementedException();
+        throw new NotImplementedException();
     }
 
     /**
      * @inheritDoc
-     * @throws     HttpNotImplementedException
+     * @throws     NotImplementedException
      */
     public function execute(HttpRequestInterface $request)
     {
-        throw new HttpNotImplementedException();
+        throw new NotImplementedException();
     }
 }
