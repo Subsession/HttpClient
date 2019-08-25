@@ -51,9 +51,21 @@ class HttpClient implements HttpClientInterface
      */
     public function handle(RequestInterface $request)
     {
+        // Handle RequestInterceptor call
+        $this->getInterceptor()
+            ->getRequest()
+            ->intercept($request);
+
+        // Get ResponseInterface from the AdapterInterface
         $response = $this->getAdapter()->handle($request);
         $this->setResponse($response);
 
+        // Handle ResponseInterceptor call
+        $this->getInterceptor()
+            ->getResponse()
+            ->intercept($response);
+
+        // Return ResponseInterface
         return $response;
     }
 }

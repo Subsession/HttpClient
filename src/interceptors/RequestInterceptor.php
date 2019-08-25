@@ -51,25 +51,23 @@ class RequestInterceptor
      * @access public
      * @return RequestInterface
      */
-    public function handle(RequestInterface &$request)
+    public function intercept(RequestInterface &$request)
     {
-        if (is_callable($this->callback)) {
-            $callback = $this->callback;
+        if (is_callable(($callback = $this->callback))) {
             $callback($request);
         }
-
-        return $request;
     }
 
     /**
-     * Intercept RequestInterface instances before they are processed
+     * Set the callback function to be called before
+     * a RequestInterface is processed.
      *
      * @param callable $callback
      *
      * @access public
-     * @return RequestInterface
+     * @return void
      */
-    public function intercept(callable $callback)
+    public function setCallback(callable $callback)
     {
         $this->callback = $callback;
     }

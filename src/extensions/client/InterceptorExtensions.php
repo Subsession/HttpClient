@@ -36,11 +36,17 @@ trait InterceptorExtensions
      * Request & Response interceptor
      *
      * @access private
-     * @see Interceptor
-     * @var Interceptor
+     * @see    Interceptor
+     * @var    Interceptor
      */
     private $interceptor = null;
 
+    /**
+     * Get the Interceptor instance
+     *
+     * @access private
+     * @return Interceptor
+     */
     private function getInterceptor()
     {
         if (null === $this->interceptor) {
@@ -60,7 +66,9 @@ trait InterceptorExtensions
      */
     public function beforeRequest(callable $callable)
     {
-        $this->getInterceptor()->getRequest()->intercept($callable);
+        $this->getInterceptor()
+            ->getRequest()
+            ->setCallback($callable);
 
         return $this;
     }
@@ -75,39 +83,10 @@ trait InterceptorExtensions
      */
     public function beforeResponse(callable $callable)
     {
-        $this->getInterceptor()->getResponse()->intercept($callable);
-
-        return $this;
-    }
-
-    /**
-     * Handle the RequestInterface
-     *
-     * This handles the Interceptor calls and the
-     * AdapterInterface::handle() call.
-     *
-     * @param RequestInterface $request
-     *
-     * @access private
-     * @return ResponseInterface
-     */
-    private function handle(RequestInterface $request)
-    {
-        // Handle RequestInterceptor call
-        $this->getInterceptor()
-            ->getRequest()
-            ->handle($request);
-
-        // Get ResponseInterface from the AdapterInterface
-        $response = $this->getAdapter()->handle($request);
-        $this->setResponse($response);
-
-        // Handle ResponseInterceptor call
         $this->getInterceptor()
             ->getResponse()
-            ->handle($response);
+            ->setCallback($callable);
 
-        // Return ResponseInterface
-        return $response;
+        return $this;
     }
 }
