@@ -18,15 +18,15 @@
 namespace Comertis\Http\Adapters;
 
 use Comertis\Exceptions\NotImplementedException;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Adapters\HttpBaseAdapter;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Adapters\BaseAdapter;
 
 /**
  * Undocumented class
  *
  * @uses Comertis\Http\Exceptions\NotImplementedException
- * @uses Comertis\Http\HttpRequest
- * @uses Comertis\Http\Adapters\HttpAdapterInterface
+ * @uses Comertis\Http\Request
+ * @uses Comertis\Http\Adapters\AdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -35,11 +35,11 @@ use Comertis\Http\Adapters\HttpBaseAdapter;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpPeclAdapter extends HttpBaseAdapter
+class PeclAdapter extends BaseAdapter
 {
 
     /**
-     * Expected extensions for this HttpAdapterInterface implementation
+     * Expected extensions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -50,7 +50,7 @@ class HttpPeclAdapter extends HttpBaseAdapter
     ];
 
     /**
-     * Expected functions for this HttpAdapterInterface implementation
+     * Expected functions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -64,7 +64,7 @@ class HttpPeclAdapter extends HttpBaseAdapter
      * @inheritDoc
      * @throws     NotImplementedException
      */
-    public function prepareUrl(HttpRequestInterface &$request)
+    public function prepareUrl(RequestInterface &$request)
     {
         throw new NotImplementedException("This function is not yet implemented");
     }
@@ -73,7 +73,7 @@ class HttpPeclAdapter extends HttpBaseAdapter
      * @inheritDoc
      * @throws     NotImplementedException
      */
-    public function prepareHeaders(HttpRequestInterface &$request)
+    public function prepareHeaders(RequestInterface &$request)
     {
         throw new NotImplementedException();
     }
@@ -82,7 +82,7 @@ class HttpPeclAdapter extends HttpBaseAdapter
      * @inheritDoc
      * @throws     NotImplementedException
      */
-    public function prepareParams(HttpRequestInterface &$request)
+    public function prepareParams(RequestInterface &$request)
     {
         throw new NotImplementedException();
     }
@@ -91,7 +91,7 @@ class HttpPeclAdapter extends HttpBaseAdapter
      * @inheritDoc
      * @throws     NotImplementedException
      */
-    public function execute(HttpRequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         throw new NotImplementedException();
     }

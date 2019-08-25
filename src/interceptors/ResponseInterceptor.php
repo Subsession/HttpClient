@@ -17,8 +17,7 @@
 
 namespace Comertis\Http\Interceptors;
 
-use Comertis\Http\Interceptors\HttpRequestInterceptor;
-use Comertis\Http\Interceptors\HttpResponseInterceptor;
+use Comertis\Http\Abstraction\ResponseInterface;
 
 /**
  * Undocumented class
@@ -30,52 +29,48 @@ use Comertis\Http\Interceptors\HttpResponseInterceptor;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpInterceptor
+class ResponseInterceptor
 {
     /**
-     * Request interceptor
+     * Callable function
      *
-     * @access private
-     * @var    HttpRequestInterceptor
+     * @var callable|null
      */
-    private $request;
+    private $callback;
 
-    /**
-     * Response interceptor
-     *
-     * @access private
-     * @var    HttpResponseInterceptor
-     */
-    private $response;
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->request = new HttpRequestInterceptor();
-        $this->response = new HttpResponseInterceptor();
+        $this->callback = null;
     }
 
     /**
-     * Get the request interceptor
+     * Process the ResponseInterface with the provided callback function
+     *
+     * @param ResponseInterface $response
      *
      * @access public
-     * @return HttpRequestInterceptor
+     * @return ResponseInterface
      */
-    public function getRequest()
+    public function handle(ResponseInterface &$response)
     {
-        return $this->request;
+        if (is_callable($this->callback)) {
+            $callback = $this->callback;
+            $callback($response);
+        }
+
+        return $response;
     }
 
     /**
-     * Get the response interceptor
+     * Intercept ResponseInterface instances before they are processed
+     *
+     * @param callable $callback
      *
      * @access public
-     * @return HttpResponseInterceptor
+     * @return ResponseInterface
      */
-    public function getResponse()
+    public function intercept(callable $callback)
     {
-        return $this->response;
+        $this->callback = $callback;
     }
 }

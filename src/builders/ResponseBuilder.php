@@ -15,7 +15,10 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Extensions\Traits;
+namespace Comertis\Http\Builders;
+
+use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Response;
 
 /**
  * Undocumented class
@@ -27,39 +30,17 @@ namespace Comertis\Http\Extensions\Traits;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-trait HttpBody
+class ResponseBuilder
 {
     /**
-     * Response body
+     * Build a ResponseInterface implementation
      *
-     * @access private
-     * @var    mixed
-     */
-    private $body;
-
-    /**
-     * Get the response body
-     *
+     * @static
      * @access public
-     * @return mixed
+     * @return ResponseInterface
      */
-    public function getBody()
+    public static function build()
     {
-        return $this->body;
-    }
-
-    /**
-     * Set the response body
-     *
-     * @param string|mixed $body Response body
-     *
-     * @access public
-     * @return self
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
-
-        return $this;
+        return new Response();
     }
 }

@@ -15,10 +15,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Builders;
-
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\HttpRequest;
+namespace Comertis\Http\Extensions;
 
 /**
  * Undocumented class
@@ -30,17 +27,39 @@ use Comertis\Http\HttpRequest;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpRequestBuilder
+trait Body
 {
     /**
-     * Build a HttpRequestInterface implementation
+     * Response body
      *
-     * @static
-     * @access public
-     * @return HttpRequestInterface
+     * @access private
+     * @var    mixed
      */
-    public static function build()
+    private $body;
+
+    /**
+     * Get the response body
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getBody()
     {
-        return new HttpRequest();
+        return $this->body;
+    }
+
+    /**
+     * Set the response body
+     *
+     * @param string|mixed $body Response body
+     *
+     * @access public
+     * @return self
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+
+        return $this;
     }
 }

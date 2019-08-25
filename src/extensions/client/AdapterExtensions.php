@@ -17,7 +17,7 @@
 
 namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Builders\HttpAdapterBuilder;
+use Comertis\Http\Builders\AdapterBuilder;
 
 /**
  * Undocumented class
@@ -32,58 +32,58 @@ use Comertis\Http\Builders\HttpAdapterBuilder;
 trait AdapterExtensions
 {
     /**
-     * Responsible for executing a HttpRequest
+     * Responsible for executing a Request
      *
      * @access private
-     * @see    HttpAdapterInterface
-     * @var    HttpAdapterInterface
+     * @see    AdapterInterface
+     * @var    AdapterInterface
      */
     private $adapter;
 
     /**
-     * Get the explicitly specified HttpAdapterInterface implementation
+     * Get the explicitly specified AdapterInterface implementation
      * used for requests
      *
      * @access public
-     * @return HttpAdapterInterface|null
+     * @return AdapterInterface|null
      */
     public function getAdapter()
     {
         if (null === $this->adapter) {
-            $this->setAdapter(HttpAdapterBuilder::build());
+            $this->setAdapter(AdapterBuilder::build());
         }
 
         return $this->adapter;
     }
 
     /**
-     * Set the HttpAdapterInterface implementation to use
+     * Set the AdapterInterface implementation to use
      *
-     * Either pass an implementation of HttpAdapterInterface or
+     * Either pass an implementation of AdapterInterface or
      * the fully qualified class name of an implementation.
      *
      * Ex:
      * ```php
      *    // With class name
-     *    $client->setAdapter(HttpCurlAdapter::class);
+     *    $client->setAdapter(CurlAdapter::class);
      *
      *    // With implementation
-     *    $adapter = HttpAdapterBuilder::build();
+     *    $adapter = AdapterBuilder::build();
      *    $client->setAdapter($adapter);
      * ```
      *
-     * @param string|HttpAdapterInterface $adapter
+     * @param string|AdapterInterface $adapter
      *
      * @access public
-     * @see    HttpAdapterInterface
+     * @see    AdapterInterface
      * @return self
      */
     public function setAdapter($adapter)
     {
-        if ($adapter instanceof HttpAdapterInterface) {
+        if ($adapter instanceof AdapterInterface) {
             $this->adapter = $adapter;
         } else {
-            $this->adapter = HttpAdapterBuilder::build($adapter);
+            $this->adapter = AdapterBuilder::build($adapter);
         }
 
         return $this;

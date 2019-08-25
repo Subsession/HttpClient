@@ -18,9 +18,9 @@
 namespace Comertis\Http\Adapters;
 
 use Comertis\Exceptions\ArgumentException;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Adapters\HttpBaseAdapter;
-use Comertis\Http\Builders\HttpResponseBuilder;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Adapters\BaseAdapter;
+use Comertis\Http\Builders\ResponseBuilder;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 
@@ -34,7 +34,7 @@ use Comertis\Http\HttpRequestType;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpStreamAdapter extends HttpBaseAdapter
+class StreamAdapter extends BaseAdapter
 {
     /**
      * Stream context options
@@ -45,7 +45,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
     private $options;
 
     /**
-     * Expected extensions for this HttpAdapterInterface implementation
+     * Expected extensions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -56,7 +56,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
     ];
 
     /**
-     * Expected functions for this HttpAdapterInterface implementation
+     * Expected functions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -73,7 +73,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
     /**
      * @inheritDoc
      */
-    public function prepareUrl(HttpRequestInterface &$request)
+    public function prepareUrl(RequestInterface &$request)
     {
         if ($request->getMethod() !== HttpRequestMethod::GET) {
             return;
@@ -106,7 +106,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
     /**
      * @inheritDoc
      */
-    public function prepareHeaders(HttpRequestInterface &$request)
+    public function prepareHeaders(RequestInterface &$request)
     {
         $this->options = [
             "http" => [
@@ -127,7 +127,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
     /**
      * @inheritDoc
      */
-    public function prepareParams(HttpRequestInterface &$request)
+    public function prepareParams(RequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -156,7 +156,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
     /**
      * @inheritDoc
      */
-    public function handle(HttpRequestInterface $request)
+    public function handle(RequestInterface $request)
     {
         parent::handle($request);
 
@@ -227,7 +227,7 @@ class HttpStreamAdapter extends HttpBaseAdapter
             }
         }
 
-        $response = HttpResponseBuilder::build();
+        $response = ResponseBuilder::build();
         $response
             ->setHeaders($responseHeaders)
             ->setStatusCode($responseStatusCode)

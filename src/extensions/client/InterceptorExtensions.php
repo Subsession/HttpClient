@@ -17,8 +17,8 @@
 
 namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Interceptors\HttpInterceptor;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Interceptors\Interceptor;
 
 /**
  * Undocumented class
@@ -33,25 +33,25 @@ use Comertis\Http\Interceptors\HttpInterceptor;
 trait InterceptorExtensions
 {
     /**
-     * HttpRequest & HttpResponse interceptor
+     * Request & Response interceptor
      *
      * @access private
-     * @see HttpInterceptor
-     * @var HttpInterceptor
+     * @see Interceptor
+     * @var Interceptor
      */
     private $interceptor = null;
 
     private function getInterceptor()
     {
         if (null === $this->interceptor) {
-            $this->interceptor = new HttpInterceptor();
+            $this->interceptor = new Interceptor();
         }
 
         return $this->interceptor;
     }
 
     /**
-     * Intercept all HttpRequestInterface before they are processed
+     * Intercept all RequestInterface before they are processed
      *
      * @param callable $callable
      *
@@ -66,7 +66,7 @@ trait InterceptorExtensions
     }
 
     /**
-     * Intercept all HttpResponseInterface before they are returned
+     * Intercept all ResponseInterface before they are returned
      *
      * @param callable $callable
      *
@@ -81,33 +81,33 @@ trait InterceptorExtensions
     }
 
     /**
-     * Handle the HttpRequestInterface
+     * Handle the RequestInterface
      *
-     * This handles the HttpInterceptor calls and the
-     * HttpAdapterInterface::handle() call.
+     * This handles the Interceptor calls and the
+     * AdapterInterface::handle() call.
      *
-     * @param HttpRequestInterface $request
+     * @param RequestInterface $request
      *
      * @access private
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
-    private function handle(HttpRequestInterface $request)
+    private function handle(RequestInterface $request)
     {
-        // Handle HttpRequestInterceptor call
+        // Handle RequestInterceptor call
         $this->getInterceptor()
             ->getRequest()
             ->handle($request);
 
-        // Get HttpResponseInterface from the HttpAdapterInterface
+        // Get ResponseInterface from the AdapterInterface
         $response = $this->getAdapter()->handle($request);
         $this->setResponse($response);
 
-        // Handle HttpResponseInterceptor call
+        // Handle ResponseInterceptor call
         $this->getInterceptor()
             ->getResponse()
             ->handle($response);
 
-        // Return HttpResponseInterface
+        // Return ResponseInterface
         return $response;
     }
 }

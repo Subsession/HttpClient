@@ -18,8 +18,8 @@
 namespace Comertis\Http;
 
 use Comertis\Http\Abstraction\HttpClientInterface;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
 
 /**
  * Undocumented class
@@ -39,17 +39,17 @@ class HttpClient implements HttpClientInterface
     use \Comertis\Http\Extensions\Client\AdapterExtensions;
 
     /**
-     * Handle the HttpRequestInterface
+     * Handle the RequestInterface
      *
-     * This handles the HttpInterceptor calls and the
-     * HttpAdapterInterface::handle() call.
+     * This handles the Interceptor calls and the
+     * AdapterInterface::handle() call.
      *
-     * @param HttpRequestInterface $request
+     * @param RequestInterface $request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
-    public function handle(HttpRequestInterface $request)
+    public function handle(RequestInterface $request)
     {
         $response = $this->getAdapter()->handle($request);
         $this->setResponse($response);

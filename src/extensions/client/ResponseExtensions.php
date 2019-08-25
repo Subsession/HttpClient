@@ -17,8 +17,8 @@
 
 namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\Builders\HttpResponseBuilder;
+use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Builders\ResponseBuilder;
 
 /**
  * Undocumented class
@@ -36,43 +36,43 @@ trait ResponseExtensions
      * Holds the response information once a request has been executed
      *
      * @access private
-     * @see    HttpResponse
-     * @var    HttpResponseInterface
+     * @see    Response
+     * @var    ResponseInterface
      */
     private $response;
 
     /**
-     * Get the HttpResponse instance after executing
-     * a HttpRequestInterface
+     * Get the Response instance after executing
+     * a RequestInterface
      *
      * This returns null if called before executing
-     * the HttpRequestInterface.
+     * the RequestInterface.
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function getResponse()
     {
         if (null === $this->response) {
-            $this->setResponse(HttpResponseBuilder::build());
+            $this->setResponse(ResponseBuilder::build());
         }
 
         return $this->response;
     }
 
     /**
-     * Set the HttpResponseInterface instance
+     * Set the ResponseInterface instance
      *
      * This should never be used explicitly in
      * normal use-cases, this method exists for
      * consistency reasons.
      *
-     * @param HttpResponseInterface $response HttpResponseInterface instance
+     * @param ResponseInterface $response ResponseInterface instance
      *
      * @access public
      * @return self
      */
-    public function setResponse(HttpResponseInterface $response)
+    public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
 

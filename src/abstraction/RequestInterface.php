@@ -30,10 +30,10 @@ use Comertis\Http\HttpRequestMethod;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface HttpRequestInterface
+interface RequestInterface
 {
     /**
-     * Get the HttpRequest headers
+     * Get the Request headers
      *
      * @access public
      * @return array
@@ -41,7 +41,7 @@ interface HttpRequestInterface
     public function getHeaders();
 
     /**
-     * Set the HttpRequest headers
+     * Set the Request headers
      *
      * @param array $headers Request headers
      *
@@ -63,7 +63,7 @@ interface HttpRequestInterface
     public function addHeaders($headers);
 
     /**
-     * Get the HttpRequest method
+     * Get the Request method
      *
      * @access public
      * @return string
@@ -100,7 +100,7 @@ interface HttpRequestInterface
     public function setUrl($url);
 
     /**
-     * Get the HttpRequest parameters
+     * Get the Request parameters
      *
      * @access public
      * @return array
@@ -108,7 +108,7 @@ interface HttpRequestInterface
     public function getParams();
 
     /**
-     * Set the HttpRequest parameters
+     * Set the Request parameters
      *
      * @param array $params Request parameters
      *

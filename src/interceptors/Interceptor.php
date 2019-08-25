@@ -15,7 +15,10 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http\Extensions\Traits;
+namespace Comertis\Http\Interceptors;
+
+use Comertis\Http\Interceptors\RequestInterceptor;
+use Comertis\Http\Interceptors\ResponseInterceptor;
 
 /**
  * Undocumented class
@@ -27,54 +30,52 @@ namespace Comertis\Http\Extensions\Traits;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-trait HttpHeaders
+class Interceptor
 {
     /**
-     * HTTP headers
+     * Request interceptor
      *
      * @access private
-     * @var    array
+     * @var    RequestInterceptor
      */
-    private $headers;
+    private $request;
 
     /**
-     * Get the request headers
+     * Response interceptor
      *
-     * @access public
-     * @return array
+     * @access private
+     * @var    ResponseInterceptor
      */
-    public function getHeaders()
+    private $response;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        return $this->headers;
+        $this->request = new RequestInterceptor();
+        $this->response = new ResponseInterceptor();
     }
 
     /**
-     * Set the request headers
-     *
-     * @param array $headers Request headers
+     * Get the request interceptor
      *
      * @access public
-     * @return self
+     * @return RequestInterceptor
      */
-    public function setHeaders($headers)
+    public function getRequest()
     {
-        $this->headers = $headers;
-
-        return $this;
+        return $this->request;
     }
 
     /**
-     * Add headers to the request.
-     * IMPORTANT: Overrides existing headers if
-     * duplicate found
-     *
-     * @param array $headers Request headers
+     * Get the response interceptor
      *
      * @access public
-     * @return void
+     * @return ResponseInterceptor
      */
-    public function addHeaders($headers)
+    public function getResponse()
     {
-        $this->headers = array_merge($this->headers, $headers);
+        return $this->response;
     }
 }

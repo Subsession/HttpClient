@@ -17,8 +17,8 @@
 
 namespace Comertis\Http\Builders;
 
-use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\HttpResponse;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Request;
 
 /**
  * Undocumented class
@@ -30,17 +30,17 @@ use Comertis\Http\HttpResponse;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpResponseBuilder
+class RequestBuilder
 {
     /**
-     * Build a HttpResponseInterface implementation
+     * Build a RequestInterface implementation
      *
      * @static
      * @access public
-     * @return HttpResponseInterface
+     * @return RequestInterface
      */
     public static function build()
     {
-        return new HttpResponse();
+        return new Request();
     }
 }

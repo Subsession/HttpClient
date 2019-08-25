@@ -2,22 +2,22 @@
 
 namespace Comertis\Http\Tests;
 
-use Comertis\Http\Adapters\HttpCurlAdapter;
-use Comertis\Http\Builders\HttpAdapterBuilder;
-use Comertis\Http\HttpRequest;
+use Comertis\Http\Adapters\CurlAdapter;
+use Comertis\Http\Builders\AdapterBuilder;
+use Comertis\Http\Request;
 use Comertis\Http\HttpRequestMethod;
 use PHPUnit\Framework\TestCase;
 
 final class HttpCurlAdapterTests extends TestCase
 {
     /**
-     * @var HttpAdapterInterface
+     * @var AdapterInterface
      */
     private $adapter;
 
     public function __construct()
     {
-        $this->adapter = HttpAdapterBuilder::build(HttpCurlAdapter::class);
+        $this->adapter = AdapterBuilder::build(CurlAdapter::class);
 
         parent::__construct();
     }
@@ -33,7 +33,7 @@ final class HttpCurlAdapterTests extends TestCase
 
         $params = [$object];
 
-        $request = new HttpRequest();
+        $request = new Request();
         $request->setMethod(HttpRequestMethod::POST);
         $request->setParams($params);
 

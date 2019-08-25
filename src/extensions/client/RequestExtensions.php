@@ -17,9 +17,9 @@
 
 namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\Builders\HttpRequestBuilder;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Builders\RequestBuilder;
 use Comertis\Http\HttpRequestMethod;
 
 /**
@@ -48,8 +48,8 @@ trait RequestExtensions
      * Holds the request information
      *
      * @access private
-     * @see    HttpRequest
-     * @var    HttpRequestInterface
+     * @see    Request
+     * @var    RequestInterface
      */
     private $request;
 
@@ -57,7 +57,7 @@ trait RequestExtensions
      * Get the request URL
      *
      * @access public
-     * @see    HttpRequest::getUrl()
+     * @see    Request::getUrl()
      * @return string
      */
     public function getUrl()
@@ -75,7 +75,7 @@ trait RequestExtensions
      *
      * @access public
      * @see    HttpClient::setBaseUrl()
-     * @see    HttpRequest::setUrl()
+     * @see    Request::setUrl()
      * @return self
      */
     public function setUrl($url)
@@ -93,7 +93,7 @@ trait RequestExtensions
      * Get the request headers
      *
      * @access public
-     * @see    HttpRequest::getHeaders()
+     * @see    Request::getHeaders()
      * @return array
      */
     public function getHeaders()
@@ -107,7 +107,7 @@ trait RequestExtensions
      * @param array $headers Array of (Key => Value) pairs
      *
      * @access public
-     * @see    HttpRequest::setHeaders()
+     * @see    Request::setHeaders()
      * @return self
      */
     public function setHeaders(array $headers)
@@ -123,7 +123,7 @@ trait RequestExtensions
      * @param array $headers Array of (Key => Value) pairs
      *
      * @access public
-     * @see    HttpRequest::addHeaders()
+     * @see    Request::addHeaders()
      * @return self
      */
     public function addHeaders(array $headers)
@@ -137,7 +137,7 @@ trait RequestExtensions
      * Clear all headers from the request
      *
      * @access public
-     * @see    HttpRequest::setHeaders()
+     * @see    Request::setHeaders()
      * @return self
      */
     public function clearHeaders()
@@ -175,29 +175,29 @@ trait RequestExtensions
     }
 
     /**
-     * Get the HttpRequestInterface instance
+     * Get the RequestInterface instance
      *
      * @access public
-     * @return HttpRequestInterface
+     * @return RequestInterface
      */
     public function getRequest()
     {
         if (null === $this->request) {
-            $this->setRequest(HttpRequestBuilder::build());
+            $this->setRequest(RequestBuilder::build());
         }
 
         return $this->request;
     }
 
     /**
-     * Set the HttpRequestInterface instance
+     * Set the RequestInterface instance
      *
-     * @param HttpRequestInterface $request HttpRequestInterface instance
+     * @param RequestInterface $request RequestInterface instance
      *
      * @access public
      * @return self
      */
-    public function setRequest(HttpRequestInterface $request)
+    public function setRequest(RequestInterface $request)
     {
         $this->request = $request;
 
@@ -211,7 +211,7 @@ trait RequestExtensions
      *                      These parameters will be added to the URL
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function head($params = [])
     {
@@ -228,7 +228,7 @@ trait RequestExtensions
      * @param array $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function get($params = [])
     {
@@ -245,7 +245,7 @@ trait RequestExtensions
      * @param array $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function post($params = [])
     {
@@ -262,7 +262,7 @@ trait RequestExtensions
      * @param array|mixed|object $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function put($params = [])
     {
@@ -279,7 +279,7 @@ trait RequestExtensions
      * @param array $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function delete($params = [])
     {

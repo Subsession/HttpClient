@@ -29,7 +29,7 @@ use Comertis\Http\HttpStatusCode;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-interface HttpResponseInterface
+interface ResponseInterface
 {
     /**
      * Get the response headers

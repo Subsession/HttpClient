@@ -17,9 +17,9 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Http\Abstraction\HttpAdapterInterface;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Abstraction\AdapterInterface;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
 
 /**
  * Undocumented class
@@ -31,10 +31,10 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-abstract class HttpBaseAdapter implements HttpAdapterInterface
+abstract class BaseAdapter implements AdapterInterface
 {
     /**
-     * Expected extensions for this HttpAdapterInterface implementation
+     * Expected extensions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -45,7 +45,7 @@ abstract class HttpBaseAdapter implements HttpAdapterInterface
     ];
 
     /**
-     * Expected functions for this HttpAdapterInterface implementation
+     * Expected functions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -81,12 +81,12 @@ abstract class HttpBaseAdapter implements HttpAdapterInterface
     /**
      * @inheritDoc
      *
-     * @param HttpRequestInterface $request
+     * @param RequestInterface $request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
-    public function handle(HttpRequestInterface $request)
+    public function handle(RequestInterface $request)
     {
         $this->prepareUrl($request);
         $this->prepareHeaders($request);

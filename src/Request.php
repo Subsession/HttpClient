@@ -18,7 +18,7 @@
 namespace Comertis\Http;
 
 use Comertis\Exceptions\ArgumentNullException;
-use Comertis\Http\Abstraction\HttpRequestInterface;
+use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\HttpRequestMethod;
 
 /**
@@ -31,9 +31,9 @@ use Comertis\Http\HttpRequestMethod;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpRequest implements HttpRequestInterface
+class Request implements RequestInterface
 {
-    use \Comertis\Http\Extensions\Traits\HttpHeaders;
+    use \Comertis\Http\Extensions\Headers;
 
     /**
      * Base url
@@ -98,7 +98,7 @@ class HttpRequest implements HttpRequestInterface
     }
 
     /**
-     * Get the HttpRequest method
+     * Get the Request method
      *
      * @access public
      * @return string
@@ -160,7 +160,7 @@ class HttpRequest implements HttpRequestInterface
     }
 
     /**
-     * Get the HttpRequest parameters
+     * Get the Request parameters
      *
      * @access public
      * @return array
@@ -171,7 +171,7 @@ class HttpRequest implements HttpRequestInterface
     }
 
     /**
-     * Set the HttpRequest parameters
+     * Set the Request parameters
      *
      * @param array $params Request parameters
      *

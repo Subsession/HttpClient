@@ -17,7 +17,7 @@
 
 namespace Comertis\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 
@@ -39,7 +39,7 @@ trait RequestJsonExtensions
      * @param array|mixed|object $params Parameters to include in the request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function postJson($params = [])
     {
@@ -57,7 +57,7 @@ trait RequestJsonExtensions
      * @param array|mixed|object $params Parameters to be json encoded
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function putJson($params = [])
     {
@@ -75,7 +75,7 @@ trait RequestJsonExtensions
      * @param array $params Parameters to be json encoded
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function deleteJson($params = [])
     {

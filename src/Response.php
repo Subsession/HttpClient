@@ -17,7 +17,7 @@
 
 namespace Comertis\Http;
 
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
 use Comertis\Http\HttpStatusCode;
 
 /**
@@ -32,10 +32,10 @@ use Comertis\Http\HttpStatusCode;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpResponse implements HttpResponseInterface
+class Response implements ResponseInterface
 {
-    use \Comertis\Http\Extensions\Traits\HttpHeaders;
-    use \Comertis\Http\Extensions\Traits\HttpBody;
+    use \Comertis\Http\Extensions\Headers;
+    use \Comertis\Http\Extensions\Body;
 
     /**
      * Response HTTP status code
@@ -54,7 +54,7 @@ class HttpResponse implements HttpResponseInterface
     private $error;
 
     /**
-     * HttpResponse instance for HttpClient
+     * Response instance for HttpClient
      *
      * @param array        $headers    Response headers
      * @param integer      $statusCode Response status code

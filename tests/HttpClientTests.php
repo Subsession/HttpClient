@@ -2,9 +2,9 @@
 
 namespace Comertis\Http\Tests;
 
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\Adapters\HttpCurlAdapter;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Adapters\CurlAdapter;
 use Comertis\Http\Builders\HttpClientBuilder;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Tests\Mocks\Post;
@@ -24,11 +24,11 @@ final class HttpClientTests extends TestCase
         $this->client = HttpClientBuilder::build();
         $this->client
             ->setBaseUrl(self::BASE_URL)
-            ->setAdapter(HttpCurlAdapter::class)
-            ->beforeRequest(function (HttpRequestInterface &$request) {
+            ->setAdapter(CurlAdapter::class)
+            ->beforeRequest(function (RequestInterface &$request) {
                 print_r("Request interceptor called" . PHP_EOL);
             })
-            ->beforeResponse(function (HttpResponseInterface &$response) {
+            ->beforeResponse(function (ResponseInterface &$response) {
                 print_r("Response interceptor called" . PHP_EOL);
             });
 

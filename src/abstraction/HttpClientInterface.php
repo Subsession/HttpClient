@@ -17,9 +17,9 @@
 
 namespace Comertis\Http\Abstraction;
 
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Abstraction\HttpResponseInterface;
-use Comertis\Http\Adapters\HttpAdapterInterface;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Adapters\AdapterInterface;
 
 /**
  * Undocumented class
@@ -34,81 +34,81 @@ use Comertis\Http\Adapters\HttpAdapterInterface;
 interface HttpClientInterface
 {
     /**
-     * Get the HttpRequestInterface instance
+     * Get the RequestInterface instance
      *
      * @access public
-     * @return HttpRequestInterface
+     * @return RequestInterface
      */
     public function getRequest();
 
     /**
-     * Set the HttpRequestInterface instance
+     * Set the RequestInterface instance
      *
-     * @param HttpRequestInterface $request HttpRequestInterface instance
+     * @param RequestInterface $request RequestInterface instance
      *
      * @access public
      * @return self
      */
-    public function setRequest(HttpRequestInterface $request);
+    public function setRequest(RequestInterface $request);
 
     /**
-     * Get the HttpResponse instance after executing
-     * a HttpRequestInterface
+     * Get the Response instance after executing
+     * a RequestInterface
      *
      * This returns null if called before executing
-     * the HttpRequestInterface.
+     * the RequestInterface.
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
     public function getResponse();
 
     /**
-     * Set the HttpResponseInterface instance
+     * Set the ResponseInterface instance
      *
      * This should never be used explicitly in
      * normal use-cases, this method exists for
      * consistency reasons.
      *
-     * @param HttpResponseInterface $response HttpResponseInterface instance
+     * @param ResponseInterface $response ResponseInterface instance
      *
      * @access public
      * @return self
      */
-    public function setResponse(HttpResponseInterface $response);
+    public function setResponse(ResponseInterface $response);
 
     /**
-     * Get the explicitly specified HttpAdapterInterface implementation
+     * Get the explicitly specified AdapterInterface implementation
      * used for requests
      *
      * @access public
-     * @return HttpAdapterInterface|null
+     * @return AdapterInterface|null
      */
     public function getAdapter();
 
     /**
-     * Specify an explicit HttpAdapterInterface implementation to use
+     * Specify an explicit AdapterInterface implementation to use
      * for requests, either just one, or a array with the preferred
      * order of the available implementations.
      *
-     * @param string|HttpAdapterInterface $adapter
+     * @param string|AdapterInterface $adapter
      *
      * @access public
-     * @see    HttpAdapterInterface
+     * @see    AdapterInterface
      * @return self
      */
     public function setAdapter($adapter);
 
     /**
-     * Handle the HttpRequestInterface
+     * Handle the RequestInterface
      *
-     * This handles the HttpInterceptor calls and the
-     * HttpAdapterInterface::handle() call.
+     * This handles the Interceptor calls and the
+     * AdapterInterface::handle() call.
      *
-     * @param HttpRequestInterface $request
+     * @param RequestInterface $request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return ResponseInterface
      */
-    public function handle(HttpRequestInterface $request);
+    public function handle(RequestInterface $request);
 }

@@ -18,14 +18,14 @@
 namespace Comertis\Http\Adapters;
 
 use Comertis\Exceptions\ArgumentException;
-use Comertis\Http\Abstraction\HttpRequestInterface;
-use Comertis\Http\Adapters\HttpBaseAdapter;
-use Comertis\Http\Builders\HttpResponseBuilder;
+use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Adapters\BaseAdapter;
+use Comertis\Http\Builders\ResponseBuilder;
 use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpRequestType;
 
 /**
- * HttpAdapterInterface implementation using the CURL
+ * AdapterInterface implementation using the CURL
  * PHP extension
  *
  * @category Http
@@ -35,7 +35,7 @@ use Comertis\Http\HttpRequestType;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpCurlAdapter extends HttpBaseAdapter
+class CurlAdapter extends BaseAdapter
 {
     /**
      * CURL instance
@@ -46,7 +46,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
     private $ch;
 
     /**
-     * Expected extensions for this HttpAdapterInterface implementation
+     * Expected extensions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -57,7 +57,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
     ];
 
     /**
-     * Expected functions for this HttpAdapterInterface implementation
+     * Expected functions for this AdapterInterface implementation
      * to work properly
      *
      * @access public
@@ -99,7 +99,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
      *
      * @return void
      */
-    public function prepareUrl(HttpRequestInterface &$request)
+    public function prepareUrl(RequestInterface &$request)
     {
         $method = $request->getMethod();
 
@@ -132,7 +132,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
      *
      * @return void
      */
-    public function prepareHeaders(HttpRequestInterface &$request)
+    public function prepareHeaders(RequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -178,7 +178,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
      *
      * @return void
      */
-    public function prepareParams(HttpRequestInterface &$request)
+    public function prepareParams(RequestInterface &$request)
     {
         if (empty($request->getParams())) {
             return;
@@ -213,7 +213,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
     /**
      * @inheritDoc
      */
-    public function handle(HttpRequestInterface $request)
+    public function handle(RequestInterface $request)
     {
         parent::handle($request);
 
@@ -285,7 +285,7 @@ class HttpCurlAdapter extends HttpBaseAdapter
         $responseInfo = curl_getinfo($this->ch);
         $responseStatusCode = $responseInfo['http_code'];
 
-        $response = HttpResponseBuilder::build();
+        $response = ResponseBuilder::build();
         $response
             ->setHeaders($responseHeaders)
             ->setStatusCode($responseStatusCode)

@@ -18,13 +18,13 @@
 namespace Comertis\Http\Builders;
 
 use Comertis\Exceptions\NullReferenceException;
-use Comertis\Http\Abstraction\HttpAdapterInterface;
-use Comertis\Http\Adapters\HttpCurlAdapter;
-use Comertis\Http\Adapters\HttpPeclAdapter;
-use Comertis\Http\Adapters\HttpStreamAdapter;
+use Comertis\Http\Abstraction\AdapterInterface;
+use Comertis\Http\Adapters\CurlAdapter;
+use Comertis\Http\Adapters\PeclAdapter;
+use Comertis\Http\Adapters\StreamAdapter;
 
 /**
- * Builder class for HttpAdapterInterface implementations
+ * Builder class for AdapterInterface implementations
  *
  * @category Http
  * @package  Comertis\Http
@@ -33,18 +33,18 @@ use Comertis\Http\Adapters\HttpStreamAdapter;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpAdapterBuilder
+class AdapterBuilder
 {
     /**
-     * Create an instance of a HttpAdapterInterface based on loaded extensions
+     * Create an instance of a AdapterInterface based on loaded extensions
      * and/or available functions
      *
-     * @param string|array $implementation Explicit HttpAdapterInterface implementation
+     * @param string|array $implementation Explicit AdapterInterface implementation
      *
      * @static
      * @access public
      * @throws NullReferenceException
-     * @return HttpAdapterInterface
+     * @return AdapterInterface
      */
     public static function build($implementation = null)
     {
@@ -65,13 +65,13 @@ class HttpAdapterBuilder
     }
 
     /**
-     * Create an explicit implementation of HttpAdapterInterface
+     * Create an explicit implementation of AdapterInterface
      *
      * @param string|array $adapter Adapter implementation
      *
      * @static
      * @access public
-     * @return HttpAdapterInterface|null
+     * @return AdapterInterface|null
      */
     public static function getAdapterImplementation($adapter)
     {
@@ -80,28 +80,28 @@ class HttpAdapterBuilder
                 // Recursive call until one adapter || null is returned
                 $implementation = self::getAdapterImplementation($value);
 
-                if ($implementation instanceof HttpAdapterInterface) {
+                if ($implementation instanceof AdapterInterface) {
                     return $implementation;
                 }
             }
         }
 
         switch ($adapter) {
-            case HttpCurlAdapter::class:
-                if (HttpCurlAdapter::isAvailable()) {
-                    return new HttpCurlAdapter();
+            case CurlAdapter::class:
+                if (CurlAdapter::isAvailable()) {
+                    return new CurlAdapter();
                 }
                 break;
 
-            case HttpPeclAdapter::class:
-                if (HttpPeclAdapter::isAvailable()) {
-                    return new HttpPeclAdapter();
+            case PeclAdapter::class:
+                if (PeclAdapter::isAvailable()) {
+                    return new PeclAdapter();
                 }
                 break;
 
-            case HttpStreamAdapter::class:
-                if (HttpStreamAdapter::isAvailable()) {
-                    return new HttpStreamAdapter();
+            case StreamAdapter::class:
+                if (StreamAdapter::isAvailable()) {
+                    return new StreamAdapter();
                 }
                 break;
             default:
@@ -113,21 +113,21 @@ class HttpAdapterBuilder
     }
 
     /**
-     * Load an instance of HttpAdapterInterface based on installed
+     * Load an instance of AdapterInterface based on installed
      * PHP extensions and/or available functions
      *
      * @static
      * @access private
-     * @return HttpAdapterInterface|null
+     * @return AdapterInterface|null
      */
     private static function getAdapter()
     {
-        if (HttpCurlAdapter::isAvailable()) {
-            return new HttpCurlAdapter();
+        if (CurlAdapter::isAvailable()) {
+            return new CurlAdapter();
         } elseif (self::checkPeclImplementation()) {
-            return new HttpPeclAdapter();
-        } elseif (HttpStreamAdapter::isAvailable()) {
-            return new HttpStreamAdapter();
+            return new PeclAdapter();
+        } elseif (StreamAdapter::isAvailable()) {
+            return new StreamAdapter();
         }
 
         return null;

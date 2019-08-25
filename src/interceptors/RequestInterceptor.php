@@ -17,7 +17,7 @@
 
 namespace Comertis\Http\Interceptors;
 
-use Comertis\Http\Abstraction\HttpResponseInterface;
+use Comertis\Http\Abstraction\RequestInterface;
 
 /**
  * Undocumented class
@@ -29,7 +29,7 @@ use Comertis\Http\Abstraction\HttpResponseInterface;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpResponseInterceptor
+class RequestInterceptor
 {
     /**
      * Callable function
@@ -44,30 +44,30 @@ class HttpResponseInterceptor
     }
 
     /**
-     * Process the HttpResponseInterface with the provided callback function
+     * Process the RequestInterface with the provided callback function
      *
-     * @param HttpResponseInterface $response
+     * @param RequestInterface $request
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return RequestInterface
      */
-    public function handle(HttpResponseInterface &$response)
+    public function handle(RequestInterface &$request)
     {
         if (is_callable($this->callback)) {
             $callback = $this->callback;
-            $callback($response);
+            $callback($request);
         }
 
-        return $response;
+        return $request;
     }
 
     /**
-     * Intercept HttpResponseInterface instances before they are processed
+     * Intercept RequestInterface instances before they are processed
      *
      * @param callable $callback
      *
      * @access public
-     * @return HttpResponseInterface
+     * @return RequestInterface
      */
     public function intercept(callable $callback)
     {
