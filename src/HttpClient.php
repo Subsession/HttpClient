@@ -17,7 +17,9 @@
 
 namespace Comertis\Http;
 
+use Comertis\Exceptions\InvalidOperationException;
 use Comertis\Http\Abstraction\HttpClientInterface;
+use Comertis\Http\Abstraction\MiddlewareInterface;
 use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Abstraction\ResponseInterface;
 
@@ -37,6 +39,7 @@ class HttpClient implements HttpClientInterface
     use \Comertis\Http\Extensions\Client\ResponseExtensions;
     use \Comertis\Http\Extensions\Client\InterceptorExtensions;
     use \Comertis\Http\Extensions\Client\AdapterExtensions;
+    use \Comertis\Http\Extensions\Client\MiddlewareExtensions;
 
     /**
      * Handle the RequestInterface
@@ -46,11 +49,20 @@ class HttpClient implements HttpClientInterface
      *
      * @param RequestInterface $request
      *
+     * @throws InvalidOperationException if one of the middlewares throws
      * @access public
      * @return ResponseInterface
      */
     public function handle(RequestInterface $request)
     {
+        /**
+         * @var int                 $key
+         * @var MiddlewareInterface $middleware
+         */
+        foreach ($this->getMiddlewares() as $key => $middleware) {
+            $middleware->handle($request);
+        }
+
         // Handle RequestInterceptor call
         $this->getInterceptor()
             ->getRequest()
