@@ -30,12 +30,26 @@ namespace Comertis\Http\Extensions;
 trait Headers
 {
     /**
+     * Default request headers
+     *
+     * @access private
+     * @var    array
+     */
+    private static $defaultHeaders = [
+        "Cache-Control" => "max-age=0",
+        "Connection" => "keep-alive",
+        "Keep-Alive" => "300",
+        "Accept" => "application/json,text/xml,application/xml,application/xhtml+xml,text/plain,image/png,*/*",
+        "Accept-Charset" => "utf-8,ISO-8859-1",
+    ];
+
+    /**
      * HTTP headers
      *
      * @access private
      * @var    array
      */
-    private $headers;
+    private $headers = [];
 
     /**
      * Get the request headers
@@ -76,5 +90,18 @@ trait Headers
     public function addHeaders($headers)
     {
         $this->headers = array_merge($this->headers, $headers);
+    }
+
+    /**
+     * Clear all request headers
+     *
+     * @access public
+     * @return static
+     */
+    public function clearHeaders()
+    {
+        $this->setHeaders([]);
+
+        return $this;
     }
 }

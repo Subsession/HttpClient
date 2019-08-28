@@ -19,14 +19,11 @@ namespace Comertis\Http\Adapters;
 
 use Comertis\Exceptions\NotImplementedException;
 use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
 use Comertis\Http\Adapters\BaseAdapter;
 
 /**
  * Undocumented class
- *
- * @uses Comertis\Http\Exceptions\NotImplementedException
- * @uses Comertis\Http\Request
- * @uses Comertis\Http\Adapters\AdapterInterface
  *
  * @category Http
  * @package  Comertis\Http
@@ -37,7 +34,6 @@ use Comertis\Http\Adapters\BaseAdapter;
  */
 class PeclAdapter extends BaseAdapter
 {
-
     /**
      * Expected extensions for this AdapterInterface implementation
      * to work properly
@@ -62,36 +58,12 @@ class PeclAdapter extends BaseAdapter
 
     /**
      * @inheritDoc
-     * @throws     NotImplementedException
+     *
+     * @access public
+     * @throws NotImplementedException
+     * @return ResponseInterface
      */
-    public function prepareUrl(RequestInterface &$request)
-    {
-        throw new NotImplementedException("This function is not yet implemented");
-    }
-
-    /**
-     * @inheritDoc
-     * @throws     NotImplementedException
-     */
-    public function prepareHeaders(RequestInterface &$request)
-    {
-        throw new NotImplementedException();
-    }
-
-    /**
-     * @inheritDoc
-     * @throws     NotImplementedException
-     */
-    public function prepareParams(RequestInterface &$request)
-    {
-        throw new NotImplementedException();
-    }
-
-    /**
-     * @inheritDoc
-     * @throws     NotImplementedException
-     */
-    public function execute(RequestInterface $request)
+    public function handle(RequestInterface $request)
     {
         throw new NotImplementedException();
     }

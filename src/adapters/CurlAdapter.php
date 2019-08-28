@@ -35,14 +35,6 @@ use Comertis\Http\Builders\ResponseBuilder;
 class CurlAdapter extends BaseAdapter
 {
     /**
-     * CURL instance
-     *
-     * @access private
-     * @var    resource
-     */
-    private $ch;
-
-    /**
      * Expected extensions for this AdapterInterface implementation
      * to work properly
      *
@@ -70,28 +62,6 @@ class CurlAdapter extends BaseAdapter
     ];
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        try {
-            $this->ch = curl_init();
-        } catch (\Throwable $exception) {
-            // Ignored for now
-        }
-    }
-
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        if (is_resource($this->ch)) {
-            curl_close($this->ch);
-        }
-    }
-
-    /**
      * @inheritDoc
      */
     public function handle(RequestInterface $request)
@@ -111,16 +81,22 @@ class CurlAdapter extends BaseAdapter
         /** @var string|null $curlError */
         $curlError = null;
 
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        /** @var resource $ch */
+        $ch = curl_init();
 
-        curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $request->getHeaders());
-        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
-        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getParams());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        curl_setopt($ch, CURLOPT_URL, $request->getUrl());
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $request->getHeaders());
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+
+        if (!empty($request->getParams())) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getParams());
+        }
 
         curl_setopt(
-            $this->ch,
+            $ch,
             CURLOPT_HEADERFUNCTION,
             function ($curl, $header) use (&$headers) {
                 $headerLength = strlen($header);
@@ -137,17 +113,22 @@ class CurlAdapter extends BaseAdapter
         );
 
         /** @var string|bool $body */
-        $body = curl_exec($this->ch);
+        $body = curl_exec($ch);
 
-        if (curl_errno($this->ch)) {
-            $curlError = curl_error($this->ch);
+        if (curl_errno($ch)) {
+            /** @var string $curlError */
+            $curlError = curl_error($ch);
         }
 
         /** @var array $curlInfo */
-        $curlInfo = curl_getinfo($this->ch);
+        $curlInfo = curl_getinfo($ch);
 
         /** @var int $statusCode */
         $statusCode = $curlInfo['http_code'];
+
+        if (is_resource($ch)) {
+            curl_close($ch);
+        }
 
         /** @var ResponseInterface $response */
         $response = ResponseBuilder::build();

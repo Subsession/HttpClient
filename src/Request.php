@@ -17,6 +17,7 @@
 
 namespace Comertis\Http;
 
+use Comertis\Exceptions\ArgumentException;
 use Comertis\Exceptions\ArgumentNullException;
 use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\HttpRequestMethod;
@@ -34,6 +35,7 @@ use Comertis\Http\HttpRequestMethod;
 class Request implements RequestInterface
 {
     use \Comertis\Http\Extensions\Headers;
+    use \Comertis\Http\Extensions\ContentType;
 
     /**
      * Base url
@@ -77,7 +79,7 @@ class Request implements RequestInterface
      */
     public function __construct($url = null, $headers = [], $method = null, $params = [])
     {
-        if (is_null($method)) {
+        if (null === $method) {
             $method = HttpRequestMethod::GET;
         }
 
@@ -86,15 +88,7 @@ class Request implements RequestInterface
         $this->method = $method;
         $this->params = $params;
 
-        $this->addHeaders(
-            [
-                "Cache-Control" => "max-age=0",
-                "Connection" => "keep-alive",
-                "Keep-Alive" => "300",
-                "Accept" => "application/json,text/xml,application/xml,application/xhtml+xml,text/plain,image/png,*/*",
-                "Accept-Charset" => "utf-8,ISO-8859-1",
-            ]
-        );
+        $this->addHeaders(static::$defaultHeaders);
     }
 
     /**
@@ -141,7 +135,8 @@ class Request implements RequestInterface
      * @param string $url URL
      *
      * @access public
-     * @throws ArgumentNullException If the URL is null or empty
+     * @throws ArgumentNullException If the URL is null
+     * @throws ArgumentException If the URL is empty
      * @return static
      */
     public function setUrl($url)
@@ -151,7 +146,7 @@ class Request implements RequestInterface
         }
 
         if (empty($url)) {
-            throw new ArgumentNullException("URL cannot be empty");
+            throw new ArgumentException("URL cannot be empty");
         }
 
         $this->url = $url;
@@ -173,14 +168,18 @@ class Request implements RequestInterface
     /**
      * Set the Request parameters
      *
-     * @param array $params Request parameters
+     * @param array|object $params Request parameters
      *
      * @access public
      * @return static
      */
     public function setParams($params)
     {
-        $this->params = $params;
+        if (is_array($params)) {
+            $this->params = $params;
+        } else {
+            $this->params = [$params];
+        }
 
         return $this;
     }

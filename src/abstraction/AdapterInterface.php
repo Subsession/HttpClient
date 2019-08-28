@@ -24,8 +24,6 @@ use Comertis\Http\Abstraction\ResponseInterface;
  * Defines the minimum necessary for a HttpExecutor
  * implementation regardless of used library or extension
  *
- * @uses Comertis\Http\RequestInterface
- *
  * @category Http
  * @package  Comertis\Http
  * @author   Cristian Moraru <cristian@comertis.com>

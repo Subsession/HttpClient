@@ -15,7 +15,7 @@
  * @link     https://github.com/Comertis/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Comertis\Http\Extensions;
 
 /**
  * Undocumented class
@@ -27,16 +27,39 @@ namespace Comertis\Http;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpRequestType
+trait Error
 {
-    const NONE = "NONE";
-    const FORM_DATA = "multipart/form-data";
-    const X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-    const TEXT = "application/text";
-    const TEXT_PLAIN = "text/plain";
-    const JSON = "application/json";
-    const JAVASCRIPT = "application/javascript";
-    const XML = "application/xml";
-    const HTML = "application/html";
-    const BINARY = "BINARY";
+    /**
+     * Response error message
+     *
+     * @access private
+     * @var    string
+     */
+    private $error;
+
+    /**
+     * Get the response error
+     *
+     * @access public
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * Set the response error
+     *
+     * @param string $error Error message
+     *
+     * @access public
+     * @return static
+     */
+    public function setError($error)
+    {
+        $this->error = $error;
+
+        return $this;
+    }
 }
