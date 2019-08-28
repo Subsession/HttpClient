@@ -17,12 +17,9 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Exceptions\ArgumentException;
 use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Adapters\BaseAdapter;
 use Comertis\Http\Builders\ResponseBuilder;
-use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\HttpRequestType;
 
 /**
  * Undocumented class
@@ -36,14 +33,6 @@ use Comertis\Http\HttpRequestType;
  */
 class StreamAdapter extends BaseAdapter
 {
-    /**
-     * Stream context options
-     *
-     * @access private
-     * @var    array
-     */
-    private $options;
-
     /**
      * Expected extensions for this AdapterInterface implementation
      * to work properly
@@ -73,166 +62,87 @@ class StreamAdapter extends BaseAdapter
     /**
      * @inheritDoc
      */
-    public function prepareUrl(RequestInterface &$request)
+    public function handle(RequestInterface $request)
     {
-        if ($request->getMethod() !== HttpRequestMethod::GET) {
-            return;
-        }
+        /** @var array $headers */
+        $headers = [];
 
-        if (empty($request->getParams())) {
-            return;
-        }
+        /** @var string|null $body */
+        $body = null;
 
-        $params = $request->getParams();
+        /** @var array $curlInfo */
+        $streamInfo = [];
 
-        if (empty($params) || null === $params) {
-            return;
-        }
+        /** @var int $statusCode */
+        $statusCode = 500;
 
-        $url = $request->getUrl();
+        /** @var string|null $curlError */
+        $streamError = null;
 
-        $separator = "?";
-
-        // If "?" already exists in the url
-        if (strpos($url, $separator) !== false) {
-            $separator = "&";
-        }
-
-        $url .= $separator . http_build_query($params);
-
-        $request->setUrl($url);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function prepareHeaders(RequestInterface &$request)
-    {
-        $this->options = [
+        /** @var array $options */
+        $options = [
             "http" => [
                 "method" => $request->getMethod(),
                 "header" => "",
             ],
         ];
 
+        /**
+         * @var string $key   Header key
+         * @var string $value Header value
+         */
         foreach ($request->getHeaders() as $key => $value) {
-            $this->options["http"]["header"] .= $key . "=" . $value . ";";
+            $options["http"]["header"] .= $key . "=" . $value . ";";
         }
 
+        /** @var string|null $bodyType */
         if (!empty($bodyType = $request->getBodyType())) {
-            $this->options["http"]["header"] .= "Content-Type: " . $bodyType . ";";
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function prepareParams(RequestInterface &$request)
-    {
-        if (empty($request->getParams())) {
-            return;
+            $options["http"]["header"] .= "Content-Type: " . $bodyType . ";";
         }
 
-        $params = $request->getParams();
+        $options["http"]["content"] = $request->getParams();
 
-        switch ($request->getBodyType()) {
-            case HttpRequestType::JSON:
-                $params = json_encode($params);
-                break;
+        /** @var resource $context */
+        $context = stream_context_create($options);
 
-            case HttpRequestType::X_WWW_FORM_URLENCODED:
-            default:
-                $params = http_build_query($params);
-                break;
-        }
-
-        if (empty($params) || null === $params) {
-            throw new ArgumentException("Failed to parse request parameters");
-        }
-
-        $this->options["http"]["content"] = $params;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function handle(RequestInterface $request)
-    {
-        parent::handle($request);
-
-        /**
-         * Response headers
-         *
-         * @var array
-         */
-        $responseHeaders = [];
-
-        /**
-         * Response body
-         *
-         * @var string|null
-         */
-        $responseBody = null;
-
-        /**
-         * Response metadata
-         *
-         * @var array
-         */
-        $responseInfo = [];
-
-        /**
-         * Response status code
-         *
-         * @var integer
-         */
-        $responseStatusCode = 500;
-
-        /**
-         * Response error message
-         *
-         * @var string|null
-         */
-        $responseError = null;
-
-        $context = stream_context_create($this->options);
-
+        /** @var resource|bool $stream */
         $stream = @fopen($request->getUrl(), "r", false, $context);
 
         if ($stream) {
-            $responseInfo = stream_get_meta_data($stream);
-            $responseBody = stream_get_contents($stream);
-            fclose($stream);
+            $streamInfo = stream_get_meta_data($stream);
+            $body = stream_get_contents($stream);
+            @fclose($stream);
         } elseif (isset($http_response_header)) {
-            $responseInfo["wrapper_data"] = $http_response_header;
+            $streamInfo["wrapper_data"] = $http_response_header;
         }
 
-        if (isset($responseInfo["wrapper_data"])) {
-            $headers = $responseInfo["wrapper_data"];
+        if (isset($streamInfo["wrapper_data"])) {
+            $headers = $streamInfo["wrapper_data"];
 
             // Set headers
-            for ($i = 1; $i < count($headers); $i++) {
+            $headersCount = count($headers);
+            for ($i = 1; $i < $headersCount; $i++) {
                 $currentHeader = explode(":", $headers[$i], 2);
-                $responseHeaders[trim($currentHeader[0])] = trim($currentHeader[1]);
+                $headers[trim($currentHeader[0])] = trim($currentHeader[1]);
             }
 
             // Set status code
             $match = [];
-            $status_line = $responseInfo["wrapper_data"][0];
+            $status_line = $streamInfo["wrapper_data"][0];
 
             preg_match("{HTTP\/\S*\s(\d{3})}", $status_line, $match);
 
             if (isset($match[1])) {
-                $responseStatusCode = (integer) $match[1];
+                $statusCode = (int) $match[1];
             }
         }
 
+        /** @var ResponseInterface $response */
         $response = ResponseBuilder::build();
-        $response
-            ->setHeaders($responseHeaders)
-            ->setStatusCode($responseStatusCode)
-            ->setBody($responseBody)
-            ->setError($responseError);
+        $response->setHeaders($headers)
+            ->setStatusCode($statusCode)
+            ->setBody($body)
+            ->setError($streamError);
 
         return $response;
     }

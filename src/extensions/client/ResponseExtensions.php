@@ -70,7 +70,7 @@ trait ResponseExtensions
      * @param ResponseInterface $response ResponseInterface instance
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setResponse(ResponseInterface $response)
     {

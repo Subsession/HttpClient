@@ -47,7 +47,7 @@ interface HttpClientInterface
      * @param RequestInterface $request RequestInterface instance
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setRequest(RequestInterface $request);
 
@@ -73,7 +73,7 @@ interface HttpClientInterface
      * @param ResponseInterface $response ResponseInterface instance
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setResponse(ResponseInterface $response);
 
@@ -95,7 +95,7 @@ interface HttpClientInterface
      *
      * @access public
      * @see    AdapterInterface
-     * @return self
+     * @return static
      */
     public function setAdapter($adapter);
 

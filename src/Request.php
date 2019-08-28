@@ -115,7 +115,7 @@ class Request implements RequestInterface
      *
      * @access public
      * @see    HttpRequestMethod
-     * @return self
+     * @return static
      */
     public function setMethod($requestMethod)
     {
@@ -142,7 +142,7 @@ class Request implements RequestInterface
      *
      * @access public
      * @throws ArgumentNullException If the URL is null or empty
-     * @return self
+     * @return static
      */
     public function setUrl($url)
     {
@@ -176,7 +176,7 @@ class Request implements RequestInterface
      * @param array $params Request parameters
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setParams($params)
     {
@@ -203,7 +203,7 @@ class Request implements RequestInterface
      *
      * @access public
      * @see    HttpRequestType
-     * @return self
+     * @return static
      */
     public function setBodyType($bodyType)
     {

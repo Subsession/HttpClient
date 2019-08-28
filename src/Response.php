@@ -89,7 +89,7 @@ class Response implements ResponseInterface
      *
      * @access public
      * @see    HttpStatusCode
-     * @return self
+     * @return static
      */
     public function setStatusCode($statusCode)
     {
@@ -115,7 +115,7 @@ class Response implements ResponseInterface
      * @param integer $error Error message
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setError($error)
     {

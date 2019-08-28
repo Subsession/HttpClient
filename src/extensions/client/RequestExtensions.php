@@ -76,7 +76,7 @@ trait RequestExtensions
      * @access public
      * @see    HttpClient::setBaseUrl()
      * @see    Request::setUrl()
-     * @return self
+     * @return static
      */
     public function setUrl($url)
     {
@@ -108,7 +108,7 @@ trait RequestExtensions
      *
      * @access public
      * @see    Request::setHeaders()
-     * @return self
+     * @return static
      */
     public function setHeaders(array $headers)
     {
@@ -124,7 +124,7 @@ trait RequestExtensions
      *
      * @access public
      * @see    Request::addHeaders()
-     * @return self
+     * @return static
      */
     public function addHeaders(array $headers)
     {
@@ -138,7 +138,7 @@ trait RequestExtensions
      *
      * @access public
      * @see    Request::setHeaders()
-     * @return self
+     * @return static
      */
     public function clearHeaders()
     {
@@ -164,7 +164,7 @@ trait RequestExtensions
      * @param string|null $url Base URL | Null to remove
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setBaseUrl($url)
     {
@@ -195,7 +195,7 @@ trait RequestExtensions
      * @param RequestInterface $request RequestInterface instance
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setRequest(RequestInterface $request)
     {

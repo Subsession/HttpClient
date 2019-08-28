@@ -17,7 +17,6 @@
 
 namespace Comertis\Http\Builders;
 
-use Comertis\Http\Abstraction\HttpClientInterface;
 use Comertis\Http\HttpClient;
 
 /**
@@ -37,7 +36,7 @@ class HttpClientBuilder
      *
      * @static
      * @access public
-     * @return HttpClientInterface
+     * @return HttpClient
      */
     public static function build()
     {

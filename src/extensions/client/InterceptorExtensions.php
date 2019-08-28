@@ -62,7 +62,7 @@ trait InterceptorExtensions
      * @param callable $callable
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function beforeRequest(callable $callable)
     {
@@ -79,7 +79,7 @@ trait InterceptorExtensions
      * @param callable $callable
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function beforeResponse(callable $callable)
     {

@@ -88,8 +88,6 @@ abstract class BaseAdapter implements AdapterInterface
      */
     public function handle(RequestInterface $request)
     {
-        $this->prepareUrl($request);
-        $this->prepareHeaders($request);
-        $this->prepareParams($request);
+        //
     }
 }

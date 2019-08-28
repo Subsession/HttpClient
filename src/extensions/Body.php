@@ -54,7 +54,7 @@ trait Body
      * @param string|mixed $body Response body
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setBody($body)
     {

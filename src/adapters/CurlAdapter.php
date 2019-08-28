@@ -17,12 +17,9 @@
 
 namespace Comertis\Http\Adapters;
 
-use Comertis\Exceptions\ArgumentException;
 use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Adapters\BaseAdapter;
 use Comertis\Http\Builders\ResponseBuilder;
-use Comertis\Http\HttpRequestMethod;
-use Comertis\Http\HttpRequestType;
 
 /**
  * AdapterInterface implementation using the CURL
@@ -96,161 +93,23 @@ class CurlAdapter extends BaseAdapter
 
     /**
      * @inheritDoc
-     *
-     * @return void
-     */
-    public function prepareUrl(RequestInterface &$request)
-    {
-        $method = $request->getMethod();
-
-        if ($method !== HttpRequestMethod::GET || $method !== HttpRequestMethod::HEAD) {
-            return;
-        }
-
-        $params = $request->getParams();
-
-        if (empty($params) || null === $params) {
-            return;
-        }
-
-        $url = $request->getUrl();
-
-        $separator = "?";
-
-        // If "?" already exists in the url
-        if (strpos($url, $separator) !== false) {
-            $separator = "&";
-        }
-
-        $url .= $separator . http_build_query($params);
-
-        $request->setUrl($url);
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @return void
-     */
-    public function prepareHeaders(RequestInterface &$request)
-    {
-        if (empty($request->getParams())) {
-            return;
-        }
-
-        $method = $request->getMethod();
-
-        if ($method === HttpRequestMethod::GET || $method === HttpRequestMethod::HEAD) {
-            return;
-        }
-
-        $params = $request->getParams();
-        $contentLength = 0;
-
-        if (is_array($params)) {
-            foreach ($params as $key => $value) {
-                if (is_object($value)) {
-                    $contentLength += strlen(serialize($value));
-                } else {
-                    $contentLength += strlen($value);
-                }
-            }
-        } elseif (is_object($params)) {
-            $contentLength = strlen(serialize($params));
-        } else {
-            $contentLength = strlen($params);
-        }
-
-        $request->addHeaders(["Content-Length" => $contentLength]);
-
-        switch ($request->getBodyType()) {
-            case HttpRequestType::JSON:
-                $request->addHeaders(["Content-Type" => HttpRequestType::JSON]);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @return void
-     */
-    public function prepareParams(RequestInterface &$request)
-    {
-        if (empty($request->getParams())) {
-            return;
-        }
-
-        $method = $request->getMethod();
-
-        if ($method === HttpRequestMethod::GET || $method === HttpRequestMethod::HEAD) {
-            return;
-        }
-
-        $params = $request->getParams();
-
-        switch ($request->getBodyType()) {
-            case HttpRequestType::JSON:
-                $params = json_encode($params);
-                break;
-
-            case HttpRequestType::X_WWW_FORM_URLENCODED:
-            default:
-                $params = http_build_query($params);
-                break;
-        }
-
-        if (empty($params) | is_null($params)) {
-            throw new ArgumentException("Failed to parse request parameters");
-        }
-
-        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $params);
-    }
-
-    /**
-     * @inheritDoc
      */
     public function handle(RequestInterface $request)
     {
-        parent::handle($request);
+        /** @var array $headers */
+        $headers = [];
 
-        /**
-         * Response headers
-         *
-         * @var array
-         */
-        $responseHeaders = [];
+        /** @var string|null $body */
+        $body = null;
 
-        /**
-         * Response body
-         *
-         * @var string|null
-         */
-        $responseBody = null;
+        /** @var array $curlInfo */
+        $curlInfo = [];
 
-        /**
-         * Response metadata
-         *
-         * @var array
-         */
-        $responseInfo = [];
+        /** @var int $statusCode */
+        $statusCode = 500;
 
-        /**
-         * Response status code
-         *
-         * @var integer
-         */
-        $responseStatusCode = 500;
-
-        /**
-         * Response error message
-         *
-         * @var string|null
-         */
-        $responseError = null;
+        /** @var string|null $curlError */
+        $curlError = null;
 
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
@@ -258,11 +117,12 @@ class CurlAdapter extends BaseAdapter
         curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $request->getHeaders());
         curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getParams());
 
         curl_setopt(
             $this->ch,
             CURLOPT_HEADERFUNCTION,
-            function ($curl, $header) use (&$responseHeaders) {
+            function ($curl, $header) use (&$headers) {
                 $headerLength = strlen($header);
                 $header = explode(':', $header, 2);
 
@@ -270,27 +130,31 @@ class CurlAdapter extends BaseAdapter
                     return $headerLength;
                 }
 
-                $responseHeaders[trim($header[0])] = trim($header[1]);
+                $headers[trim($header[0])] = trim($header[1]);
 
                 return $headerLength;
             }
         );
 
-        $responseBody = curl_exec($this->ch);
+        /** @var string|bool $body */
+        $body = curl_exec($this->ch);
 
         if (curl_errno($this->ch)) {
-            $responseError = curl_error($this->ch);
+            $curlError = curl_error($this->ch);
         }
 
-        $responseInfo = curl_getinfo($this->ch);
-        $responseStatusCode = $responseInfo['http_code'];
+        /** @var array $curlInfo */
+        $curlInfo = curl_getinfo($this->ch);
 
+        /** @var int $statusCode */
+        $statusCode = $curlInfo['http_code'];
+
+        /** @var ResponseInterface $response */
         $response = ResponseBuilder::build();
-        $response
-            ->setHeaders($responseHeaders)
-            ->setStatusCode($responseStatusCode)
-            ->setBody($responseBody)
-            ->setError($responseError);
+        $response->setHeaders($headers)
+            ->setStatusCode($statusCode)
+            ->setBody($body)
+            ->setError($curlError);
 
         return $response;
     }

@@ -2,10 +2,10 @@
 
 namespace Comertis\Http\Tests;
 
-use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Abstraction\ResponseInterface;
 use Comertis\Http\Adapters\CurlAdapter;
 use Comertis\Http\Builders\HttpClientBuilder;
+use Comertis\Http\HttpClient;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 final class HttpClientTests extends TestCase
 {
     /**
-     * @var HttpClientInterface
+     * @var HttpClient
      */
     private $client;
 
@@ -24,19 +24,14 @@ final class HttpClientTests extends TestCase
         $this->client = HttpClientBuilder::build();
         $this->client
             ->setBaseUrl(self::BASE_URL)
-            ->setAdapter(CurlAdapter::class)
-            ->beforeRequest(function (RequestInterface &$request) {
-                print_r("Request interceptor called" . PHP_EOL);
-            })
-            ->beforeResponse(function (ResponseInterface &$response) {
-                print_r("Response interceptor called" . PHP_EOL);
-            });
+            ->setAdapter(CurlAdapter::class);
 
         parent::__construct();
     }
 
     public function testExpect200ResponseStatusCode()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts/1")
             ->get();
@@ -53,6 +48,7 @@ final class HttpClientTests extends TestCase
 
     public function testExpect404ResponseStatusCode()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("post/222222")
             ->get();
@@ -65,6 +61,7 @@ final class HttpClientTests extends TestCase
 
     public function testExpectResponseBodyToHaveContent()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts/1")
             ->get();
@@ -81,6 +78,7 @@ final class HttpClientTests extends TestCase
 
     public function testExpectResponseBodyToBeEmpty()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts/2222")
             ->get();
@@ -96,6 +94,7 @@ final class HttpClientTests extends TestCase
         $contentType = "Content-Type";
         $applicationJson = "application/json; charset=utf-8";
 
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts/1")
             ->get();
@@ -115,6 +114,7 @@ final class HttpClientTests extends TestCase
 
     public function testExpectHttpClientToHavePostJsonExtensionMethod()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts")
             ->postJson([(new Post())]);
@@ -127,6 +127,7 @@ final class HttpClientTests extends TestCase
 
     public function testExpectHttpClientToHavePutJsonExtensionMethod()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts/1")
             ->putJson([(new Post())]);
@@ -139,6 +140,7 @@ final class HttpClientTests extends TestCase
 
     public function testExpectHttpClientToHaveDeleteJsonExtensionMethod()
     {
+        /** @var ResponseInterface $response */
         $response = $this->client
             ->setUrl("posts/1")
             ->deleteJson();

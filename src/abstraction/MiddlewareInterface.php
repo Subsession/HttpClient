@@ -19,6 +19,7 @@ namespace Comertis\Http\Abstraction;
 
 use Comertis\Exceptions\InvalidOperationException;
 use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Abstraction\ResponseInterface;
 
 /**
  * Undocumented class
@@ -33,7 +34,7 @@ use Comertis\Http\Abstraction\RequestInterface;
 interface MiddlewareInterface
 {
     /**
-     * Handle the RequestInterface
+     * Handle the RequestInterface before it is processed
      *
      * @param RequestInterface $request
      *
@@ -41,5 +42,16 @@ interface MiddlewareInterface
      * @access public
      * @return void
      */
-    public function handle(RequestInterface &$request);
+    public function onRequest(RequestInterface &$request);
+
+    /**
+     * Handle the ResponseInterface before it is returned
+     *
+     * @param ResponseInterface $response
+     *
+     * @throws InvalidOperationException if the middleware fails to process the ResponseInterface
+     * @access public
+     * @return void
+     */
+    public function onResponse(ResponseInterface &$response);
 }

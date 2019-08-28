@@ -76,7 +76,7 @@ trait AdapterExtensions
      *
      * @access public
      * @see    AdapterInterface
-     * @return self
+     * @return static
      */
     public function setAdapter($adapter)
     {

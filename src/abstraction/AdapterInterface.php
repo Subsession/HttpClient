@@ -36,36 +36,6 @@ use Comertis\Http\Abstraction\ResponseInterface;
 interface AdapterInterface
 {
     /**
-     * Make any necessary changes to the RequestInterface URL before executing
-     *
-     * @param RequestInterface $request RequestInterface instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareUrl(RequestInterface &$request);
-
-    /**
-     * Make any necessary changes to the RequestInterface headers before executing
-     *
-     * @param RequestInterface $request RequestInterface instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareHeaders(RequestInterface &$request);
-
-    /**
-     * Make any necessary changes to the RequestInterface parameters before executing
-     *
-     * @param RequestInterface $request RequestInterface instance, passed by reference
-     *
-     * @access public
-     * @return void
-     */
-    public function prepareParams(RequestInterface &$request);
-
-    /**
      * Execute the RequestInterface and return a ResponseInterface instance
      *
      * @param RequestInterface $request RequestInterface instance

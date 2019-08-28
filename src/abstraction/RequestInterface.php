@@ -46,7 +46,7 @@ interface RequestInterface
      * @param array $headers Request headers
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setHeaders($headers);
 
@@ -77,7 +77,7 @@ interface RequestInterface
      *
      * @access public
      * @see    HttpRequestMethod
-     * @return self
+     * @return static
      */
     public function setMethod($requestMethod);
     /**
@@ -95,7 +95,7 @@ interface RequestInterface
      *
      * @access public
      * @throws ArgumentNullException If the URL is null or empty
-     * @return self
+     * @return static
      */
     public function setUrl($url);
 
@@ -113,7 +113,7 @@ interface RequestInterface
      * @param array $params Request parameters
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setParams($params);
 
@@ -132,7 +132,7 @@ interface RequestInterface
      *
      * @access public
      * @see    HttpRequestType
-     * @return self
+     * @return static
      */
     public function setBodyType($bodyType);
 }

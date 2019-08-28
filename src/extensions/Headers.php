@@ -54,7 +54,7 @@ trait Headers
      * @param array $headers Request headers
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setHeaders($headers)
     {

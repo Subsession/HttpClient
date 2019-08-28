@@ -45,7 +45,7 @@ interface ResponseInterface
      * @param array $headers Response headers
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setHeaders($headers);
 
@@ -64,7 +64,7 @@ interface ResponseInterface
      *
      * @access public
      * @see    HttpStatusCode
-     * @return self
+     * @return static
      */
     public function setStatusCode($statusCode);
 
@@ -82,7 +82,7 @@ interface ResponseInterface
      * @param string|mixed $body Response body
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setBody($body);
 
@@ -100,7 +100,7 @@ interface ResponseInterface
      * @param string $error Error message
      *
      * @access public
-     * @return self
+     * @return static
      */
     public function setError($error);
 
