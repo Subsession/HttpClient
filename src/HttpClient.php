@@ -52,7 +52,7 @@ class HttpClient implements HttpClientInterface
     public function handle(RequestInterface $request)
     {
         // Invoke onRequest() function on all registered MiddlewareInterface implementations
-        $this->onRequest($request);
+        $this->invokeOnRequest($request);
 
         // Get ResponseInterface from the AdapterInterface
         /** @var ResponseInterface $response */
@@ -60,7 +60,7 @@ class HttpClient implements HttpClientInterface
         $this->setResponse($response);
 
         // Invoke onResponse() function on all registered MiddlewareInterface implementations
-        $this->onResponse($response);
+        $this->invokeOnResponse($response);
 
         // Return ResponseInterface
         return $response;

@@ -148,7 +148,7 @@ trait MiddlewareExtensions
      * @access private
      * @return void
      */
-    private function onRequest(RequestInterface &$request)
+    private function invokeOnRequest(RequestInterface &$request)
     {
         /**
          * @var int                 $key
@@ -166,7 +166,7 @@ trait MiddlewareExtensions
      * @access private
      * @return void
      */
-    private function onResponse(ResponseInterface &$response)
+    private function invokeOnResponse(ResponseInterface &$response)
     {
         /**
          * @var int                 $key
