@@ -35,7 +35,7 @@ trait StatusCode
      * Response HTTP status code
      *
      * @access private
-     * @var    integer
+     * @var    int
      */
     private $statusCode;
 
@@ -47,7 +47,7 @@ trait StatusCode
      */
     public function getStatusCode()
     {
-        return $this->statusCode;
+        return (int) $this->statusCode;
     }
 
     /**
@@ -74,7 +74,7 @@ trait StatusCode
      */
     public function isInformational()
     {
-        return isset(HttpStatusCode::INFORMATIONAL[$this->getStatusCode()]);
+        return in_array($this->getStatusCode(), HttpStatusCode::INFORMATIONAL);
     }
 
     /**
@@ -85,7 +85,7 @@ trait StatusCode
      */
     public function isSuccess()
     {
-        return isset(HttpStatusCode::SUCCESS[$this->getStatusCode()]);
+        return in_array($this->getStatusCode(), HttpStatusCode::SUCCESS);
     }
 
     /**
@@ -96,7 +96,7 @@ trait StatusCode
      */
     public function isRedirect()
     {
-        return isset(HttpStatusCode::REDIRECTION[$this->getStatusCode()]);
+        return in_array($this->getStatusCode(), HttpStatusCode::REDIRECTION);
     }
 
     /**
@@ -107,7 +107,7 @@ trait StatusCode
      */
     public function isClientError()
     {
-        return isset(HttpStatusCode::CLIENT_ERRORS[$this->getStatusCode()]);
+        return in_array($this->getStatusCode(), HttpStatusCode::CLIENT_ERRORS);
     }
 
     /**
@@ -118,6 +118,6 @@ trait StatusCode
      */
     public function isServerError()
     {
-        return isset(HttpStatusCode::SERVER_ERRORS[$this->getStatusCode()]);
+        return in_array($this->getStatusCode(), HttpStatusCode::SERVER_ERRORS);
     }
 }
