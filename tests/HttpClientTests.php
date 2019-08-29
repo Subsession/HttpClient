@@ -44,6 +44,10 @@ final class HttpClientTests extends TestCase
             $response->getStatusCode()
         );
 
+        $this->assertTrue(
+            $response->isSuccess()
+        );
+
         $this->assertNotEmpty(
             $response->getBody()
         );
@@ -60,6 +64,10 @@ final class HttpClientTests extends TestCase
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
+
+        $this->assertTrue(
+            $response->isClientError()
+        );
     }
 
     public function testExpectResponseBodyToHaveContent()
@@ -72,6 +80,10 @@ final class HttpClientTests extends TestCase
         $this->assertEquals(
             HttpStatusCode::OK,
             $response->getStatusCode()
+        );
+
+        $this->assertTrue(
+            $response->isSuccess()
         );
 
         $this->assertNotEmpty(
@@ -90,6 +102,10 @@ final class HttpClientTests extends TestCase
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
+
+        $this->assertTrue(
+            $response->isClientError()
+        );
     }
 
     public function testExpectResponseHeadersToContainContentTypeApplicationJson()
@@ -101,6 +117,13 @@ final class HttpClientTests extends TestCase
         $response = $this->client
             ->setUrl("posts/1")
             ->get();
+
+        $this->assertEquals(
+            HttpStatusCode::OK,
+            $response->getStatusCode()
+        );
+
+        $this->assertTrue($response->isSuccess());
 
         $responseHeaders = $response->getHeaders();
 
@@ -126,6 +149,10 @@ final class HttpClientTests extends TestCase
             HttpStatusCode::CREATED,
             $response->getStatusCode()
         );
+
+        $this->assertTrue(
+            $response->isSuccess()
+        );
     }
 
     public function testExpectHttpClientToHavePutJsonExtensionMethod()
@@ -139,6 +166,10 @@ final class HttpClientTests extends TestCase
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
+
+        $this->assertTrue(
+            $response->isSuccess()
+        );
     }
 
     public function testExpectHttpClientToHaveDeleteJsonExtensionMethod()
@@ -151,6 +182,10 @@ final class HttpClientTests extends TestCase
         $this->assertEquals(
             HttpStatusCode::OK,
             $response->getStatusCode()
+        );
+
+        $this->assertTrue(
+            $response->isSuccess()
         );
     }
 }
