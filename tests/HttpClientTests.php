@@ -19,14 +19,17 @@ final class HttpClientTests extends TestCase
 
     const BASE_URL = "http://jsonplaceholder.typicode.com/";
 
-    public function __construct()
+    protected function setUp()
     {
         $this->client = HttpClientBuilder::build();
         $this->client
             ->setBaseUrl(self::BASE_URL)
             ->setAdapter(CurlAdapter::class);
+    }
 
-        parent::__construct();
+    protected function tearDown()
+    {
+        //
     }
 
     public function testExpect200ResponseStatusCode()

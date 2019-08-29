@@ -32,19 +32,20 @@ use Comertis\Http\HttpStatusCode;
  */
 class Response implements ResponseInterface
 {
+    use \Comertis\Http\Extensions\StatusCode;
     use \Comertis\Http\Extensions\Headers;
     use \Comertis\Http\Extensions\Body;
-    use \Comertis\Http\Extensions\StatusCode;
     use \Comertis\Http\Extensions\Error;
 
     /**
      * Response instance for HttpClient
      *
-     * @param array        $headers    Response headers
-     * @param int          $statusCode Response status code
-     * @param mixed|string $body       Response body
+     * @param array             $headers    Response headers
+     * @param int|null          $statusCode Response status code
+     * @param mixed|string|null $body       Response body
+     * @param string|null       $error      Response error message
      */
-    public function __construct($headers = [], $statusCode = null, $body = null)
+    public function __construct($statusCode = null, $headers = [], $body = null, $error = null)
     {
         if (null === $statusCode) {
             $statusCode = HttpStatusCode::OK;
@@ -53,5 +54,36 @@ class Response implements ResponseInterface
         $this->headers = $headers;
         $this->statusCode = $statusCode;
         $this->body = $body;
+        $this->error = $error;
+    }
+
+    /**
+     * Override __toString()
+     *
+     * @access public
+     * @return string
+     */
+    public function __toString()
+    {
+        $string = "";
+
+        $string .= $this->getStatusCode() . PHP_EOL;
+        $string .= PHP_EOL;
+
+        foreach ($this->getHeaders() as $key => $value) {
+            $string .= $key . ":" . $value . PHP_EOL;
+        }
+        $string .= PHP_EOL;
+
+        $string .= $this->getBody() . PHP_EOL;
+        $string .= PHP_EOL;
+
+        if (null !== $this->getError()) {
+            $string .= "Error:" . PHP_EOL;
+            $string .= $this->getError() . PHP_EOL;
+            $string .= PHP_EOL;
+        }
+
+        return $string;
     }
 }
