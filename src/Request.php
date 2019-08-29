@@ -210,4 +210,30 @@ class Request implements RequestInterface
 
         return $this;
     }
+
+    /**
+     * Override __toString()
+     *
+     * @access public
+     * @return string
+     */
+    public function __toString()
+    {
+        $string = "";
+
+        $string .= $this->getMethod() . " " . $this->getUrl() . PHP_EOL;
+        $string .= PHP_EOL;
+
+        foreach ($this->getHeaders() as $key => $value) {
+            $string .= $key . ":" . $value . PHP_EOL;
+        }
+        $string .= PHP_EOL;
+
+        foreach ($this->getParams() as $key => $value) {
+            $string .= $key . " => " . $value . PHP_EOL;
+        }
+        $string .= PHP_EOL;
+
+        return $string;
+    }
 }
