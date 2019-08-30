@@ -19,9 +19,7 @@ namespace Comertis\Http\Builders;
 
 use Comertis\Exceptions\NullReferenceException;
 use Comertis\Http\Abstraction\AdapterInterface;
-use Comertis\Http\Adapters\CurlAdapter;
-use Comertis\Http\Adapters\PeclAdapter;
-use Comertis\Http\Adapters\StreamAdapter;
+use ReflectionClass;
 
 /**
  * Builder class for AdapterInterface implementations
@@ -51,7 +49,10 @@ class AdapterBuilder
         $adapter = null;
 
         if (null === $implementation) {
-            $adapter = static::getAdapter();
+            $implementation = self::getFirstAdapterImplementation();
+            if ($implementation::isAvailable()) {
+                $adapter = new $implementation();
+            }
         } else {
             $adapter = static::getAdapterImplementation($implementation);
         }
@@ -76,6 +77,7 @@ class AdapterBuilder
     public static function getAdapterImplementation($adapter)
     {
         if (is_array($adapter)) {
+            $implementation = null;
             foreach ($adapter as $key => $value) {
                 // Recursive call until one adapter || null is returned
                 $implementation = self::getAdapterImplementation($value);
@@ -84,52 +86,27 @@ class AdapterBuilder
                     return $implementation;
                 }
             }
+
+            return $implementation;
         }
 
-        switch ($adapter) {
-            case CurlAdapter::class:
-                if (CurlAdapter::isAvailable()) {
-                    return new CurlAdapter();
-                }
-                break;
-
-            case PeclAdapter::class:
-                if (PeclAdapter::isAvailable()) {
-                    return new PeclAdapter();
-                }
-                break;
-
-            case StreamAdapter::class:
-                if (StreamAdapter::isAvailable()) {
-                    return new StreamAdapter();
-                }
-                break;
-            default:
-                return null;
-                break;
+        if ($adapter::isAvailable()) {
+            return new $adapter();
         }
 
         return null;
     }
 
-    /**
-     * Load an instance of AdapterInterface based on installed
-     * PHP extensions and/or available functions
-     *
-     * @static
-     * @access private
-     * @return AdapterInterface|null
-     */
-    private static function getAdapter()
+    private static function getFirstAdapterImplementation()
     {
-        if (CurlAdapter::isAvailable()) {
-            return new CurlAdapter();
-        } elseif (self::checkPeclImplementation()) {
-            return new PeclAdapter();
-        } elseif (StreamAdapter::isAvailable()) {
-            return new StreamAdapter();
-        }
+        foreach (get_declared_classes() as $className) {
+            if (in_array(AdapterInterface::class, class_implements($className))) {
+                $adapter = new ReflectionClass($className);
 
-        return null;
+                if ($adapter->isInstantiable()) {
+                    return $className;
+                }
+            }
+        }
     }
 }

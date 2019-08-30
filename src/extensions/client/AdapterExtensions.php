@@ -17,6 +17,7 @@
 
 namespace Comertis\Http\Extensions\Client;
 
+use Comertis\Http\Abstraction\AdapterInterface;
 use Comertis\Http\Builders\AdapterBuilder;
 
 /**
@@ -36,7 +37,7 @@ trait AdapterExtensions
      *
      * @access private
      * @see    AdapterInterface
-     * @var    AdapterInterface
+     * @var    AdapterInterface|null
      */
     private $adapter;
 
@@ -49,10 +50,6 @@ trait AdapterExtensions
      */
     public function getAdapter()
     {
-        if (null === $this->adapter) {
-            $this->setAdapter(AdapterBuilder::build());
-        }
-
         return $this->adapter;
     }
 
@@ -64,15 +61,19 @@ trait AdapterExtensions
      *
      * Ex:
      * ```php
-     *    // With class name
-     *    $client->setAdapter(CurlAdapter::class);
-     *
      *    // With implementation
+     *    // $adapter = new CurlAdapter();
+     *    // $adapter = new StreamAdapter();
+     *    // $adapter = new MyCustomAdapter();
+     *    // [...]
      *    $adapter = AdapterBuilder::build();
      *    $client->setAdapter($adapter);
+     *
+     *    // With class name
+     *    $client->setAdapter(CurlAdapter::class);
      * ```
      *
-     * @param string|AdapterInterface $adapter
+     * @param AdapterInterface|string $adapter
      *
      * @access public
      * @see    AdapterInterface

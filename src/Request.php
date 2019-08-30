@@ -17,8 +17,6 @@
 
 namespace Comertis\Http;
 
-use Comertis\Exceptions\ArgumentException;
-use Comertis\Exceptions\ArgumentNullException;
 use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\HttpRequestMethod;
 
@@ -41,7 +39,7 @@ class Request implements RequestInterface
      * Base url
      *
      * @access private
-     * @var    string
+     * @var    string|null
      */
     private $url;
 
@@ -122,7 +120,7 @@ class Request implements RequestInterface
      * Get the request URL
      *
      * @access public
-     * @return string
+     * @return string|null
      */
     public function getUrl()
     {
@@ -135,20 +133,10 @@ class Request implements RequestInterface
      * @param string $url URL
      *
      * @access public
-     * @throws ArgumentNullException If the URL is null
-     * @throws ArgumentException If the URL is empty
      * @return static
      */
     public function setUrl($url)
     {
-        if (is_null($url)) {
-            throw new ArgumentNullException("URL cannot be null");
-        }
-
-        if (empty($url)) {
-            throw new ArgumentException("URL cannot be empty");
-        }
-
         $this->url = $url;
 
         return $this;

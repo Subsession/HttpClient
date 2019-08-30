@@ -36,7 +36,6 @@ class HttpClient implements HttpClientInterface
 {
     use Extensions\RequestExtensions;
     use Extensions\ResponseExtensions;
-    use Extensions\InterceptorExtensions;
     use Extensions\AdapterExtensions;
     use Extensions\MiddlewareExtensions;
 

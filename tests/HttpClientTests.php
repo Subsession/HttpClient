@@ -2,12 +2,14 @@
 
 namespace Comertis\Http\Tests;
 
+use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Abstraction\ResponseInterface;
 use Comertis\Http\Adapters\CurlAdapter;
 use Comertis\Http\Builders\HttpClientBuilder;
+use Comertis\Http\Builders\RequestBuilder;
 use Comertis\Http\HttpClient;
+use Comertis\Http\HttpRequestMethod;
 use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
 
 final class HttpClientTests extends TestCase
@@ -34,18 +36,17 @@ final class HttpClientTests extends TestCase
 
     public function testExpect200ResponseStatusCode()
     {
+        /** @var RequestInterface $request */
+        $request = RequestBuilder::build();
+        $request->setUrl(self::BASE_URL . "posts/1")
+            ->setMethod(HttpRequestMethod::GET);
+
         /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts/1")
-            ->get();
+        $response = $this->client->handle($request);
 
         $this->assertEquals(
             HttpStatusCode::OK,
             $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->isSuccess()
         );
 
         $this->assertNotEmpty(
@@ -55,35 +56,33 @@ final class HttpClientTests extends TestCase
 
     public function testExpect404ResponseStatusCode()
     {
+        /** @var RequestInterface $request */
+        $request = RequestBuilder::build();
+        $request->setUrl(self::BASE_URL . "post/222222")
+            ->setMethod(HttpRequestMethod::GET);
+
         /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("post/222222")
-            ->get();
+        $response = $this->client->handle($request);
 
         $this->assertEquals(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
-
-        $this->assertTrue(
-            $response->isClientError()
-        );
     }
 
     public function testExpectResponseBodyToHaveContent()
     {
+        /** @var RequestInterface $request */
+        $request = RequestBuilder::build();
+        $request->setUrl(self::BASE_URL . "posts/1")
+            ->setMethod(HttpRequestMethod::GET);
+
         /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts/1")
-            ->get();
+        $response = $this->client->handle($request);
 
         $this->assertEquals(
             HttpStatusCode::OK,
             $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->isSuccess()
         );
 
         $this->assertNotEmpty(
@@ -93,18 +92,17 @@ final class HttpClientTests extends TestCase
 
     public function testExpectResponseBodyToBeEmpty()
     {
+        /** @var RequestInterface $request */
+        $request = RequestBuilder::build();
+        $request->setUrl(self::BASE_URL . "posts/2222")
+            ->setMethod(HttpRequestMethod::GET);
+
         /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts/2222")
-            ->get();
+        $response = $this->client->handle($request);
 
         $this->assertEquals(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->isClientError()
         );
     }
 
@@ -113,17 +111,18 @@ final class HttpClientTests extends TestCase
         $contentType = "Content-Type";
         $applicationJson = "application/json; charset=utf-8";
 
+        /** @var RequestInterface $request */
+        $request = RequestBuilder::build();
+        $request->setUrl(self::BASE_URL . "posts/1")
+            ->setMethod(HttpRequestMethod::GET);
+
         /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts/1")
-            ->get();
+        $response = $this->client->handle($request);
 
         $this->assertEquals(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
-
-        $this->assertTrue($response->isSuccess());
 
         $responseHeaders = $response->getHeaders();
 
@@ -135,57 +134,6 @@ final class HttpClientTests extends TestCase
         $this->assertEquals(
             $responseHeaders[$contentType],
             $applicationJson
-        );
-    }
-
-    public function testExpectHttpClientToHavePostJsonExtensionMethod()
-    {
-        /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts")
-            ->postJson([(new Post())]);
-
-        $this->assertEquals(
-            HttpStatusCode::CREATED,
-            $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->isSuccess()
-        );
-    }
-
-    public function testExpectHttpClientToHavePutJsonExtensionMethod()
-    {
-        /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts/1")
-            ->putJson([(new Post())]);
-
-        $this->assertEquals(
-            HttpStatusCode::OK,
-            $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->isSuccess()
-        );
-    }
-
-    public function testExpectHttpClientToHaveDeleteJsonExtensionMethod()
-    {
-        /** @var ResponseInterface $response */
-        $response = $this->client
-            ->setUrl("posts/1")
-            ->deleteJson();
-
-        $this->assertEquals(
-            HttpStatusCode::OK,
-            $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->isSuccess()
         );
     }
 }
