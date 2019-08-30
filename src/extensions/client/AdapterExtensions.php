@@ -39,7 +39,7 @@ trait AdapterExtensions
      *
      * @access private
      * @see    AdapterInterface
-     * @var    AdapterInterface
+     * @var    AdapterInterface|null
      */
     private $adapter;
 
@@ -67,16 +67,16 @@ trait AdapterExtensions
      *
      * Ex:
      * ```php
-     *    // With class name
-     *    $client->setAdapter(CurlAdapter::class);
-     *
      *    // With implementation
      *    AdapterBuilder::setImplementation(CurlAdapter::class);
      *    $adapter = AdapterBuilder::getInstance()->build();
      *    $client->setAdapter($adapter);
+     *
+     *    // With class name
+     *    $client->setAdapter(CurlAdapter::class);
      * ```
      *
-     * @param string|AdapterInterface $adapter
+     * @param AdapterInterface|string $adapter
      *
      * @access public
      * @see    AdapterInterface
