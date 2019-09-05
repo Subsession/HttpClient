@@ -36,6 +36,46 @@ use Comertis\Http\Adapters\StreamAdapter;
 class AdapterBuilder
 {
     /**
+     * AdapterInterface implementation
+     *
+     * @access private
+     * @var    AdapterInterface
+     */
+    private $adapter;
+
+    public function __construct()
+    {
+        $this->adapter = null;
+    }
+
+    /**
+     * Initialize the AdapterBuilder
+     *
+     * @static
+     * @access public
+     * @return static
+     */
+    public static function init()
+    {
+        return new static();
+    }
+
+    /**
+     * Set the adapter implementation
+     *
+     * @param string $implementation
+     *
+     * @access public
+     * @return static
+     */
+    public function withImplementation($implementation)
+    {
+        $this->adapter = static::build($implementation);
+
+        return $this;
+    }
+
+    /**
      * Create an instance of a AdapterInterface based on loaded extensions
      * and/or available functions
      *
@@ -124,8 +164,6 @@ class AdapterBuilder
     {
         if (CurlAdapter::isAvailable()) {
             return new CurlAdapter();
-        } elseif (self::checkPeclImplementation()) {
-            return new PeclAdapter();
         } elseif (StreamAdapter::isAvailable()) {
             return new StreamAdapter();
         }

@@ -20,6 +20,9 @@ namespace Comertis\Http;
 use Comertis\Http\Abstraction\HttpClientInterface;
 use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Builders\AdapterBuilder;
+use Comertis\Http\Builders\RequestBuilder;
+use Comertis\Http\Builders\ResponseBuilder;
 use Comertis\Http\Extensions\Client as Extensions;
 
 /**
@@ -39,6 +42,14 @@ class HttpClient implements HttpClientInterface
     use Extensions\InterceptorExtensions;
     use Extensions\AdapterExtensions;
     use Extensions\MiddlewareExtensions;
+
+    public function __construct()
+    {
+        $this->setAdapter(AdapterBuilder::build());
+        $this->setRequest(RequestBuilder::getInstance()->build());
+        $this->setResponse(ResponseBuilder::getInstance()->build());
+        $this->setMiddlewares(static::$defaultMiddlewares);
+    }
 
     /**
      * Handle the RequestInterface
