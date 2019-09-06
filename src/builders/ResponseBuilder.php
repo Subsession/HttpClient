@@ -119,7 +119,14 @@ class ResponseBuilder
     {
         static::$responseClass = $className;
 
-        static::$instance = new static(static::$responseClass);
+        if (null !== static::$instance) {
+            static::$instance->updateResponseClass($className);
+        }
+    }
+
+    private function updateResponseClass($className)
+    {
+        $this->response = new $className();
     }
 
     /**

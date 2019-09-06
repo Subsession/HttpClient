@@ -119,7 +119,14 @@ class RequestBuilder
     {
         static::$requestClass = $className;
 
-        static::$instance = new static(static::$requestClass);
+        if (null !== static::$instance) {
+            static::$instance->updateRequestClass($className);
+        }
+    }
+
+    private function updateRequestClass($className)
+    {
+        $this->response = new $className();
     }
 
     /**
