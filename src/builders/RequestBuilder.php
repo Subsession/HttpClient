@@ -126,7 +126,7 @@ class RequestBuilder
 
     private function updateRequestClass($className)
     {
-        $this->response = new $className();
+        $this->request = new $className();
     }
 
     /**
