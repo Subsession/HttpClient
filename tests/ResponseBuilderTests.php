@@ -21,11 +21,19 @@ class ResponseBuilderTests extends TestCase
 
     public function testExpectResponseImplementationToBeMockResponseInstance()
     {
-        ResponseBuilder::setResponseClass(MockResponse::class);
+        // Set the ResponseInterface implementation class to use
+        // This is important as it needs to be honored until the
+        // execution ends.
+        ResponseBuilder::setImplementation(MockResponse::class);
+
+        $statusCode = 200;
+        $headers = [];
+        $body = "test";
+
         $response = ResponseBuilder::getInstance()
-            ->withStatusCode(200)
-            ->withHeaders([])
-            ->withBody("")
+            ->withStatusCode($statusCode)
+            ->withHeaders($headers)
+            ->withBody($body)
             ->build();
 
         $this->assertInstanceOf(
@@ -33,10 +41,24 @@ class ResponseBuilderTests extends TestCase
             $response
         );
 
-        // Make sure that `ResponseBuilder::setResponseClass(MockResponse::class);`
+        $this->assertEquals(
+            $statusCode,
+            $response->getStatusCode()
+        );
+
+        $this->assertEquals(
+            $headers,
+            $response->getHeaders()
+        );
+
+        $this->assertEquals(
+            $body,
+            $response->getBody()
+        );
+
+        // Make sure that `ResponseBuilder::setImplementation(MockResponse::class);`
         // is still honored
-        $response = ResponseBuilder::getInstance()
-            ->build();
+        $response = ResponseBuilder::getInstance()->build();
 
         $this->assertInstanceOf(
             MockResponse::class,
@@ -46,11 +68,20 @@ class ResponseBuilderTests extends TestCase
 
     public function testExpectResponseImplementationToBeResponseInstance()
     {
-        ResponseBuilder::setResponseClass(Response::class);
+        // Set the ResponseInterface implementation class to use
+        // This is important as it needs to be honored until the
+        // execution ends.
+        ResponseBuilder::setImplementation(Response::class);
+
+        $statusCode = 200;
+        $headers = [];
+        $body = "test";
+
+        /** @var ResponseInterface $response */
         $response = ResponseBuilder::getInstance()
-            ->withStatusCode(200)
-            ->withHeaders([])
-            ->withBody("")
+            ->withStatusCode($statusCode)
+            ->withHeaders($headers)
+            ->withBody($body)
             ->build();
 
         $this->assertInstanceOf(
@@ -58,7 +89,22 @@ class ResponseBuilderTests extends TestCase
             $response
         );
 
-        // Make sure that `ResponseBuilder::setResponseClass(Response::class);`
+        $this->assertEquals(
+            $statusCode,
+            $response->getStatusCode()
+        );
+
+        $this->assertEquals(
+            $headers,
+            $response->getHeaders()
+        );
+
+        $this->assertEquals(
+            $body,
+            $response->getBody()
+        );
+
+        // Make sure that `ResponseBuilder::setImplementation(Response::class);`
         // is still honored
         $response = ResponseBuilder::getInstance()->build();
 

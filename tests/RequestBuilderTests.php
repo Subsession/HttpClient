@@ -2,7 +2,6 @@
 
 namespace Comertis\Http\Tests;
 
-use Comertis\Http\Abstraction\RequestInterface;
 use Comertis\Http\Builders\RequestBuilder;
 use Comertis\Http\Request;
 use Comertis\Http\Tests\Mocks\MockRequest;
@@ -10,14 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class RequestBuilderTests extends TestCase
 {
-    /**
-     * RequestInterface implementation instance
-     *
-     * @access private
-     * @var RequestInterface
-     */
-    private $request;
-
     public function setUp()
     {
         //
@@ -30,12 +21,21 @@ class RequestBuilderTests extends TestCase
 
     public function testExpectRequestImplementationToBeMockRequestInstance()
     {
-        RequestBuilder::setRequestClass(MockRequest::class);
+        // Set the RequestInterface implementation class to use
+        // This is important as it needs to be honored until the
+        // execution ends.
+        RequestBuilder::setImplementation(MockRequest::class);
+
+        $url = "test";
+        $headers = [];
+        $method = "POST";
+        $bodyType = "application/json";
+
         $request = RequestBuilder::getInstance()
-            ->withUrl("test")
-            ->withHeaders([])
-            ->withMethod("POST")
-            ->withBodyType("application/json")
+            ->withUrl($url)
+            ->withHeaders($headers)
+            ->withMethod($method)
+            ->withBodyType($bodyType)
             ->build();
 
         $this->assertInstanceOf(
@@ -43,7 +43,27 @@ class RequestBuilderTests extends TestCase
             $request
         );
 
-        // Make sure that `RequestBuilder::setRequestClass(MockRequest::class);`
+        $this->assertEquals(
+            $url,
+            $request->getUrl()
+        );
+
+        $this->assertEquals(
+            $headers,
+            $request->getHeaders()
+        );
+
+        $this->assertEquals(
+            $method,
+            $request->getMethod()
+        );
+
+        $this->assertEquals(
+            $bodyType,
+            $request->getBodyType()
+        );
+
+        // Make sure that `RequestBuilder::setImplementation(MockRequest::class);`
         // is still honored
         $request = RequestBuilder::getInstance()->build();
 
@@ -55,12 +75,21 @@ class RequestBuilderTests extends TestCase
 
     public function testExpectRequestImplementationToBeRequestInstance()
     {
-        RequestBuilder::setRequestClass(Request::class);
+        // Set the RequestInterface implementation class to use
+        // This is important as it needs to be honored until the
+        // execution ends.
+        RequestBuilder::setImplementation(Request::class);
+
+        $url = "test";
+        $headers = [];
+        $method = "POST";
+        $bodyType = "application/json";
+
         $request = RequestBuilder::getInstance()
-            ->withBodyType("application/json")
-            ->withMethod("POST")
-            ->withUrl("test")
-            ->withHeaders([])
+            ->withUrl($url)
+            ->withHeaders($headers)
+            ->withMethod($method)
+            ->withBodyType($bodyType)
             ->build();
 
         $this->assertInstanceOf(
@@ -68,7 +97,27 @@ class RequestBuilderTests extends TestCase
             $request
         );
 
-        // Make sure that `RequestBuilder::setRequestClass(Request::class);`
+        $this->assertEquals(
+            $url,
+            $request->getUrl()
+        );
+
+        $this->assertEquals(
+            $headers,
+            $request->getHeaders()
+        );
+
+        $this->assertEquals(
+            $method,
+            $request->getMethod()
+        );
+
+        $this->assertEquals(
+            $bodyType,
+            $request->getBodyType()
+        );
+
+        // Make sure that `RequestBuilder::setImplementation(Request::class);`
         // is still honored
         $request = RequestBuilder::getInstance()->build();
 
