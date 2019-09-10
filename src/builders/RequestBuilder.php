@@ -18,6 +18,7 @@
 namespace Comertis\Http\Builders;
 
 use Comertis\Http\Abstraction\RequestInterface;
+use Comertis\Http\Builders\BaseBuilder;
 use Comertis\Http\Request;
 
 /**
@@ -30,7 +31,7 @@ use Comertis\Http\Request;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class RequestBuilder
+class RequestBuilder extends BaseBuilder
 {
     /**
      * Request instance
@@ -41,53 +42,19 @@ class RequestBuilder
     private $request;
 
     /**
-     * RequestInterface class implementation
-     *
-     * @static
-     * @access private
-     * @var    string
-     */
-    private static $requestClass;
-
-    /**
      * Default RequestInterface implementation class
      *
      * @static
      * @access private
      * @var    string
      */
-    private static $defaultRequestClass = Request::class;
-
-    /**
-     * Self instance
-     *
-     * @static
-     * @access private
-     * @var    static
-     */
-    private static $instance = null;
+    private static $defaultImplementation = Request::class;
 
     public function __construct()
     {
-        $implementation = static::getRequestClass();
+        $implementation = static::getImplementation();
 
         $this->request = new $implementation();
-    }
-
-    /**
-     * Get instance of self
-     *
-     * @static
-     * @access public
-     * @return static
-     */
-    public static function getInstance()
-    {
-        if (static::$instance === null) {
-            static::$instance = new static();
-        }
-
-        return static::$instance;
     }
 
     /**
@@ -97,13 +64,13 @@ class RequestBuilder
      * @access public
      * @return string
      */
-    public static function getRequestClass()
+    public static function getImplementation()
     {
-        if (null === static::$requestClass) {
-            static::setRequestClass(static::$defaultRequestClass);
+        if (null === static::$implementation) {
+            static::setImplementation(static::$defaultImplementation);
         }
 
-        return static::$requestClass;
+        return static::$implementation;
     }
 
     /**
@@ -115,18 +82,18 @@ class RequestBuilder
      * @access public
      * @return void
      */
-    public static function setRequestClass($className)
+    public static function setImplementation($implementation)
     {
-        static::$requestClass = $className;
+        static::$implementation = $implementation;
 
         if (null !== static::$instance) {
-            static::$instance->updateRequestClass($className);
+            static::$instance->updateImplementationClass($implementation);
         }
     }
 
-    private function updateRequestClass($className)
+    private function updateImplementationClass($implementation)
     {
-        $this->request = new $className();
+        $this->request = new $implementation();
     }
 
     /**

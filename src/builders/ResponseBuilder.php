@@ -18,6 +18,7 @@
 namespace Comertis\Http\Builders;
 
 use Comertis\Http\Abstraction\ResponseInterface;
+use Comertis\Http\Builders\BaseBuilder;
 use Comertis\Http\Response;
 
 /**
@@ -30,7 +31,7 @@ use Comertis\Http\Response;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class ResponseBuilder
+class ResponseBuilder extends BaseBuilder
 {
     /**
      * ResponseInterface implementation
@@ -41,53 +42,19 @@ class ResponseBuilder
     private $response;
 
     /**
-     * ResponseInterface class implementation
-     *
-     * @static
-     * @access private
-     * @var    string
-     */
-    private static $responseClass;
-
-    /**
      * Default ResponseInterface implementation class
      *
      * @static
      * @access private
      * @var    string
      */
-    private static $defaultResponseClass = Response::class;
+    private static $defaultImplementation = Response::class;
 
-    /**
-     * Self instance
-     *
-     * @static
-     * @access private
-     * @var    static
-     */
-    private static $instance = null;
-
-    public function __construct($implementation = null)
+    public function __construct()
     {
-        $implementation = $implementation ?? static::getResponseClass();
+        $implementation = static::getImplementation();
 
         $this->response = new $implementation();
-    }
-
-    /**
-     * Get instance of self
-     *
-     * @static
-     * @access public
-     * @return static
-     */
-    public static function getInstance()
-    {
-        if (null === static::$instance) {
-            static::$instance = new static();
-        }
-
-        return static::$instance;
     }
 
     /**
@@ -97,36 +64,36 @@ class ResponseBuilder
      * @access public
      * @return string
      */
-    public static function getResponseClass()
+    public static function getImplementation()
     {
-        if (null === static::$responseClass) {
-            static::setResponseClass(static::$defaultResponseClass);
+        if (null === static::$implementation) {
+            static::setImplementation(static::$defaultImplementation);
         }
 
-        return static::$responseClass;
+        return static::$implementation;
     }
 
     /**
      * Set the ResponseInterface implementation class
      *
-     * @param string $className
+     * @param string $implementation
      *
      * @static
      * @access public
      * @return void
      */
-    public static function setResponseClass($className)
+    public static function setImplementation($implementation)
     {
-        static::$responseClass = $className;
+        static::$implementation = $implementation;
 
         if (null !== static::$instance) {
-            static::$instance->updateResponseClass($className);
+            static::$instance->updateImplementationClass($implementation);
         }
     }
 
-    private function updateResponseClass($className)
+    private function updateImplementationClass($implementation)
     {
-        $this->response = new $className();
+        $this->response = new $implementation();
     }
 
     /**
