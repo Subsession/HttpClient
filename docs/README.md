@@ -1,5 +1,144 @@
 # Comertis/HttpClient documentation
 
+- [Comertis/HttpClient documentation](#comertishttpclient-documentation)
+  - [Builders](#builders)
+    - [HttpClientBuilder](#httpclientbuilder)
+      - [Usage](#usage)
+    - [RequestBuilder](#requestbuilder)
+      - [Usage](#usage-1)
+    - [ResponseBuilder](#responsebuilder)
+      - [Usage](#usage-2)
+    - [AdapterBuilder](#adapterbuilder)
+      - [Usage](#usage-3)
+  - [HttpClient](#httpclient)
+    - [Setup](#setup)
+      - [Simple request handling](#simple-request-handling)
+      - [Advanced request handling](#advanced-request-handling)
+
+## Builders
+
+The builders are used in case you want to use custom implementation of the provided interfaces under the `Comertis\Http\Abstraction` namespace. The library already offers & uses a default implementation of said interfaces.
+
+### HttpClientBuilder
+
+Used to create `HttpClientInterface` instances
+If no specific implementation is specified, it uses the default one: `HttpClient`.
+
+#### Usage
+
+Default:
+
+```php
+// This builds the default implementation (HttpClient)
+/** @var HttpClient $client */
+$client = HttpClientBuilder::getInstance()->build();
+```
+
+Custom `HttpClientInterface` implementation:
+
+```php
+// This sets the HttpClientInterface implementation to
+// my custom http client class.
+HttpClientBuilder::setImplementation(MyCustomHttpClient::class);
+
+// This is now an instance of 'MyCustomHttpClient'
+/** @var MyCustomHttpClient $client */
+$client = HttpClientBuilder::getInstance()->build();
+```
+
+### RequestBuilder
+
+Used to create `RequestInterface` instances.
+If no specific implementation is specified, it uses the default one: `Request`.
+
+#### Usage
+
+Default:
+
+```php
+// This builds the default implementation (Request)
+/** @var Request $request */
+$request = RequestBuilder::getInstance()
+    ->withUrl("https://api.github.com/")
+    ->withMethod(HttpRequestMethod::GET)
+    ->build();
+```
+
+Custom `RequestInterface` implementation:
+
+```php
+// This sets the RequestInterface implementation to
+// my custom request class.
+RequestBuilder::setImplementation(MyCustomRequest::class);
+
+// This is now an instance of 'MyCustomRequest'
+/** @var MyCustomRequest $request */
+$request = RequestBuilder::getInstance()
+    ->withUrl("https://api.github.com/")
+    ->withMethod(HttpRequestMethod::GET)
+    ->build();
+```
+
+### ResponseBuilder
+
+> ⚠ IMPORTANT ⚠
+>
+> This builder should only be used in case you with to create a custom `AdapterInterface`, since that's the only place where responses are created.
+
+#### Usage
+
+Default:
+
+```php
+// This builds the default implementation (Response)
+/** @var Response $response */
+$response = ResponseBuilder::getInstance()->build();
+```
+
+Custom `ResponseInterface` implementation:
+
+```php
+// This sets the ResponseInterface implementation to
+// my custom response class.
+ResponseBuilder::setImplementation(MyCustomResponse::class);
+
+// This is now an instance of 'MyCustomResponse'
+/** @var MyCustomResponse $response */
+$response = ResponseBuilder::getInstance()
+    ->withStatusCode(200)
+    ->build();
+```
+
+### AdapterBuilder
+
+> ⚠ IMPORTANT ⚠
+>
+> This builder should only be used in case you with to create a custom `AdapterInterface` and want to swap out the default adapter from the `HttpClient`
+
+#### Usage
+
+Default:
+
+```php
+// This builds the default implementation (CurlAdapter)
+/** @var CurlAdapter $adapter */
+$adapter = AdapterBuilder::getInstance()->build();
+```
+
+Custom `AdapterInterface` implementation:
+
+```php
+AdapterBuilder::setImplementation(MyCustomAdapter::class);
+
+// This is now an instance of 'MyCustomAdapter'
+/** @var MyCustomAdapter $adapter */
+$adapter = AdapterBuilder::getInstance()->build();
+
+// Swap out the client's default adapter for a custom one
+/** @var HttpClient $client */
+$client->setAdapter($adapter);
+```
+
 ## HttpClient
 
 ### Setup
