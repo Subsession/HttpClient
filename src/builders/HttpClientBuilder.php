@@ -17,6 +17,8 @@
 
 namespace Comertis\Http\Builders;
 
+use Comertis\Http\Abstraction\HttpClientInterface;
+use Comertis\Http\Abstraction\BuilderInterface;
 use Comertis\Http\HttpClient;
 
 /**
@@ -29,8 +31,105 @@ use Comertis\Http\HttpClient;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class HttpClientBuilder
+class HttpClientBuilder implements BuilderInterface
 {
+    /**
+     * HttpClient instance
+     *
+     * @access private
+     * @var    HttpClientInterface
+     */
+    private $client;
+
+            /**
+     * Self instance
+     *
+     * @static
+     * @access protected
+     * @var    static
+     */
+    protected static $instance = null;
+
+    /**
+     * Implementation class of whatever is being built
+     *
+     * @static
+     * @access protected
+     * @var    string
+     */
+    protected static $implementation = null;
+
+    /**
+     * Default implementation class to use in case none is specified
+     *
+     * @static
+     * @access private
+     * @var    string
+     */
+    private static $defaultImplementation = HttpClient::class;
+
+    public function __construct()
+    {
+        $implementation = static::getImplementation();
+
+        $this->client = new $implementation();
+    }
+
+        /**
+     * Get instance of self
+     *
+     * @static
+     * @access public
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if (null === static::$instance) {
+            static::$instance = new static();
+        }
+
+        return static::$instance;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function getImplementation()
+    {
+        if (null === static::$implementation) {
+            static::setImplementation(static::$defaultImplementation);
+        }
+
+        return static::$implementation;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * Example:
+     * ```php
+     * AdapterBuilder::setImplementation(CurlAdapter::class);
+     * ```
+     *
+     * @param string $implementation Fully qualified class name
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function setImplementation($implementation)
+    {
+        static::$implementation = $implementation;
+
+        if (null !== static::$instance) {
+            static::$instance->updateImplementation($implementation);
+        }
+    }
+
     /**
      * Build a HttpClientInterface instance
      *
@@ -40,6 +139,6 @@ class HttpClientBuilder
      */
     public static function build()
     {
-        return new HttpClient();
+        return $this->client;
     }
 }

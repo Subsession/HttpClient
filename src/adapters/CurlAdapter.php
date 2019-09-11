@@ -131,7 +131,7 @@ class CurlAdapter extends BaseAdapter
         }
 
         /** @var ResponseInterface $response */
-        $response = ResponseBuilder::build();
+        $response = ResponseBuilder::getInstance()->build();
         $response->setHeaders($headers)
             ->setStatusCode($statusCode)
             ->setBody($body)

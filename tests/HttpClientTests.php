@@ -3,8 +3,6 @@
 namespace Comertis\Http\Tests;
 
 use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Adapters\CurlAdapter;
-use Comertis\Http\Builders\HttpClientBuilder;
 use Comertis\Http\HttpClient;
 use Comertis\Http\HttpStatusCode;
 use Comertis\Http\Tests\Mocks\Post;
@@ -21,10 +19,8 @@ final class HttpClientTests extends TestCase
 
     protected function setUp()
     {
-        $this->client = HttpClientBuilder::build();
-        $this->client
-            ->setBaseUrl(self::BASE_URL)
-            ->setAdapter(CurlAdapter::class);
+        $this->client = new HttpClient();
+        $this->client->setBaseUrl(self::BASE_URL);
     }
 
     protected function tearDown()

@@ -183,7 +183,7 @@ trait RequestExtensions
     public function getRequest()
     {
         if (null === $this->request) {
-            $this->setRequest(RequestBuilder::build());
+            $this->setRequest(RequestBuilder::getInstance()->build());
         }
 
         return $this->request;
