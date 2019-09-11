@@ -17,8 +17,8 @@
 
 namespace Comertis\Http\Builders;
 
+use Comertis\Http\Abstraction\BuilderInterface;
 use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Builders\BaseBuilder;
 use Comertis\Http\Response;
 
 /**
@@ -31,7 +31,7 @@ use Comertis\Http\Response;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class ResponseBuilder extends BaseBuilder
+class ResponseBuilder implements BuilderInterface
 {
     /**
      * ResponseInterface implementation
@@ -40,6 +40,24 @@ class ResponseBuilder extends BaseBuilder
      * @var    ResponseInterface
      */
     private $response;
+
+    /**
+     * Self instance
+     *
+     * @static
+     * @access protected
+     * @var    static
+     */
+    protected static $instance = null;
+
+    /**
+     * Implementation class of whatever is being built
+     *
+     * @static
+     * @access protected
+     * @var    string
+     */
+    protected static $implementation = null;
 
     /**
      * Default ResponseInterface implementation class
@@ -55,6 +73,22 @@ class ResponseBuilder extends BaseBuilder
         $implementation = static::getImplementation();
 
         $this->response = new $implementation();
+    }
+
+    /**
+     * Get instance of self
+     *
+     * @static
+     * @access public
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if (null === static::$instance) {
+            static::$instance = new static();
+        }
+
+        return static::$instance;
     }
 
     /**

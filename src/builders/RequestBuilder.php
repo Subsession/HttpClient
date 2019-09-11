@@ -17,8 +17,8 @@
 
 namespace Comertis\Http\Builders;
 
+use Comertis\Http\Abstraction\BuilderInterface;
 use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\Builders\BaseBuilder;
 use Comertis\Http\Request;
 
 /**
@@ -31,7 +31,7 @@ use Comertis\Http\Request;
  * @version  Release: 1.0.0
  * @link     https://github.com/Comertis/HttpClient
  */
-class RequestBuilder extends BaseBuilder
+class RequestBuilder implements BuilderInterface
 {
     /**
      * Request instance
@@ -40,6 +40,24 @@ class RequestBuilder extends BaseBuilder
      * @var    RequestInterface
      */
     private $request;
+
+    /**
+     * Self instance
+     *
+     * @static
+     * @access protected
+     * @var    static
+     */
+    protected static $instance = null;
+
+    /**
+     * Implementation class of whatever is being built
+     *
+     * @static
+     * @access protected
+     * @var    string
+     */
+    protected static $implementation = null;
 
     /**
      * Default RequestInterface implementation class
@@ -55,6 +73,22 @@ class RequestBuilder extends BaseBuilder
         $implementation = static::getImplementation();
 
         $this->request = new $implementation();
+    }
+
+    /**
+     * Get instance of self
+     *
+     * @static
+     * @access public
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if (null === static::$instance) {
+            static::$instance = new static();
+        }
+
+        return static::$instance;
     }
 
     /**

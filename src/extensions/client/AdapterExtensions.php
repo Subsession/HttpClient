@@ -17,7 +17,9 @@
 
 namespace Comertis\Http\Extensions\Client;
 
+use InvalidArgumentException;
 use Comertis\Http\Builders\AdapterBuilder;
+use Comertis\Http\Abstraction\AdapterInterface;
 
 /**
  * Undocumented class
@@ -50,7 +52,7 @@ trait AdapterExtensions
     public function getAdapter()
     {
         if (null === $this->adapter) {
-            $this->setAdapter(AdapterBuilder::build());
+            $this->setAdapter(AdapterBuilder::getInstance()->build());
         }
 
         return $this->adapter;
@@ -68,7 +70,8 @@ trait AdapterExtensions
      *    $client->setAdapter(CurlAdapter::class);
      *
      *    // With implementation
-     *    $adapter = AdapterBuilder::build();
+     *    AdapterBuilder::setImplementation(CurlAdapter::class);
+     *    $adapter = AdapterBuilder::getInstance()->build();
      *    $client->setAdapter($adapter);
      * ```
      *
@@ -76,15 +79,16 @@ trait AdapterExtensions
      *
      * @access public
      * @see    AdapterInterface
+     * @throws InvalidArgumentException If the given adapter is not an instance of AdapterInterface
      * @return static
      */
     public function setAdapter($adapter)
     {
-        if ($adapter instanceof AdapterInterface) {
-            $this->adapter = $adapter;
-        } else {
-            $this->adapter = AdapterBuilder::build($adapter);
+        if (!$adapter instanceof AdapterInterface) {
+            throw new InvalidArgumentException("Adapter is not an instance of AdapterInterface");
         }
+
+        $this->adapter = $adapter;
 
         return $this;
     }

@@ -82,7 +82,17 @@ trait MiddlewareExtensions
      */
     public function setMiddlewares(array $middlewares)
     {
-        $this->middlewares = $middlewares;
+        $instances = [];
+
+        foreach ($middlewares as $key => $middleware) {
+            if ($middleware instanceof MiddlewareInterface) {
+                $instances[] = $middleware;
+            } elseif (is_string($middleware)) {
+                $instances[] = new $middleware();
+            }
+        }
+
+        $this->middlewares = $instances;
 
         return $this;
     }

@@ -27,15 +27,21 @@ class RequestBuilderTests extends TestCase
         RequestBuilder::setImplementation(MockRequest::class);
 
         $url = "test";
-        $headers = [];
+        $headers = [
+            "header1" => "value1"
+        ];
         $method = "POST";
         $bodyType = "application/json";
+        $params = [
+            "param1" => "value1"
+        ];
 
         $request = RequestBuilder::getInstance()
             ->withUrl($url)
             ->withHeaders($headers)
             ->withMethod($method)
             ->withBodyType($bodyType)
+            ->withParams($params)
             ->build();
 
         $this->assertInstanceOf(
@@ -61,6 +67,11 @@ class RequestBuilderTests extends TestCase
         $this->assertEquals(
             $bodyType,
             $request->getBodyType()
+        );
+
+        $this->assertEquals(
+            $params,
+            $request->getParams()
         );
 
         // Make sure that `RequestBuilder::setImplementation(MockRequest::class);`

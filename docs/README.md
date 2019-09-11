@@ -20,7 +20,7 @@ $client = HttpClientBuilder::build();
 
 // GET Request
 /** @var RequestInterface $request */
-$request = RequestBuilder::build();
+$request = RequestBuilder::getInstance()->build();
 $request->setUrl("https://api.mywebservice.com/endpoint1");
 $request->setParams(["param1" => "value"]);
 $request->setMethod(HttpRequestMethod::GET);
@@ -35,7 +35,7 @@ $client = HttpClientBuilder::build();
 
 // POST Request with JSON encoded params
 /** @var RequestInterface $request */
-$request = RequestBuilder::build();
+$request = RequestBuilder::getInstance()->build();
 $request->setUrl("https://api.mywebservice.com/endpoint1");
 $request->setParams(["param1" => "value"]);
 $request->setMethod(HttpRequestMethod::POST);
