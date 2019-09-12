@@ -82,8 +82,10 @@ class StreamAdapter extends BaseAdapter
         /** @var array $options */
         $options = [
             "http" => [
-                "method" => $request->getMethod(),
+                "method" => strtoupper($request->getMethod()),
                 "header" => "",
+                "follow_location" => 1,
+                "ignore_errors" => true,
             ],
         ];
 
