@@ -84,11 +84,14 @@ trait AdapterExtensions
      */
     public function setAdapter($adapter)
     {
-        if (!$adapter instanceof AdapterInterface) {
+        if ($adapter instanceof AdapterInterface) {
+            $this->adapter = $adapter;
+        } elseif (is_string($adapter)) {
+            AdapterBuilder::setImplementation($adapter);
+            $this->adapter = AdapterBuilder::getInstance()->build();
+        } else {
             throw new InvalidArgumentException("Adapter is not an instance of AdapterInterface");
         }
-
-        $this->adapter = $adapter;
 
         return $this;
     }
