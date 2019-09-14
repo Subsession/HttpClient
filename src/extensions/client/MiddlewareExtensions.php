@@ -5,34 +5,34 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http\Extensions\Client;
+namespace Subsession\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\MiddlewareInterface;
-use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Middlewares\BodyFormatterMiddleware;
-use Comertis\Http\Middlewares\HeadersFormatterMiddleware;
-use Comertis\Http\Middlewares\UrlFormatterMiddleware;
+use Subsession\Http\Abstraction\MiddlewareInterface;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Middlewares\BodyFormatterMiddleware;
+use Subsession\Http\Middlewares\HeadersFormatterMiddleware;
+use Subsession\Http\Middlewares\UrlFormatterMiddleware;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 trait MiddlewareExtensions
 {

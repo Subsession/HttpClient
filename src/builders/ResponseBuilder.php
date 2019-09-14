@@ -5,31 +5,31 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http\Builders;
+namespace Subsession\Http\Builders;
 
-use Comertis\Http\Abstraction\BuilderInterface;
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Response;
+use Subsession\Http\Abstraction\BuilderInterface;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Response;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 class ResponseBuilder implements BuilderInterface
 {

@@ -5,35 +5,35 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Subsession\Http;
 
-use Comertis\Http\Abstraction\HttpClientInterface;
-use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Builders\AdapterBuilder;
-use Comertis\Http\Builders\RequestBuilder;
-use Comertis\Http\Builders\ResponseBuilder;
-use Comertis\Http\Extensions\Client as Extensions;
+use Subsession\Http\Abstraction\HttpClientInterface;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Builders\AdapterBuilder;
+use Subsession\Http\Builders\RequestBuilder;
+use Subsession\Http\Builders\ResponseBuilder;
+use Subsession\Http\Extensions\Client as Extensions;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 class HttpClient implements HttpClientInterface
 {

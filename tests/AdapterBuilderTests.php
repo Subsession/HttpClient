@@ -1,10 +1,10 @@
 <?php
 
-namespace Comertis\Http\Tests;
+namespace Subsession\Http\Tests;
 
-use Comertis\Http\Adapters\CurlAdapter;
-use Comertis\Http\Adapters\StreamAdapter;
-use Comertis\Http\Builders\AdapterBuilder;
+use Subsession\Http\Adapters\CurlAdapter;
+use Subsession\Http\Adapters\StreamAdapter;
+use Subsession\Http\Builders\AdapterBuilder;
 use PHPUnit\Framework\TestCase;
 
 class AdapterBuilderTests extends TestCase

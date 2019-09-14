@@ -1,4 +1,4 @@
-# Comertis\Http\Tests
+# HttpClient tests
 
 This library uses PHPUnit ^7 for it's unit testing.
 

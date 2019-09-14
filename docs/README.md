@@ -1,6 +1,6 @@
-# Comertis/HttpClient documentation
+# HttpClient documentation
 
-- [Comertis/HttpClient documentation](#comertishttpclient-documentation)
+- [HttpClient documentation](#httpclient-documentation)
   - [Builders](#builders)
     - [HttpClientBuilder](#httpclientbuilder)
       - [Usage](#usage)
@@ -17,7 +17,7 @@
 
 ## Builders
 
-The builders are used in case you want to use custom implementation of the provided interfaces under the `Comertis\Http\Abstraction` namespace. The library already offers & uses a default implementation of said interfaces.
+The builders are used in case you want to use custom implementation of the provided interfaces under the `Subsession\Http\Abstraction` namespace. The library already offers & uses a default implementation of said interfaces.
 
 ### HttpClientBuilder
 

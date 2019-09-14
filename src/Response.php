@@ -5,37 +5,37 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Subsession\Http;
 
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\HttpStatusCode;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\HttpStatusCode;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 class Response implements ResponseInterface
 {
-    use \Comertis\Http\Extensions\StatusCode;
-    use \Comertis\Http\Extensions\Headers;
-    use \Comertis\Http\Extensions\Body;
-    use \Comertis\Http\Extensions\Error;
+    use \Subsession\Http\Extensions\StatusCode;
+    use \Subsession\Http\Extensions\Headers;
+    use \Subsession\Http\Extensions\Body;
+    use \Subsession\Http\Extensions\Error;
 
     /**
      * Response instance for HttpClient

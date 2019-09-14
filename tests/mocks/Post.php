@@ -1,6 +1,6 @@
 <?php
 
-namespace Comertis\Http\Tests\Mocks;
+namespace Subsession\Http\Tests\Mocks;
 
 class Post
 {

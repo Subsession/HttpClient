@@ -5,30 +5,30 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http\Abstraction;
+namespace Subsession\Http\Abstraction;
 
-use Comertis\Exceptions\ArgumentNullException;
-use Comertis\Http\HttpRequestMethod;
+use Subsession\Exceptions\ArgumentNullException;
+use Subsession\Http\HttpRequestMethod;
 
 /**
  * Undocumented interface
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 interface RequestInterface
 {

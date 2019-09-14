@@ -5,31 +5,31 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http\Adapters;
+namespace Subsession\Http\Adapters;
 
-use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\Adapters\BaseAdapter;
-use Comertis\Http\Builders\ResponseBuilder;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Adapters\BaseAdapter;
+use Subsession\Http\Builders\ResponseBuilder;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 class StreamAdapter extends BaseAdapter
 {

@@ -5,36 +5,36 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http\Extensions\Client;
+namespace Subsession\Http\Extensions\Client;
 
-use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Builders\RequestBuilder;
-use Comertis\Http\HttpRequestMethod;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Builders\RequestBuilder;
+use Subsession\Http\HttpRequestMethod;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 trait RequestExtensions
 {
-    use \Comertis\Http\Extensions\Client\RequestJsonExtensions;
+    use \Subsession\Http\Extensions\Client\RequestJsonExtensions;
 
     /**
      * Base URL for all requests

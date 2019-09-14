@@ -1,10 +1,10 @@
 <?php
 
-namespace Comertis\Http\Tests;
+namespace Subsession\Http\Tests;
 
-use Comertis\Http\Builders\RequestBuilder;
-use Comertis\Http\Request;
-use Comertis\Http\Tests\Mocks\MockRequest;
+use Subsession\Http\Builders\RequestBuilder;
+use Subsession\Http\Request;
+use Subsession\Http\Tests\Mocks\MockRequest;
 use PHPUnit\Framework\TestCase;
 
 class RequestBuilderTests extends TestCase

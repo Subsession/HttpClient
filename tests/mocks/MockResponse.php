@@ -1,16 +1,16 @@
 <?php
 
-namespace Comertis\Http\Tests\Mocks;
+namespace Subsession\Http\Tests\Mocks;
 
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\HttpStatusCode;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\HttpStatusCode;
 
 class MockResponse implements ResponseInterface
 {
-    use \Comertis\Http\Extensions\StatusCode;
-    use \Comertis\Http\Extensions\Headers;
-    use \Comertis\Http\Extensions\Body;
-    use \Comertis\Http\Extensions\Error;
+    use \Subsession\Http\Extensions\StatusCode;
+    use \Subsession\Http\Extensions\Headers;
+    use \Subsession\Http\Extensions\Body;
+    use \Subsession\Http\Extensions\Error;
 
     /**
      * Response instance for HttpClient

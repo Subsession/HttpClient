@@ -5,37 +5,37 @@
  * LICENSE:
  * Proprietary, see the LICENSE file that was provided with the software.
  *
- * Copyright (c) 2019 - present Comertis <info@comertis.com>
+ * Copyright (c) 2019 - present Subsession
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Comertis\Http;
+namespace Subsession\Http;
 
-use Comertis\Exceptions\ArgumentException;
-use Comertis\Exceptions\ArgumentNullException;
-use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\HttpRequestMethod;
+use Subsession\Exceptions\ArgumentException;
+use Subsession\Exceptions\ArgumentNullException;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\HttpRequestMethod;
 
 /**
  * Undocumented class
  *
  * @category Http
- * @package  Comertis\Http
- * @author   Cristian Moraru <cristian@comertis.com>
- * @license  Proprietary
+ * @package  Subsession\Http
+ * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
- * @link     https://github.com/Comertis/HttpClient
+ * @link     https://github.com/Subsession/HttpClient
  */
 class Request implements RequestInterface
 {
-    use \Comertis\Http\Extensions\Headers;
-    use \Comertis\Http\Extensions\ContentType;
+    use \Subsession\Http\Extensions\Headers;
+    use \Subsession\Http\Extensions\ContentType;
 
     /**
      * Base url

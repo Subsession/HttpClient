@@ -1,11 +1,11 @@
 <?php
 
-namespace Comertis\Http\Tests;
+namespace Subsession\Http\Tests;
 
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\HttpClient;
-use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Tests\Mocks\Post;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\HttpClient;
+use Subsession\Http\HttpStatusCode;
+use Subsession\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
 
 final class HttpClientTests extends TestCase
