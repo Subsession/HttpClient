@@ -21,7 +21,8 @@ The builders are used in case you want to use custom implementation of the provi
 
 ### HttpClientBuilder
 
-Used to create `HttpClientInterface` instances
+Used to create `HttpClientInterface` instances.
+
 If no specific implementation is specified, it uses the default one: `HttpClient`.
 
 #### Usage
@@ -49,6 +50,7 @@ $client = HttpClientBuilder::getInstance()->build();
 ### RequestBuilder
 
 Used to create `RequestInterface` instances.
+
 If no specific implementation is specified, it uses the default one: `Request`.
 
 #### Usage
@@ -81,6 +83,10 @@ $request = RequestBuilder::getInstance()
 
 ### ResponseBuilder
 
+Used to create `ResponseInterface` instances.
+
+If no specific implementation is specified, it uses the default one: `Response`.
+
 > ⚠ IMPORTANT ⚠
 >
 > This builder should only be used in case you with to create a custom `AdapterInterface`, since that's the only place where responses are created.
@@ -110,6 +116,10 @@ $response = ResponseBuilder::getInstance()
 ```
 
 ### AdapterBuilder
+
+Used to create `AdapterInterface` instances.
+
+If no specific implementation is specified, it uses the default one: `CurlAdapter`.
 
 > ⚠ IMPORTANT ⚠
 >
@@ -143,11 +153,11 @@ $client->setAdapter($adapter);
 
 ### Setup
 
-The `HttpClientInterface` interface only has one method, `handle(RequestInterface $request)`, which the `HttpClient` class implements.
+The `HttpClientInterface` interface has only one method: `handle(RequestInterface $request)`.
 
-There are several extensions available & added to the `HttpClient` class that make it much easier to handle requests than having to manually build a request each time and pass it to the client.
+There are several extensions available & added to the `HttpClient` class that make it much easier to handle requests than having to manually build a request each time.
 
-Under `src/extensions/client` there are a few `trait`s that handle everything from the `AdapterInterface`, to the request, response and middlewares for the `HttpClient` class.
+Under `src/extensions/client` there are a few `traits` that handle everything from the adapter to use, the request object creation & configuration, to the response and middlewares for the `HttpClient` class.
 
 #### Simple request handling
 
@@ -166,11 +176,6 @@ $request->setMethod(HttpRequestMethod::GET);
 
 /** @var ResponseInterface $response */
 $response = $client->handle($request);
-```
-
-```php
-/** @var HttpClient $client */
-$client = HttpClientBuilder::build();
 
 // POST Request with JSON encoded params
 /** @var RequestInterface $request */
@@ -184,6 +189,8 @@ $request->setBodyType(HttpRequestType::JSON);
 $response = $client->handle($request);
 ```
 
+This approach is more verbose, but it is compliant with the `HttpClientInterface`.
+
 #### Advanced request handling
 
 Example request with extensions added to the `HttpClient` class:
@@ -192,18 +199,20 @@ Example request with extensions added to the `HttpClient` class:
 /** @var HttpClient $client */
 $client = HttpClientBuilder::build();
 
-// Base url will be available for the $client's scope
+// Base url for all requests
 $client->setBaseUrl("https://api.mywebservice.com/");
 
 // GET Request
 /** @var ResponseInterface $response */
 $response = $client
-    ->setUrl("endpoint1") // NOTE: relative to the base url set above
+    ->setUrl("endpoint1") // Relative to the base url
     ->get(["param1" => "value"]);
 
 // POST Request with JSON encoded params
 /** @var ResponseInterface $response */
 $response = $client
-    ->setUrl("endpoint1")
+    ->setUrl("endpoint1") // Relative to the base url
     ->postJson(["param1" => "value"]);
 ```
+
+This approach is much more convenient when dealing with multiple requests in the same scope, and it doesn't break the `HttpClientInterface` contract, but autocomplete might fail to recognize the extension methods.
