@@ -18,6 +18,7 @@
 
 namespace Subsession\Http\Builders;
 
+use ReflectionClass;
 use Subsession\Http\Abstraction\AdapterInterface;
 use Subsession\Http\Abstraction\BuilderInterface;
 use Subsession\Http\Adapters\CurlAdapter;
@@ -120,10 +121,17 @@ class AdapterBuilder implements BuilderInterface
      *
      * @static
      * @access public
+     * @throws \Subsession\Exceptions\InvalidArgumentException
      * @return void
      */
     public static function setImplementation($implementation)
     {
+        // Check if class implements AdapterInterface
+        if (!in_array(AdapterInterface::class, class_implements($implementation))) {
+            $error = "$implementation is not an instance of AdapterInterface";
+            throw new \Subsession\Exceptions\InvalidArgumentException($error);
+        }
+
         static::$implementation = $implementation;
 
         if (null !== static::$instance) {
@@ -131,6 +139,15 @@ class AdapterBuilder implements BuilderInterface
         }
     }
 
+    /**
+     * IMPORTANT: DO NOT USE
+     *
+     * Used to change the implementation class for the `AdapterInterface`
+     *
+     * @param string $implementation
+     *
+     * @return void
+     */
     public function updateImplementation($implementation)
     {
         $this->adapter = new $implementation();
