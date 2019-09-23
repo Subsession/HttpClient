@@ -36,7 +36,7 @@
   },
   "require": {
     "php": ">=7.0.0",
-    "subsession/exceptions": "^1.0"
+    "subsession/exceptions": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0"
