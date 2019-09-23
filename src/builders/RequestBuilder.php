@@ -119,6 +119,11 @@ class RequestBuilder implements BuilderInterface
      */
     public static function setImplementation($implementation)
     {
+        if (!in_array(RequestInterface::class, class_implements($implementation))) {
+            $error = "$implementation is not an instance of RequestInterface";
+            throw new \Subsession\Exceptions\InvalidArgumentException($error);
+        }
+
         static::$implementation = $implementation;
 
         if (null !== static::$instance) {

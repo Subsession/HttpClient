@@ -119,6 +119,11 @@ class ResponseBuilder implements BuilderInterface
      */
     public static function setImplementation($implementation)
     {
+        if (!in_array(ResponseInterface::class, class_implements($implementation))) {
+            $error = "$implementation is not an instance of ResponseInterface";
+            throw new \Subsession\Exceptions\InvalidArgumentException($error);
+        }
+
         static::$implementation = $implementation;
 
         if (null !== static::$instance) {
