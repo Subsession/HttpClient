@@ -19,6 +19,12 @@ class RequestTests extends TestCase
         //
     }
 
+    /**
+     * Tests json_encode on a Request class
+     *
+     * @see https://github.com/Subsession/HttpClient/issues/19
+     * @return void
+     */
     public function testRequestJsonEncodesCorrectly()
     {
         $innerData = new stdClass();
