@@ -2,13 +2,13 @@
 
 - [HttpClient documentation](#httpclient-documentation)
   - [Builders](#builders)
-    - [HttpClientBuilder](#httpclientbuilder)
+    - [Builders\HttpClientBuilder](#buildershttpclientbuilder)
       - [Usage](#usage)
-    - [RequestBuilder](#requestbuilder)
+    - [Builders\RequestBuilder](#buildersrequestbuilder)
       - [Usage](#usage-1)
     - [ResponseBuilder](#responsebuilder)
       - [Usage](#usage-2)
-    - [AdapterBuilder](#adapterbuilder)
+    - [Builders\AdapterBuilder](#buildersadapterbuilder)
       - [Usage](#usage-3)
   - [HttpClient](#httpclient)
     - [Setup](#setup)
@@ -19,9 +19,9 @@
 
 The builders are used in case you want to use custom implementation of the provided interfaces under the `Subsession\Http\Abstraction` namespace. The library already offers & uses a default implementation of said interfaces.
 
-### HttpClientBuilder
+### Builders\HttpClientBuilder
 
-Used to create `HttpClientInterface` instances.
+Used to create `Abstraction\HttpClientInterface` instances.
 
 If no specific implementation is specified, it uses the default one: `HttpClient`.
 
@@ -32,22 +32,22 @@ Default:
 ```php
 // This builds the default implementation (HttpClient)
 /** @var HttpClient $client */
-$client = HttpClientBuilder::getInstance()->build();
+$client = Builders\HttpClientBuilder::getInstance()->build();
 ```
 
-Custom `HttpClientInterface` implementation:
+Custom `Abstraction\HttpClientInterface` implementation:
 
 ```php
-// This sets the HttpClientInterface implementation to
+// This sets the Abstraction\HttpClientInterface implementation to
 // my custom http client class.
-HttpClientBuilder::setImplementation(MyCustomHttpClient::class);
+Builders\HttpClientBuilder::setImplementation(MyCustomHttpClient::class);
 
 // This is now an instance of 'MyCustomHttpClient'
 /** @var MyCustomHttpClient $client */
-$client = HttpClientBuilder::getInstance()->build();
+$client = Builders\HttpClientBuilder::getInstance()->build();
 ```
 
-### RequestBuilder
+### Builders\RequestBuilder
 
 Used to create `RequestInterface` instances.
 
@@ -60,7 +60,7 @@ Default:
 ```php
 // This builds the default implementation (Request)
 /** @var Request $request */
-$request = RequestBuilder::getInstance()
+$request = Builders\RequestBuilder::getInstance()
     ->withUrl("https://api.github.com/")
     ->withMethod(HttpRequestMethod::GET)
     ->build();
@@ -71,11 +71,11 @@ Custom `RequestInterface` implementation:
 ```php
 // This sets the RequestInterface implementation to
 // my custom request class.
-RequestBuilder::setImplementation(MyCustomRequest::class);
+Builders\RequestBuilder::setImplementation(MyCustomRequest::class);
 
 // This is now an instance of 'MyCustomRequest'
 /** @var MyCustomRequest $request */
-$request = RequestBuilder::getInstance()
+$request = Builders\RequestBuilder::getInstance()
     ->withUrl("https://api.github.com/")
     ->withMethod(HttpRequestMethod::GET)
     ->build();
@@ -83,7 +83,7 @@ $request = RequestBuilder::getInstance()
 
 ### ResponseBuilder
 
-Used to create `ResponseInterface` instances.
+Used to create `Abstraction\ResponseInterface` instances.
 
 If no specific implementation is specified, it uses the default one: `Response`.
 
@@ -101,10 +101,10 @@ Default:
 $response = ResponseBuilder::getInstance()->build();
 ```
 
-Custom `ResponseInterface` implementation:
+Custom `Abstraction\ResponseInterface` implementation:
 
 ```php
-// This sets the ResponseInterface implementation to
+// This sets the Abstraction\ResponseInterface implementation to
 // my custom response class.
 ResponseBuilder::setImplementation(MyCustomResponse::class);
 
@@ -115,11 +115,11 @@ $response = ResponseBuilder::getInstance()
     ->build();
 ```
 
-### AdapterBuilder
+### Builders\AdapterBuilder
 
 Used to create `AdapterInterface` instances.
 
-If no specific implementation is specified, it uses the default one: `CurlAdapter`.
+If no specific implementation is specified, it uses the default one: `Adapters\CurlAdapter`.
 
 > ⚠ IMPORTANT ⚠
 >
@@ -130,19 +130,19 @@ If no specific implementation is specified, it uses the default one: `CurlAdapte
 Default:
 
 ```php
-// This builds the default implementation (CurlAdapter)
-/** @var CurlAdapter $adapter */
-$adapter = AdapterBuilder::getInstance()->build();
+// This builds the default implementation (Adapters\CurlAdapter)
+/** @var Adapters\CurlAdapter $adapter */
+$adapter = Builders\AdapterBuilder::getInstance()->build();
 ```
 
 Custom `AdapterInterface` implementation:
 
 ```php
-AdapterBuilder::setImplementation(MyCustomAdapter::class);
+Builders\AdapterBuilder::setImplementation(MyCustomAdapter::class);
 
 // This is now an instance of 'MyCustomAdapter'
 /** @var MyCustomAdapter $adapter */
-$adapter = AdapterBuilder::getInstance()->build();
+$adapter = Builders\AdapterBuilder::getInstance()->build();
 
 // Swap out the client's default adapter for a custom one
 /** @var HttpClient $client */
@@ -153,7 +153,7 @@ $client->setAdapter($adapter);
 
 ### Setup
 
-The `HttpClientInterface` interface has only one method: `handle(RequestInterface $request)`.
+The `Abstraction\HttpClientInterface` interface has only one method: `handle(RequestInterface $request)`.
 
 There are several extensions available & added to the `HttpClient` class that make it much easier to handle requests than having to manually build a request each time.
 
@@ -165,54 +165,54 @@ Example request without any extensions added to the `HttpClient` class:
 
 ```php
 /** @var HttpClient $client */
-$client = HttpClientBuilder::build();
+$client = Builders\HttpClientBuilder::getInstance()->build();
 
 // GET Request
 /** @var RequestInterface $request */
-$request = RequestBuilder::getInstance()->build();
-$request->setUrl("https://api.mywebservice.com/endpoint1");
-$request->setParams(["param1" => "value"]);
-$request->setMethod(HttpRequestMethod::GET);
+$request = Builders\RequestBuilder::getInstance()->build();
+$request->setUrl("https://api.github.com/endpoint1")
+    ->setParams(["param1" => "value"])
+    ->setMethod(HttpRequestMethod::GET);
 
-/** @var ResponseInterface $response */
+/** @var Abstraction\ResponseInterface $response */
 $response = $client->handle($request);
 
 // POST Request with JSON encoded params
 /** @var RequestInterface $request */
-$request = RequestBuilder::getInstance()->build();
-$request->setUrl("https://api.mywebservice.com/endpoint1");
-$request->setParams(["param1" => "value"]);
-$request->setMethod(HttpRequestMethod::POST);
-$request->setBodyType(HttpRequestType::JSON);
+$request = Builders\RequestBuilder::getInstance()->build();
+$request->setUrl("https://api.github.com/endpoint1")
+    ->setParams(["param1" => "value"])
+    ->setMethod(HttpRequestMethod::POST)
+    ->setBodyType(HttpRequestType::JSON);
 
-/** @var ResponseInterface $response */
+/** @var Abstraction\ResponseInterface $response */
 $response = $client->handle($request);
 ```
 
-This approach is more verbose, but it is compliant with the `HttpClientInterface`.
+This approach is more verbose, but it is compliant with the `Abstraction\HttpClientInterface`.
 
 #### Advanced request handling
 
-Example request with extensions added to the `HttpClient` class:
+Example request with traits added to the `HttpClient` class:
 
 ```php
 /** @var HttpClient $client */
-$client = HttpClientBuilder::build();
+$client = Builders\HttpClientBuilder::getInstance()->build();
 
 // Base url for all requests
-$client->setBaseUrl("https://api.mywebservice.com/");
+$client->setBaseUrl("https://api.github.com/");
 
 // GET Request
-/** @var ResponseInterface $response */
+/** @var Abstraction\ResponseInterface $response */
 $response = $client
     ->setUrl("endpoint1") // Relative to the base url
     ->get(["param1" => "value"]);
 
 // POST Request with JSON encoded params
-/** @var ResponseInterface $response */
+/** @var Abstraction\ResponseInterface $response */
 $response = $client
     ->setUrl("endpoint1") // Relative to the base url
     ->postJson(["param1" => "value"]);
 ```
 
-This approach is much more convenient when dealing with multiple requests in the same scope, and it doesn't break the `HttpClientInterface` contract, but autocomplete might fail to recognize the extension methods.
+This approach is much more convenient when dealing with multiple requests in the same scope, and it doesn't break the `Abstraction\HttpClientInterface` contract, but autocomplete might fail to recognize the extension methods.
