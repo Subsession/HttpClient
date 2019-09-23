@@ -6,7 +6,7 @@
       - [Usage](#usage)
     - [Builders\RequestBuilder](#buildersrequestbuilder)
       - [Usage](#usage-1)
-    - [ResponseBuilder](#responsebuilder)
+    - [Builders\ResponseBuilder](#buildersresponsebuilder)
       - [Usage](#usage-2)
     - [Builders\AdapterBuilder](#buildersadapterbuilder)
       - [Usage](#usage-3)
@@ -49,7 +49,7 @@ $client = Builders\HttpClientBuilder::getInstance()->build();
 
 ### Builders\RequestBuilder
 
-Used to create `RequestInterface` instances.
+Used to create `Abstraction\RequestInterface` instances.
 
 If no specific implementation is specified, it uses the default one: `Request`.
 
@@ -66,10 +66,10 @@ $request = Builders\RequestBuilder::getInstance()
     ->build();
 ```
 
-Custom `RequestInterface` implementation:
+Custom `Abstraction\RequestInterface` implementation:
 
 ```php
-// This sets the RequestInterface implementation to
+// This sets the Abstraction\RequestInterface implementation to
 // my custom request class.
 Builders\RequestBuilder::setImplementation(MyCustomRequest::class);
 
@@ -81,7 +81,7 @@ $request = Builders\RequestBuilder::getInstance()
     ->build();
 ```
 
-### ResponseBuilder
+### Builders\ResponseBuilder
 
 Used to create `Abstraction\ResponseInterface` instances.
 
@@ -98,7 +98,7 @@ Default:
 ```php
 // This builds the default implementation (Response)
 /** @var Response $response */
-$response = ResponseBuilder::getInstance()->build();
+$response = Builders\ResponseBuilder::getInstance()->build();
 ```
 
 Custom `Abstraction\ResponseInterface` implementation:
@@ -106,11 +106,11 @@ Custom `Abstraction\ResponseInterface` implementation:
 ```php
 // This sets the Abstraction\ResponseInterface implementation to
 // my custom response class.
-ResponseBuilder::setImplementation(MyCustomResponse::class);
+Builders\ResponseBuilder::setImplementation(MyCustomResponse::class);
 
 // This is now an instance of 'MyCustomResponse'
 /** @var MyCustomResponse $response */
-$response = ResponseBuilder::getInstance()
+$response = Builders\ResponseBuilder::getInstance()
     ->withStatusCode(200)
     ->build();
 ```
@@ -153,7 +153,7 @@ $client->setAdapter($adapter);
 
 ### Setup
 
-The `Abstraction\HttpClientInterface` interface has only one method: `handle(RequestInterface $request)`.
+The `Abstraction\HttpClientInterface` interface has only one method: `handle(Abstraction\RequestInterface $request)`.
 
 There are several extensions available & added to the `HttpClient` class that make it much easier to handle requests than having to manually build a request each time.
 
@@ -168,7 +168,7 @@ Example request without any extensions added to the `HttpClient` class:
 $client = Builders\HttpClientBuilder::getInstance()->build();
 
 // GET Request
-/** @var RequestInterface $request */
+/** @var Abstraction\RequestInterface $request */
 $request = Builders\RequestBuilder::getInstance()->build();
 $request->setUrl("https://api.github.com/endpoint1")
     ->setParams(["param1" => "value"])
@@ -178,7 +178,7 @@ $request->setUrl("https://api.github.com/endpoint1")
 $response = $client->handle($request);
 
 // POST Request with JSON encoded params
-/** @var RequestInterface $request */
+/** @var Abstraction\RequestInterface $request */
 $request = Builders\RequestBuilder::getInstance()->build();
 $request->setUrl("https://api.github.com/endpoint1")
     ->setParams(["param1" => "value"])
