@@ -134,11 +134,10 @@ class HttpClientBuilder implements BuilderInterface
     /**
      * Build a HttpClientInterface instance
      *
-     * @static
      * @access public
      * @return HttpClient
      */
-    public static function build()
+    public function build()
     {
         return $this->client;
     }
