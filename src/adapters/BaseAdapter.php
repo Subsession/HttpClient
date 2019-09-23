@@ -1,9 +1,10 @@
 <?php
+
 /**
  * PHP Version 7
  *
  * LICENSE:
- * Proprietary, see the LICENSE file that was provided with the software.
+ * See the LICENSE file that was provided with the software.
  *
  * Copyright (c) 2019 - present Subsession
  *
@@ -40,9 +41,7 @@ abstract class BaseAdapter implements AdapterInterface
      * @access public
      * @var    array
      */
-    const EXPECTED_EXTENSIONS = [
-
-    ];
+    const EXPECTED_EXTENSIONS = [];
 
     /**
      * Expected functions for this AdapterInterface implementation
@@ -51,9 +50,7 @@ abstract class BaseAdapter implements AdapterInterface
      * @access public
      * @var    array
      */
-    const EXPECTED_FUNCTIONS = [
-
-    ];
+    const EXPECTED_FUNCTIONS = [];
 
     /**
      * @inheritDoc

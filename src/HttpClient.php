@@ -3,7 +3,7 @@
  * PHP Version 7
  *
  * LICENSE:
- * Proprietary, see the LICENSE file that was provided with the software.
+ * See the LICENSE file that was provided with the software.
  *
  * Copyright (c) 2019 - present Subsession
  *

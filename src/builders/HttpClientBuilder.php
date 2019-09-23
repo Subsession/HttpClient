@@ -1,9 +1,10 @@
 <?php
+
 /**
  * PHP Version 7
  *
  * LICENSE:
- * Proprietary, see the LICENSE file that was provided with the software.
+ * See the LICENSE file that was provided with the software.
  *
  * Copyright (c) 2019 - present Subsession
  *
@@ -41,7 +42,7 @@ class HttpClientBuilder implements BuilderInterface
      */
     private $client;
 
-            /**
+    /**
      * Self instance
      *
      * @static
@@ -75,7 +76,7 @@ class HttpClientBuilder implements BuilderInterface
         $this->client = new $implementation();
     }
 
-        /**
+    /**
      * Get instance of self
      *
      * @static
