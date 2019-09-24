@@ -18,6 +18,7 @@
 
 namespace Subsession\Http\Builders;
 
+use Subsession\Http\Abstraction\AdapterInterface;
 use Subsession\Http\Abstraction\HttpClientInterface;
 use Subsession\Http\Abstraction\BuilderInterface;
 use Subsession\Http\HttpClient;
@@ -129,6 +130,26 @@ class HttpClientBuilder implements BuilderInterface
         if (null !== static::$instance) {
             static::$instance->updateImplementation($implementation);
         }
+    }
+
+    /**
+     * Set the AdapterInterface instance to use
+     *
+     * @param AdapterInterface|string $adapter
+     *
+     * @access public
+     * @return static
+     */
+    public function withAdapter($adapter)
+    {
+        if (!$adapter instanceof AdapterInterface) {
+            AdapterBuilder::setImplementation($adapter);
+            $adapter = AdapterBuilder::getInstance()->build();
+        }
+
+        $this->client->setAdapter($adapter);
+
+        return $this;
     }
 
     /**
