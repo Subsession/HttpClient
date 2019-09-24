@@ -38,6 +38,13 @@ final class HttpClientExtensionsTests extends TestCase
         //
     }
 
+    /**
+     * @covers HttpClient::setBaseUrl
+     * @covers HttpClient::getUrl
+     * @covers HttpClient::getBaseUrl
+     *
+     * @return void
+     */
     public function testExpectClientToHaveBaseUrlExtensions()
     {
         $this->client->setBaseUrl(self::BASE_URL);
@@ -56,6 +63,13 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setBaseUrl
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::getUrl
+     *
+     * @return void
+     */
     public function testExpectClientToHaveUrlExtensions()
     {
         // Remove base url to allow absolute URL for setUrl() function
@@ -72,6 +86,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::postJson
+     *
+     * @return void
+     */
     public function testExpectClientToHavePostJsonExtension()
     {
         /** @var ResponseInterface $response */
@@ -85,6 +105,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::putJson
+     *
+     * @return void
+     */
     public function testExpectClientToHavePutJsonExtension()
     {
         /** @var ResponseInterface $response */
@@ -98,6 +124,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::deleteJson
+     *
+     * @return void
+     */
     public function testExpectClientToHaveDeleteJsonExtension()
     {
         /** @var ResponseInterface $response */
@@ -111,6 +143,14 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers RequestBuilder::getInstance
+     * @covers RequestBuilder::build
+     * @covers HttpClient::setRequest
+     * @covers HttpClient::getRequest
+     *
+     * @return void
+     */
     public function testExpectClientToHaveRequestExtensions()
     {
         /** @var RequestInterface $request */
@@ -135,6 +175,14 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setHeaders
+     * @covers HttpClient::getHeaders
+     * @covers HttpClient::addHeaders
+     * @covers HttpClient::clearHeaders
+     *
+     * @return void
+     */
     public function testExpectClientToHaveHeadersExtensions()
     {
         // # SET_HEADERS region
@@ -175,6 +223,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::get
+     *
+     * @return void
+     */
     public function testExpectClientToHaveGetExtension()
     {
         /** @var ResponseInterface $response */
@@ -187,6 +241,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::post
+     *
+     * @return void
+     */
     public function testExpectClientToHavePostExtension()
     {
         /** @var ResponseInterface $response */
@@ -199,6 +259,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::put
+     *
+     * @return void
+     */
     public function testExpectClientToHavePutExtension()
     {
         /** @var ResponseInterface $response */
@@ -211,6 +277,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::delete
+     *
+     * @return void
+     */
     public function testExpectClientToHaveDeleteExtension()
     {
         /** @var ResponseInterface $response */
@@ -223,6 +295,14 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers ResponseBuilder::getInstance
+     * @covers ResponseBuilder::build
+     * @covers HttpClient::setResponse
+     * @covers HttpClient::getResponse
+     *
+     * @return void
+     */
     public function testExpectClientToHaveResponseExtensions()
     {
         /** @var ResponseInterface $response */
@@ -247,6 +327,14 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers AdapterBuilder::getInstance
+     * @covers AdapterBuilder::build
+     * @covers HttpClient::setAdapter
+     * @covers HttpClient::getAdapter
+     *
+     * @return void
+     */
     public function testExpectClientToHaveAdapterExtensions()
     {
         /** @var AdapterInterface $adapter */
@@ -271,6 +359,12 @@ final class HttpClientExtensionsTests extends TestCase
         );
     }
 
+    /**
+     * @covers HttpClient::getMiddlewares
+     * @covers HttpClient::setMiddlewares
+     *
+     * @return void
+     */
     public function testExpectClientToHaveMiddlewareExtensions()
     {
         /** @var array|MiddlewareInterface[] $clientMiddlewares */
