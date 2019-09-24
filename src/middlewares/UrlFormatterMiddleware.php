@@ -50,7 +50,7 @@ class UrlFormatterMiddleware implements MiddlewareInterface
         /** @var string $method */
         $method = $request->getMethod();
 
-        if ($method !== HttpRequestMethod::GET || $method !== HttpRequestMethod::HEAD) {
+        if ($method !== HttpRequestMethod::GET && $method !== HttpRequestMethod::HEAD) {
             return;
         }
 
