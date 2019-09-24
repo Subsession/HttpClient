@@ -2,10 +2,15 @@
 
 namespace Subsession\Http\Tests;
 
+use stdClass;
 use JsonException;
 use PHPUnit\Framework\TestCase;
-use stdClass;
-use Subsession\Http\Builders\HttpClientBuilder;
+use Subsession\Http\HttpRequestType;
+use Subsession\Http\HttpRequestMethod;
+use Subsession\Http\Builders\RequestBuilder;
+use Subsession\Http\Middlewares\BodyFormatterMiddleware;
+use Subsession\Http\Middlewares\HeadersFormatterMiddleware;
+use Subsession\Http\Middlewares\UrlFormatterMiddleware;
 
 class RequestTests extends TestCase
 {
@@ -64,16 +69,17 @@ class RequestTests extends TestCase
             $data
         );
 
-        $client = HttpClientBuilder::getInstance()->build();
+        $request = RequestBuilder::getInstance()
+            ->withUrl("preus")
+            ->withParams($data)
+            ->withBodyType(HttpRequestType::JSON)
+            ->withMethod(HttpRequestMethod::POST)
+            ->build();
 
-        // Needed in order to modify the $request instance
-        /** @var ResponseInterface $response */
-        $response = $client
-            ->setUrl("preus")
-            ->postJson($data);
-
-        // $request has been modified at this point
-        $request = $client->getRequest();
+        // Needed in order to prepare the request info
+        (new UrlFormatterMiddleware())->onRequest($request);
+        (new HeadersFormatterMiddleware())->onRequest($request);
+        (new BodyFormatterMiddleware())->onRequest($request);
 
         try {
             $json = json_encode($request, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE);
