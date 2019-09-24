@@ -2,11 +2,14 @@
 
 namespace Subsession\Http\Tests;
 
-use Subsession\Http\Abstraction\ResponseInterface;
+use PHPUnit\Framework\TestCase;
 use Subsession\Http\HttpClient;
 use Subsession\Http\HttpStatusCode;
 use Subsession\Http\Tests\Mocks\Post;
-use PHPUnit\Framework\TestCase;
+use Subsession\Http\HttpRequestMethod;
+use Subsession\Http\Builders\RequestBuilder;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Abstraction\RequestInterface;
 
 final class HttpClientTests extends TestCase
 {
@@ -31,7 +34,7 @@ final class HttpClientTests extends TestCase
     public function testExpect200ResponseStatusCode()
     {
         /** @var RequestInterface $request */
-        $request = RequestBuilder::build();
+        $request = RequestBuilder::getInstance()->build();
         $request->setUrl(self::BASE_URL . "posts/1")
             ->setMethod(HttpRequestMethod::GET);
 
@@ -51,7 +54,7 @@ final class HttpClientTests extends TestCase
     public function testExpect404ResponseStatusCode()
     {
         /** @var RequestInterface $request */
-        $request = RequestBuilder::build();
+        $request = RequestBuilder::getInstance()->build();
         $request->setUrl(self::BASE_URL . "post/222222")
             ->setMethod(HttpRequestMethod::GET);
 
@@ -67,7 +70,7 @@ final class HttpClientTests extends TestCase
     public function testExpectResponseBodyToHaveContent()
     {
         /** @var RequestInterface $request */
-        $request = RequestBuilder::build();
+        $request = RequestBuilder::getInstance()->build();
         $request->setUrl(self::BASE_URL . "posts/1")
             ->setMethod(HttpRequestMethod::GET);
 
@@ -87,7 +90,7 @@ final class HttpClientTests extends TestCase
     public function testExpectResponseBodyToBeEmpty()
     {
         /** @var RequestInterface $request */
-        $request = RequestBuilder::build();
+        $request = RequestBuilder::getInstance()->build();
         $request->setUrl(self::BASE_URL . "posts/2222")
             ->setMethod(HttpRequestMethod::GET);
 
@@ -106,7 +109,7 @@ final class HttpClientTests extends TestCase
         $applicationJson = "application/json; charset=utf-8";
 
         /** @var RequestInterface $request */
-        $request = RequestBuilder::build();
+        $request = RequestBuilder::getInstance()->build();
         $request->setUrl(self::BASE_URL . "posts/1")
             ->setMethod(HttpRequestMethod::GET);
 

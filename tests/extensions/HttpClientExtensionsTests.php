@@ -1,19 +1,19 @@
 <?php
 
-namespace Comertis\Http\Tests;
+namespace Subsession\Http\Tests\Extensions;
 
-use Comertis\Http\Abstraction\AdapterInterface;
-use Comertis\Http\Abstraction\RequestInterface;
-use Comertis\Http\Abstraction\ResponseInterface;
-use Comertis\Http\Adapters\CurlAdapter;
-use Comertis\Http\Builders\AdapterBuilder;
-use Comertis\Http\Builders\HttpClientBuilder;
-use Comertis\Http\Builders\RequestBuilder;
-use Comertis\Http\Builders\ResponseBuilder;
-use Comertis\Http\HttpClient;
-use Comertis\Http\HttpStatusCode;
-use Comertis\Http\Response;
-use Comertis\Http\Tests\Mocks\Post;
+use Subsession\Http\Abstraction\AdapterInterface;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Adapters\CurlAdapter;
+use Subsession\Http\Builders\AdapterBuilder;
+use Subsession\Http\Builders\HttpClientBuilder;
+use Subsession\Http\Builders\RequestBuilder;
+use Subsession\Http\Builders\ResponseBuilder;
+use Subsession\Http\HttpClient;
+use Subsession\Http\HttpStatusCode;
+use Subsession\Http\Response;
+use Subsession\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
 
 final class HttpClientExtensionsTests extends TestCase
