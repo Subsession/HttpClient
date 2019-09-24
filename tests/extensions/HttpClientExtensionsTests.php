@@ -27,7 +27,7 @@ final class HttpClientExtensionsTests extends TestCase
 
     protected function setUp()
     {
-        $this->client = HttpClientBuilder::build();
+        $this->client = HttpClientBuilder::getInstance()->build();
         $this->client
             ->setBaseUrl(self::BASE_URL)
             ->setAdapter(CurlAdapter::class);
@@ -114,7 +114,7 @@ final class HttpClientExtensionsTests extends TestCase
     public function testExpectClientToHaveRequestExtensions()
     {
         /** @var RequestInterface $request */
-        $request = RequestBuilder::build();
+        $request = RequestBuilder::getInstance()->build();
 
         $this->assertTrue(
             $request instanceof RequestInterface
@@ -226,7 +226,7 @@ final class HttpClientExtensionsTests extends TestCase
     public function testExpectClientToHaveResponseExtensions()
     {
         /** @var ResponseInterface $response */
-        $response = ResponseBuilder::build();
+        $response = ResponseBuilder::getInstance()->build();
 
         $this->assertTrue(
             $response instanceof ResponseInterface
@@ -250,7 +250,7 @@ final class HttpClientExtensionsTests extends TestCase
     public function testExpectClientToHaveAdapterExtensions()
     {
         /** @var AdapterInterface $adapter */
-        $adapter = AdapterBuilder::build();
+        $adapter = AdapterBuilder::getInstance()->build();
 
         $this->assertTrue(
             $adapter instanceof AdapterInterface
