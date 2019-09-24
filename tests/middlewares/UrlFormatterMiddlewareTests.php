@@ -30,11 +30,11 @@ class UrlFormatterMiddlewareTests extends TestCase
      *
      * @covers UrlFormatterMiddleware::onRequest
      *
-     * @dataProvider getGet_HeadRequestMethods
+     * @dataProvider getRequestMethodsThatModifyTheUrl
      *
      * @return void
      */
-    public function testUrlFormatterModifiesGET_HEADRequests($requestMethod)
+    public function testUrlFormatterModifiesRequests($requestMethod)
     {
         $url = "test";
         $params = ["param" => "value"];
@@ -71,11 +71,11 @@ class UrlFormatterMiddlewareTests extends TestCase
      *
      * @covers UrlFormatterMiddleware::onRequest
      *
-     * @dataProvider getPost_Put_DeleteRequestMethods
+     * @dataProvider getRequestMethodsThatDoNotModifyTheUrl
      *
      * @return void
      */
-    public function testUrlFormatterDoesNotModifyPOST_PUT_DELETERequests($requestMethod)
+    public function testUrlFormatterDoesNotModifyRequests($requestMethod)
     {
         $url = "test";
         $params = ["param" => "value"];
@@ -100,7 +100,7 @@ class UrlFormatterMiddlewareTests extends TestCase
         );
     }
 
-    public function getGet_HeadRequestMethods()
+    public function getRequestMethodsThatModifyTheUrl()
     {
         return [
             [HttpRequestMethod::GET],
@@ -108,7 +108,7 @@ class UrlFormatterMiddlewareTests extends TestCase
         ];
     }
 
-    public function getPost_Put_DeleteRequestMethods()
+    public function getRequestMethodsThatDoNotModifyTheUrl()
     {
         return [
             [HttpRequestMethod::POST],
