@@ -22,6 +22,12 @@ class RequestTests extends TestCase
     /**
      * Tests json_encode on a Request class
      *
+     * @covers HttpClientBuilder::getInstance
+     * @covers HttpClientBuilder::build
+     * @covers HttpClient::setUrl
+     * @covers HttpClient::postJson
+     * @covers HttpClient::getRequest
+     *
      * @see https://github.com/Subsession/HttpClient/issues/19
      * @return void
      */
@@ -60,16 +66,19 @@ class RequestTests extends TestCase
 
         $client = HttpClientBuilder::getInstance()->build();
 
+        // Needed in order to modify the $request instance
         /** @var ResponseInterface $response */
         $response = $client
             ->setUrl("preus")
             ->postJson($data);
 
+        // $request has been modified at this point
         $request = $client->getRequest();
 
         try {
-            $json = json_encode($request, JSON_THROW_ON_ERROR | JSON_FORCE_OBJECT);
-            $error = json_last_error_msg();
+            $json = json_encode($request, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE);
+            $error = json_last_error();
+            $errorMessage = json_last_error_msg();
         } catch (JsonException $e) {
             var_dump($e->getMessage());
         }

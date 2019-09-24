@@ -30,3 +30,11 @@ Below you see an alternative output which is based on the idea that the name of 
 ```
 ./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/HttpClientTests
 ```
+
+### Code coverage
+
+To see the code coverage, simply add the following parameter to any of the above commands:
+
+```ps
+--coverage-text
+```

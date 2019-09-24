@@ -15,6 +15,7 @@ use Subsession\Http\HttpStatusCode;
 use Subsession\Http\Response;
 use Subsession\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
+use Subsession\Http\Extensions\Client\MiddlewareExtensions;
 
 final class HttpClientExtensionsTests extends TestCase
 {
@@ -39,9 +40,9 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setBaseUrl
-     * @covers HttpClient::getUrl
-     * @covers HttpClient::getBaseUrl
+     * @covers RequestExtensions::setBaseUrl
+     * @covers RequestExtensions::getUrl
+     * @covers RequestExtensions::getBaseUrl
      *
      * @return void
      */
@@ -64,9 +65,9 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setBaseUrl
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::getUrl
+     * @covers RequestExtensions::setBaseUrl
+     * @covers RequestExtensions::setUrl
+     * @covers RequestExtensions::getUrl
      *
      * @return void
      */
@@ -87,8 +88,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::postJson
+     * @covers RequestExtensions::setUrl
+     * @covers RequestJsonExtensions::postJson
      *
      * @return void
      */
@@ -106,8 +107,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::putJson
+     * @covers RequestExtensions::setUrl
+     * @covers RequestJsonExtensions::putJson
      *
      * @return void
      */
@@ -125,8 +126,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::deleteJson
+     * @covers RequestExtensions::setUrl
+     * @covers RequestJsonExtensions::deleteJson
      *
      * @return void
      */
@@ -176,10 +177,10 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setHeaders
-     * @covers HttpClient::getHeaders
-     * @covers HttpClient::addHeaders
-     * @covers HttpClient::clearHeaders
+     * @covers Headers::setHeaders
+     * @covers Headers::getHeaders
+     * @covers Headers::addHeaders
+     * @covers Headers::clearHeaders
      *
      * @return void
      */
@@ -224,8 +225,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::get
+     * @covers RequestExtensions::setUrl
+     * @covers RequestExtensions::get
      *
      * @return void
      */
@@ -242,8 +243,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::post
+     * @covers RequestExtensions::setUrl
+     * @covers RequestExtensions::post
      *
      * @return void
      */
@@ -260,8 +261,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::put
+     * @covers RequestExtensions::setUrl
+     * @covers RequestExtensions::put
      *
      * @return void
      */
@@ -278,8 +279,8 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::delete
+     * @covers RequestExtensions::setUrl
+     * @covers RequestExtensions::delete
      *
      * @return void
      */
@@ -330,8 +331,8 @@ final class HttpClientExtensionsTests extends TestCase
     /**
      * @covers AdapterBuilder::getInstance
      * @covers AdapterBuilder::build
-     * @covers HttpClient::setAdapter
-     * @covers HttpClient::getAdapter
+     * @covers AdapterExtensions::setAdapter
+     * @covers AdapterExtensions::getAdapter
      *
      * @return void
      */
@@ -360,8 +361,9 @@ final class HttpClientExtensionsTests extends TestCase
     }
 
     /**
-     * @covers HttpClient::getMiddlewares
-     * @covers HttpClient::setMiddlewares
+     * @covers MiddlewareExtensions::getMiddlewares
+     * @covers MiddlewareExtensions::addMiddlewares
+     * @covers MiddlewareExtensions::setMiddlewares
      *
      * @return void
      */

@@ -19,6 +19,12 @@ class AdapterBuilderTests extends TestCase
         //
     }
 
+    /**
+     * @covers AdapterBuilder::getInstance
+     * @covers AdapterBuilder::build
+     *
+     * @return void
+     */
     public function testExpectAdapterToBeDefaultInstance()
     {
         $adapter = AdapterBuilder::getInstance()->build();
@@ -30,6 +36,14 @@ class AdapterBuilderTests extends TestCase
         );
     }
 
+    /**
+     * @covers AdapterBuilder::setImplementation
+     * @covers AdapterBuilder::updateImplementation
+     * @covers AdapterBuilder::getInstance
+     * @covers AdapterBuilder::build
+     *
+     * @return void
+     */
     public function testExpectAdapterToBeCurlAdapterInstance()
     {
         AdapterBuilder::setImplementation(CurlAdapter::class);
@@ -42,6 +56,14 @@ class AdapterBuilderTests extends TestCase
         );
     }
 
+    /**
+     * @covers AdapterBuilder::setImplementation
+     * @covers AdapterBuilder::updateImplementation
+     * @covers AdapterBuilder::getInstance
+     * @covers AdapterBuilder::build
+     *
+     * @return void
+     */
     public function testExpectAdapterToBeStreamAdapterInstance()
     {
         AdapterBuilder::setImplementation(StreamAdapter::class);
