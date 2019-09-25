@@ -18,10 +18,10 @@
 
 namespace Subsession\Http;
 
-use Subsession\Exceptions\ArgumentException;
-use Subsession\Exceptions\ArgumentNullException;
+use JsonSerializable;
 use Subsession\Http\Abstraction\RequestInterface;
 use Subsession\Http\HttpRequestMethod;
+use Subsession\Http\Extensions as Extensions;
 
 /**
  * Undocumented class
@@ -33,10 +33,11 @@ use Subsession\Http\HttpRequestMethod;
  * @version  Release: 1.0.0
  * @link     https://github.com/Subsession/HttpClient
  */
-class Request implements RequestInterface
+class Request implements RequestInterface, JsonSerializable
 {
-    use \Subsession\Http\Extensions\Headers;
-    use \Subsession\Http\Extensions\ContentType;
+    use Extensions\Headers;
+    use Extensions\ContentType;
+    use Extensions\JsonSerializable;
 
     /**
      * Base url

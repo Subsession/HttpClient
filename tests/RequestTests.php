@@ -27,11 +27,16 @@ class RequestTests extends TestCase
     /**
      * Tests json_encode on a Request class
      *
-     * @covers HttpClientBuilder::getInstance
-     * @covers HttpClientBuilder::build
-     * @covers HttpClient::setUrl
-     * @covers HttpClient::postJson
-     * @covers HttpClient::getRequest
+     * @covers RequestBuilder::getInstance
+     * @covers RequestBuilder::withUrl
+     * @covers RequestBuilder::withParams
+     * @covers RequestBuilder::withBodyType
+     * @covers RequestBuilder::withMethod
+     * @covers RequestBuilder::build
+     *
+     * @covers UrlFormatterMiddleware::onRequest
+     * @covers HeadersFormatterMiddleware::onRequest
+     * @covers BodyFormatterMiddleware::onRequest
      *
      * @see https://github.com/Subsession/HttpClient/issues/19
      * @return void
@@ -82,12 +87,22 @@ class RequestTests extends TestCase
         (new BodyFormatterMiddleware())->onRequest($request);
 
         try {
-            $json = json_encode($request, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE);
+            $json = json_encode($request, JSON_PRETTY_PRINT);
             $error = json_last_error();
             $errorMessage = json_last_error_msg();
         } catch (JsonException $e) {
             var_dump($e->getMessage());
         }
+
+        $this->assertEquals(
+            0,
+            $error
+        );
+
+        $this->assertEquals(
+            "No error",
+            $errorMessage
+        );
 
         $this->assertNotEquals(
             "{}",
