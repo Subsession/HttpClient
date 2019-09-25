@@ -18,8 +18,10 @@
 
 namespace Subsession\Http;
 
+use JsonSerializable;
 use Subsession\Http\Abstraction\ResponseInterface;
 use Subsession\Http\HttpStatusCode;
+use Subsession\Http\Extensions as Extensions;
 
 /**
  * Undocumented class
@@ -31,12 +33,13 @@ use Subsession\Http\HttpStatusCode;
  * @version  Release: 1.0.0
  * @link     https://github.com/Subsession/HttpClient
  */
-class Response implements ResponseInterface
+class Response implements ResponseInterface, JsonSerializable
 {
-    use \Subsession\Http\Extensions\StatusCode;
-    use \Subsession\Http\Extensions\Headers;
-    use \Subsession\Http\Extensions\Body;
-    use \Subsession\Http\Extensions\Error;
+    use Extensions\StatusCode;
+    use Extensions\Headers;
+    use Extensions\Body;
+    use Extensions\Error;
+    use Extensions\JsonSerializable;
 
     /**
      * Response instance for HttpClient

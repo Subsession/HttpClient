@@ -10,6 +10,7 @@ use Subsession\Http\HttpRequestMethod;
 use Subsession\Http\Builders\RequestBuilder;
 use Subsession\Http\Abstraction\ResponseInterface;
 use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Builders\HttpClientBuilder;
 
 final class HttpClientTests extends TestCase
 {
@@ -199,6 +200,39 @@ final class HttpClientTests extends TestCase
         $this->assertEquals(
             $responseHeaders[$contentType],
             $applicationJson
+        );
+    }
+
+    public function testExpectHttpClientToJsonEncodeCorrecly()
+    {
+        $client = HttpClientBuilder::getInstance()->build();
+
+        $baseUrl = "baseUrl/";
+        $headers = [
+            "key" => "value"
+        ];
+        $url = "url";
+
+        $client->setBaseUrl($baseUrl)
+            ->setHeaders($headers)
+            ->setUrl($url);
+
+        $json = json_encode($client);
+
+        $expectedJson = '"{"baseUrl":"baseUrl\/","request":{"url":"baseUrl\/url","method":"GET","bodyType":null,"params":[],"headers":{"key":"value"},"contentType":null},"response":{"statusCode":200,"headers":[],"body":null,"error":null},"adapter":{},"middlewares":[{},{},{}]}"';
+
+        // Remove double double quotes @ the start & end
+        // ""{"baseUrl
+        $expectedJson = trim($expectedJson, "\"");
+
+        $this->assertNotEquals(
+            "{}",
+            $json
+        );
+
+        $this->assertEquals(
+            $expectedJson,
+            $json
         );
     }
 }

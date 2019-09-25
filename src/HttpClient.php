@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Version 7
  *
@@ -17,13 +18,14 @@
 
 namespace Subsession\Http;
 
+use JsonSerializable;
 use Subsession\Http\Abstraction\HttpClientInterface;
 use Subsession\Http\Abstraction\RequestInterface;
 use Subsession\Http\Abstraction\ResponseInterface;
 use Subsession\Http\Builders\AdapterBuilder;
 use Subsession\Http\Builders\RequestBuilder;
 use Subsession\Http\Builders\ResponseBuilder;
-use Subsession\Http\Extensions\Client as Extensions;
+use Subsession\Http\Extensions as Extensions;
 
 /**
  * Undocumented class
@@ -35,12 +37,13 @@ use Subsession\Http\Extensions\Client as Extensions;
  * @version  Release: 1.0.0
  * @link     https://github.com/Subsession/HttpClient
  */
-class HttpClient implements HttpClientInterface
+class HttpClient implements HttpClientInterface, JsonSerializable
 {
-    use Extensions\RequestExtensions;
-    use Extensions\ResponseExtensions;
-    use Extensions\AdapterExtensions;
-    use Extensions\MiddlewareExtensions;
+    use Extensions\Client\RequestExtensions;
+    use Extensions\Client\ResponseExtensions;
+    use Extensions\Client\AdapterExtensions;
+    use Extensions\Client\MiddlewareExtensions;
+    use Extensions\JsonSerializable;
 
     public function __construct()
     {
