@@ -31,20 +31,6 @@ namespace Subsession\Http\Extensions;
 trait Headers
 {
     /**
-     * Default request headers
-     *
-     * @access private
-     * @var    array
-     */
-    private static $defaultHeaders = [
-        "Cache-Control" => "max-age=0",
-        "Connection" => "keep-alive",
-        "Keep-Alive" => "300",
-        "Accept" => "application/json,text/xml,application/xml,application/xhtml+xml,text/plain,image/png,*/*",
-        "Accept-Charset" => "utf-8,ISO-8859-1",
-    ];
-
-    /**
      * HTTP headers
      *
      * @access private

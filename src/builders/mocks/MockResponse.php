@@ -16,11 +16,14 @@
  * @link     https://github.com/Subsession/HttpClient
  */
 
-namespace Subsession\Http\Abstraction;
+namespace Subsession\Http\Builders\Mocks;
+
+use Subsession\Http\HttpStatusCode;
 
 /**
- * Defines the minimum necessary for a HttpExecutor
- * implementation regardless of used library or extension
+ * IMPORTANT: Do not use
+ *
+ * This class is intended for internal use only
  *
  * @category Http
  * @package  Subsession\Http
@@ -29,13 +32,10 @@ namespace Subsession\Http\Abstraction;
  * @version  Release: 1.0.0
  * @link     https://github.com/Subsession/HttpClient
  */
-interface BuilderInterface
+class MockResponse
 {
-    /**
-     * Build an instance of the implementation class
-     *
-     * @access public
-     * @return object
-     */
-    public function build();
+    public $statusCode = HttpStatusCode::OK;
+    public $headers = [];
+    public $body = null;
+    public $error = null;
 }

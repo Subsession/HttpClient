@@ -20,10 +20,11 @@ namespace Subsession\Http\Builders;
 
 use Subsession\Http\Abstraction\BuilderInterface;
 use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Builders\Mocks\MockRequest;
 use Subsession\Http\Request;
 
 /**
- * Undocumented class
+ * Builds RequestInterface instances
  *
  * @category Http
  * @package  Subsession\Http
@@ -35,12 +36,14 @@ use Subsession\Http\Request;
 class RequestBuilder implements BuilderInterface
 {
     /**
-     * Request instance
+     * MockRequest instance
      *
-     * @access private
-     * @var    RequestInterface
+     * Stores all the info needed to build the
+     * RequestInterface instance
+     *
+     * @var MockRequest
      */
-    private $request;
+    private $config = null;
 
     /**
      * Self instance
@@ -71,9 +74,7 @@ class RequestBuilder implements BuilderInterface
 
     public function __construct()
     {
-        $implementation = static::getImplementation();
-
-        $this->request = new $implementation();
+        $this->config = new MockRequest();
     }
 
     /**
@@ -111,7 +112,8 @@ class RequestBuilder implements BuilderInterface
     /**
      * Set the RequestInterface implementation class
      *
-     * @param string $className
+     * @param string|null $implementation Fully qualified class name or NULL to
+     *                                    reset to the default internal implementation
      *
      * @static
      * @access public
@@ -119,7 +121,9 @@ class RequestBuilder implements BuilderInterface
      */
     public static function setImplementation($implementation)
     {
-        if (!in_array(RequestInterface::class, class_implements($implementation))) {
+        if (null === $implementation) {
+            $implementation = static::$defaultImplementation;
+        } elseif (!in_array(RequestInterface::class, class_implements($implementation))) {
             $error = "$implementation is not an instance of RequestInterface";
             throw new \Subsession\Exceptions\InvalidArgumentException($error);
         }
@@ -127,13 +131,8 @@ class RequestBuilder implements BuilderInterface
         static::$implementation = $implementation;
 
         if (null !== static::$instance) {
-            static::$instance->updateImplementationClass($implementation);
+            static::$instance = new static();
         }
-    }
-
-    private function updateImplementationClass($implementation)
-    {
-        $this->request = new $implementation();
     }
 
     /**
@@ -146,7 +145,7 @@ class RequestBuilder implements BuilderInterface
      */
     public function withUrl($url)
     {
-        $this->request->setUrl($url);
+        $this->config->url = $url;
 
         return $this;
     }
@@ -161,7 +160,7 @@ class RequestBuilder implements BuilderInterface
      */
     public function withHeaders(array $headers)
     {
-        $this->request->setHeaders($headers);
+        $this->config->headers = $headers;
 
         return $this;
     }
@@ -176,7 +175,7 @@ class RequestBuilder implements BuilderInterface
      */
     public function withMethod($method)
     {
-        $this->request->setMethod($method);
+        $this->config->method = $method;
 
         return $this;
     }
@@ -191,7 +190,7 @@ class RequestBuilder implements BuilderInterface
      */
     public function withBodyType($bodyType)
     {
-        $this->request->setBodyType($bodyType);
+        $this->config->bodyType = $bodyType;
 
         return $this;
     }
@@ -206,7 +205,7 @@ class RequestBuilder implements BuilderInterface
      */
     public function withParams($params)
     {
-        $this->request->setParams($params);
+        $this->config->params = $params;
 
         return $this;
     }
@@ -214,10 +213,22 @@ class RequestBuilder implements BuilderInterface
     /**
      * Build a RequestInterface implementation
      * @access public
-     * @return RequestInterface
+     * @return RequestInterface|Request
      */
     public function build()
     {
-        return $this->request;
+        /** @var string $implementation */
+        $implementation = static::getImplementation();
+
+        /** @var RequestInterface $request */
+        $request = new $implementation();
+
+        $request->setUrl($this->config->url)
+            ->setHeaders($this->config->headers)
+            ->setMethod($this->config->method)
+            ->setParams($this->config->params)
+            ->setBodyType($this->config->bodyType);
+
+        return $request;
     }
 }

@@ -18,10 +18,14 @@
 
 namespace Subsession\Http\Builders;
 
-use Subsession\Http\Abstraction\AdapterInterface;
-use Subsession\Http\Abstraction\HttpClientInterface;
-use Subsession\Http\Abstraction\BuilderInterface;
 use Subsession\Http\HttpClient;
+use Subsession\Http\Builders\AdapterBuilder;
+use Subsession\Http\Abstraction\AdapterInterface;
+use Subsession\Http\Abstraction\BuilderInterface;
+use Subsession\Http\Abstraction\RequestInterface;
+use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Builders\Mocks\MockHttpClient;
+use Subsession\Http\Abstraction\HttpClientInterface;
 
 /**
  * Builder class for HttpClientInterface implementations
@@ -36,12 +40,14 @@ use Subsession\Http\HttpClient;
 class HttpClientBuilder implements BuilderInterface
 {
     /**
-     * HttpClient instance
+     * MockHttpClient instance
      *
-     * @access private
-     * @var    HttpClientInterface
+     * Stores all the info needed to create the
+     * HttpClientInterface instance
+     *
+     * @var MockHttpClient
      */
-    private $client;
+    private $config = null;
 
     /**
      * Self instance
@@ -72,9 +78,7 @@ class HttpClientBuilder implements BuilderInterface
 
     public function __construct()
     {
-        $implementation = static::getImplementation();
-
-        $this->client = new $implementation();
+        $this->config = new MockHttpClient();
     }
 
     /**
@@ -117,7 +121,8 @@ class HttpClientBuilder implements BuilderInterface
      * AdapterBuilder::setImplementation(CurlAdapter::class);
      * ```
      *
-     * @param string $implementation Fully qualified class name
+     * @param string|null $implementation Fully qualified class name or NULL to
+     *                                    reset to the default internal implementation
      *
      * @static
      * @access public
@@ -125,10 +130,17 @@ class HttpClientBuilder implements BuilderInterface
      */
     public static function setImplementation($implementation)
     {
+        if (null === $implementation) {
+            $implementation = static::$defaultImplementation;
+        } elseif (!in_array(HttpClientInterface::class, class_implements($implementation))) {
+            $error = "$implementation is not an instance of HttpClientInterface";
+            throw new \Subsession\Exceptions\InvalidArgumentException($error);
+        }
+
         static::$implementation = $implementation;
 
         if (null !== static::$instance) {
-            static::$instance->updateImplementation($implementation);
+            static::$instance = new static();
         }
     }
 
@@ -147,7 +159,33 @@ class HttpClientBuilder implements BuilderInterface
             $adapter = AdapterBuilder::getInstance()->build();
         }
 
-        $this->client->setAdapter($adapter);
+        $this->config->adapter = $adapter;
+
+        return $this;
+    }
+
+    /**
+     * Set the RequestInterface instance to use
+     *
+     * @param RequestInterface $request
+     * @return static
+     */
+    public function withRequest(RequestInterface $request)
+    {
+        $this->config->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Set the ResponseInterface to use
+     *
+     * @param ResponseInterface $response
+     * @return static
+     */
+    public function withResponse(ResponseInterface $response)
+    {
+        $this->config->response = $response;
 
         return $this;
     }
@@ -156,10 +194,28 @@ class HttpClientBuilder implements BuilderInterface
      * Build a HttpClientInterface instance
      *
      * @access public
-     * @return HttpClient
+     * @return HttpClientInterface|HttpClient
      */
     public function build()
     {
-        return $this->client;
+        /** @var string $implementation */
+        $implementation = static::getImplementation();
+
+        /** @var HttpClientInterface $client */
+        $client = new $implementation();
+
+        if (null !== ($adapter = $this->config->adapter)) {
+            $client->setAdapter($adapter);
+        }
+
+        if (null !== ($request = $this->config->request)) {
+            $client->setRequest($request);
+        }
+
+        if (null !== ($response = $this->config->response)) {
+            $client->setResponse($response);
+        }
+
+        return $client;
     }
 }

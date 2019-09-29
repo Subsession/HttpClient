@@ -192,4 +192,52 @@ class RequestBuilderTests extends TestCase
             $request
         );
     }
+
+    public function testExpectRequestBuilderToFallbackToDefaultImplementation()
+    {
+        $default = Request::class;
+        $custom = MockRequest::class;
+
+        RequestBuilder::setImplementation($custom);
+
+        $this->assertEquals(
+            $custom,
+            RequestBuilder::getImplementation()
+        );
+
+        // Reset to default implementation
+        RequestBuilder::setImplementation(null);
+
+        $this->assertEquals(
+            $default,
+            RequestBuilder::getImplementation()
+        );
+    }
+
+    public function testExpectBuilderWithNoConfigToBuildDefaultInstance()
+    {
+        // Reset to default implementation
+        RequestBuilder::setImplementation(Request::class);
+
+        $expected = new Request();
+        $actual = RequestBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
+
+    public function testExpectBuilderWithCustomConfigToBuildIdenticalInstanceAsClassConstructor()
+    {
+        RequestBuilder::setImplementation(MockRequest::class);
+
+        $expected = new MockRequest();
+        $actual = RequestBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
 }

@@ -24,6 +24,7 @@ use Subsession\Http\Abstraction\ResponseInterface;
 use Subsession\Http\Middlewares\BodyFormatterMiddleware;
 use Subsession\Http\Middlewares\HeadersFormatterMiddleware;
 use Subsession\Http\Middlewares\UrlFormatterMiddleware;
+use Subsession\Http\Middlewares\ValidatorMiddleware;
 
 /**
  * Undocumented class
@@ -48,6 +49,7 @@ trait MiddlewareExtensions
         UrlFormatterMiddleware::class,
         HeadersFormatterMiddleware::class,
         BodyFormatterMiddleware::class,
+        ValidatorMiddleware::class
     ];
 
     /**

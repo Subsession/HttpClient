@@ -19,7 +19,6 @@
 namespace Subsession\Http\Extensions\Client;
 
 use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\Builders\ResponseBuilder;
 
 /**
  * Undocumented class
@@ -38,7 +37,7 @@ trait ResponseExtensions
      *
      * @access private
      * @see    Response
-     * @var    ResponseInterface
+     * @var    ResponseInterface|null
      */
     private $response;
 
@@ -50,14 +49,10 @@ trait ResponseExtensions
      * the RequestInterface.
      *
      * @access public
-     * @return ResponseInterface
+     * @return ResponseInterface|null
      */
     public function getResponse()
     {
-        if (null === $this->response) {
-            $this->setResponse(ResponseBuilder::build());
-        }
-
         return $this->response;
     }
 

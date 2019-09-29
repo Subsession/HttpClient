@@ -89,8 +89,6 @@ class Request implements RequestInterface, JsonSerializable
         $this->headers = $headers;
         $this->method = $method;
         $this->params = $params;
-
-        $this->addHeaders(static::$defaultHeaders);
     }
 
     /**

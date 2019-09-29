@@ -47,9 +47,6 @@ class HttpClient implements HttpClientInterface, JsonSerializable
 
     public function __construct()
     {
-        $this->setAdapter(AdapterBuilder::getInstance()->build());
-        $this->setRequest(RequestBuilder::getInstance()->build());
-        $this->setResponse(ResponseBuilder::getInstance()->build());
         $this->setMiddlewares(static::$defaultMiddlewares);
     }
 

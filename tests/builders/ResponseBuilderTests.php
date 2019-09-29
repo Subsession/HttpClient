@@ -147,4 +147,31 @@ class ResponseBuilderTests extends TestCase
             $response
         );
     }
+
+    public function testExpectBuilderWithNoConfigToBuildDefaultInstance()
+    {
+        // Reset to default implementation
+        ResponseBuilder::setImplementation(Response::class);
+
+        $expected = new Response();
+        $actual = ResponseBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
+
+    public function testExpectBuilderWithCustomConfigToBuildIdenticalInstanceAsClassConstructor()
+    {
+        ResponseBuilder::setImplementation(MockResponse::class);
+
+        $expected = new MockResponse();
+        $actual = ResponseBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
 }
