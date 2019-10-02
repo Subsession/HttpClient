@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Extensions\Client;
@@ -29,7 +29,7 @@ use Subsession\Http\Middlewares\{
 /**
  * Undocumented class
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 trait MiddlewareExtensions
 {
@@ -120,6 +120,7 @@ trait MiddlewareExtensions
     /**
      * Add multiple middlewares to the collection
      *
+     * Code example:
      * ```php
      * // MiddlewareInterface[]
      * $client->addMiddlewares([
@@ -154,11 +155,13 @@ trait MiddlewareExtensions
      */
     private function invokeOnRequest(RequestInterface &$request)
     {
+        $middlewares = $this->getMiddlewares();
+
         /**
          * @var int                 $key
          * @var MiddlewareInterface $middleware
          */
-        foreach ($this->getMiddlewares() as $key => $middleware) {
+        foreach ($middlewares as $key => $middleware) {
             $middleware->onRequest($request);
         }
     }
@@ -172,11 +175,13 @@ trait MiddlewareExtensions
      */
     private function invokeOnResponse(ResponseInterface &$response)
     {
+        $middlewares = $this->getMiddlewares();
+
         /**
          * @var int                 $key
          * @var MiddlewareInterface $middleware
          */
-        foreach ($this->getMiddlewares() as $key => $middleware) {
+        foreach ($middlewares as $key => $middleware) {
             $middleware->onResponse($response);
         }
     }

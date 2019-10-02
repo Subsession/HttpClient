@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Builders;
@@ -23,7 +23,7 @@ use Subsession\Http\Tools\Validator;
 /**
  * Builder class for AdapterInterface implementations
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 class AdapterBuilder implements BuilderInterface
 {

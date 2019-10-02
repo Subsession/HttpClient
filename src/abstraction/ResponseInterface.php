@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Abstraction;
@@ -18,7 +18,7 @@ use Subsession\Http\HttpStatusCode;
 /**
  * Undocumented interface
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 interface ResponseInterface
 {

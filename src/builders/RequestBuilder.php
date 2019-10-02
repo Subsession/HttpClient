@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Builders;
@@ -24,7 +24,7 @@ use Subsession\Http\Abstraction\{
 /**
  * Builds RequestInterface instances
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 class RequestBuilder implements BuilderInterface
 {

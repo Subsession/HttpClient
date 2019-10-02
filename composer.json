@@ -9,14 +9,15 @@
   "authors": [
     {
       "name": "Cristian Moraru",
-      "email": "cristian.moraru@live.com",
+      "email": "cristian@subsession.org",
       "role": "Developer"
     }
   ],
   "support": {
     "issues": "https://github.com/Subsession/HttpClient/issues",
     "source": "https://github.com/Subsession/HttpClient",
-    "docs": "https://github.com/Subsession/HttpClient/tree/master/docs"
+    "docs": "https://github.com/Subsession/HttpClient/tree/master/docs",
+    "email": "support@subsession.org"
   },
   "autoload": {
     "psr-4": {

@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Adapters;
@@ -23,7 +23,7 @@ use Subsession\Http\{
  * AdapterInterface implementation using the CURL
  * PHP extension
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 class CurlAdapter extends BaseAdapter
 {

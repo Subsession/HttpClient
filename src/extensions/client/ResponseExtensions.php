@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Extensions\Client;
@@ -18,7 +18,7 @@ use Subsession\Http\Abstraction\ResponseInterface;
 /**
  * Undocumented class
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 trait ResponseExtensions
 {

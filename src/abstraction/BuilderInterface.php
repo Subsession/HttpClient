@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Abstraction;
@@ -17,7 +17,7 @@ namespace Subsession\Http\Abstraction;
  * Defines the minimum necessary for a HttpExecutor
  * implementation regardless of used library or extension
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 interface BuilderInterface
 {

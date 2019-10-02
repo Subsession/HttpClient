@@ -10,7 +10,7 @@
  *
  * @category Http
  * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @author   Cristian Moraru <cristian@subsession.org>
  * @license  https://opensource.org/licenses/MIT MIT
  * @version  GIT: &Id&
  * @link     https://github.com/Subsession/HttpClient
@@ -28,7 +28,7 @@ use Subsession\Http\HttpRequestMethod;
  *
  * @category Http
  * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
+ * @author   Cristian Moraru <cristian@subsession.org>
  * @license  https://opensource.org/licenses/MIT MIT
  * @version  Release: 1.0.0
  * @link     https://github.com/Subsession/HttpClient

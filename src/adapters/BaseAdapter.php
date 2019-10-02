@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 
 namespace Subsession\Http\Adapters;
@@ -22,7 +22,7 @@ use Subsession\Http\Abstraction\{
 /**
  * Undocumented class
  *
- * @author Cristian Moraru <cristian.moraru@live.com>
+ * @author Cristian Moraru <cristian@subsession.org>
  */
 abstract class BaseAdapter implements AdapterInterface
 {
