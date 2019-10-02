@@ -8,30 +8,23 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Builders;
 
-use Subsession\Http\Abstraction\BuilderInterface;
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Builders\Mocks\MockRequest;
 use Subsession\Http\Request;
+use Subsession\Http\Builders\Mocks\MockRequest;
+
+use Subsession\Http\Abstraction\{
+    BuilderInterface,
+    RequestInterface
+};
 
 /**
  * Builds RequestInterface instances
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class RequestBuilder implements BuilderInterface
 {

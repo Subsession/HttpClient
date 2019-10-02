@@ -8,29 +8,22 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Builders;
 
-use Subsession\Http\Abstraction\AdapterInterface;
-use Subsession\Http\Abstraction\BuilderInterface;
-use Subsession\Http\Adapters\CurlAdapter;
+use Subsession\Http\{
+    Abstraction\AdapterInterface,
+    Abstraction\BuilderInterface,
+    Adapters\CurlAdapter
+};
+use Subsession\Http\Tools\Validator;
 
 /**
  * Builder class for AdapterInterface implementations
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class AdapterBuilder implements BuilderInterface
 {
@@ -129,7 +122,7 @@ class AdapterBuilder implements BuilderInterface
     {
         if (null === $implementation) {
             $implementation = static::$defaultImplementation;
-        } elseif (!in_array(AdapterInterface::class, class_implements($implementation))) {
+        } elseif (!Validator::implements($implementation, AdapterInterface::class)) {
             $error = "$implementation is not an instance of AdapterInterface";
             throw new \Subsession\Exceptions\InvalidArgumentException($error);
         }

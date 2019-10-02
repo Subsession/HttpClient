@@ -8,34 +8,31 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Builders;
 
 use Subsession\Http\HttpClient;
-use Subsession\Http\Builders\AdapterBuilder;
-use Subsession\Http\Abstraction\AdapterInterface;
-use Subsession\Http\Abstraction\BuilderInterface;
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\Builders\Mocks\MockHttpClient;
-use Subsession\Http\Abstraction\HttpClientInterface;
+
+use Subsession\Http\Builders\{
+    AdapterBuilder,
+    Mocks\MockHttpClient
+};
+
+use Subsession\Http\Abstraction\{
+    AdapterInterface,
+    BuilderInterface,
+    RequestInterface,
+    ResponseInterface,
+    HttpClientInterface,
+};
+use Subsession\Http\Tools\Validator;
 
 /**
  * Builder class for HttpClientInterface implementations
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class HttpClientBuilder implements BuilderInterface
 {
@@ -125,6 +122,7 @@ class HttpClientBuilder implements BuilderInterface
      *                                    reset to the default internal implementation
      *
      * @static
+     * @throws \Subsession\Exceptions\InvalidArgumentException
      * @access public
      * @return void
      */
@@ -132,7 +130,7 @@ class HttpClientBuilder implements BuilderInterface
     {
         if (null === $implementation) {
             $implementation = static::$defaultImplementation;
-        } elseif (!in_array(HttpClientInterface::class, class_implements($implementation))) {
+        } elseif (!Validator::implements($implementation, HttpClientInterface::class)) {
             $error = "$implementation is not an instance of HttpClientInterface";
             throw new \Subsession\Exceptions\InvalidArgumentException($error);
         }

@@ -8,29 +8,21 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Adapters;
 
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Adapters\BaseAdapter;
-use Subsession\Http\Builders\ResponseBuilder;
+use Subsession\Http\{
+    Abstraction\RequestInterface,
+    Adapters\BaseAdapter,
+    Builders\ResponseBuilder
+};
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class StreamAdapter extends BaseAdapter
 {
@@ -93,12 +85,12 @@ class StreamAdapter extends BaseAdapter
          * @var string $value Header value
          */
         foreach ($request->getHeaders() as $key => $value) {
-            $options["http"]["header"] .= $key . "=" . $value . ";";
+            $options["http"]["header"] .= $key . ":" . $value . ";";
         }
 
         /** @var string|null $bodyType */
         if (!empty($bodyType = $request->getBodyType())) {
-            $options["http"]["header"] .= "Content-Type: " . $bodyType . ";";
+            $options["http"]["header"] .= "Content-Type:" . $bodyType . ";";
         }
 
         $options["http"]["content"] = $request->getParams();

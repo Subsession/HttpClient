@@ -8,30 +8,24 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Builders;
 
-use Subsession\Http\Abstraction\BuilderInterface;
-use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\Builders\Mocks\MockResponse;
 use Subsession\Http\Response;
+use Subsession\Http\Builders\Mocks\MockResponse;
+
+use Subsession\Http\Abstraction\{
+    BuilderInterface,
+    ResponseInterface
+};
+use Subsession\Http\Tools\Validator;
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class ResponseBuilder implements BuilderInterface
 {
@@ -116,6 +110,7 @@ class ResponseBuilder implements BuilderInterface
      *                                    reset to the default internal implementation
      *
      * @static
+     * @throws \Subsession\Exceptions\InvalidArgumentException
      * @access public
      * @return void
      */
@@ -123,7 +118,7 @@ class ResponseBuilder implements BuilderInterface
     {
         if (null === $implementation) {
             $implementation = static::$defaultImplementation;
-        } elseif (!in_array(ResponseInterface::class, class_implements($implementation))) {
+        } elseif (!Validator::implements($implementation, ResponseInterface::class)) {
             $error = "$implementation is not an instance of ResponseInterface";
             throw new \Subsession\Exceptions\InvalidArgumentException($error);
         }
