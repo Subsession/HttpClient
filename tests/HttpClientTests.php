@@ -58,7 +58,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -91,7 +91,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
@@ -121,7 +121,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -154,7 +154,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
@@ -187,7 +187,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -199,7 +199,7 @@ final class HttpClientTests extends TestCase
             $responseHeaders
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $responseHeaders[$contentType],
             $applicationJson
         );

@@ -72,27 +72,27 @@ class RequestBuilderTests extends TestCase
             $request
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $request->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $method,
             $request->getMethod()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $bodyType,
             $request->getBodyType()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $params,
             $request->getParams()
         );
@@ -158,27 +158,27 @@ class RequestBuilderTests extends TestCase
             $request
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $request->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $method,
             $request->getMethod()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $bodyType,
             $request->getBodyType()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $params,
             $request->getParams()
         );
@@ -200,7 +200,7 @@ class RequestBuilderTests extends TestCase
 
         RequestBuilder::setImplementation($custom);
 
-        $this->assertEquals(
+        $this->assertSame(
             $custom,
             RequestBuilder::getImplementation()
         );
@@ -208,7 +208,7 @@ class RequestBuilderTests extends TestCase
         // Reset to default implementation
         RequestBuilder::setImplementation(null);
 
-        $this->assertEquals(
+        $this->assertSame(
             $default,
             RequestBuilder::getImplementation()
         );

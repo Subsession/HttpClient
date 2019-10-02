@@ -58,17 +58,17 @@ class ResponseBuilderTests extends TestCase
             $response
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $statusCode,
             $response->getStatusCode()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $response->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $body,
             $response->getBody()
         );
@@ -123,17 +123,17 @@ class ResponseBuilderTests extends TestCase
             $response
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $statusCode,
             $response->getStatusCode()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $response->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $body,
             $response->getBody()
         );

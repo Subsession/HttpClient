@@ -94,12 +94,12 @@ class RequestTests extends TestCase
             var_dump($e->getMessage());
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             0,
             $error
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             "No error",
             $errorMessage
         );
