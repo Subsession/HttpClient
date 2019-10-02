@@ -52,7 +52,7 @@ final class HttpClientExtensionsTests extends TestCase
 
         $clientUrl = $this->client->getUrl();
 
-        $this->assertEquals(
+        $this->assertSame(
             self::BASE_URL,
             $clientUrl
         );
@@ -81,7 +81,7 @@ final class HttpClientExtensionsTests extends TestCase
         $this->client->setUrl($testUrl);
         $clientUrl = $this->client->getUrl();
 
-        $this->assertEquals(
+        $this->assertSame(
             $testUrl,
             $clientUrl
         );
@@ -100,7 +100,7 @@ final class HttpClientExtensionsTests extends TestCase
             ->setUrl("posts")
             ->postJson((new Post()));
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::CREATED,
             $response->getStatusCode()
         );
@@ -119,7 +119,7 @@ final class HttpClientExtensionsTests extends TestCase
             ->setUrl("posts/1")
             ->putJson((new Post()));
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -138,7 +138,7 @@ final class HttpClientExtensionsTests extends TestCase
             ->setUrl("posts/1")
             ->deleteJson();
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -170,7 +170,7 @@ final class HttpClientExtensionsTests extends TestCase
             $clientRequest instanceof RequestInterface
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $request,
             $clientRequest
         );
@@ -194,7 +194,7 @@ final class HttpClientExtensionsTests extends TestCase
         // # GET_HEADERS region
         $clientHeaders = $this->client->getHeaders();
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $clientHeaders
         );
@@ -208,7 +208,7 @@ final class HttpClientExtensionsTests extends TestCase
 
         $clientHeaders = $this->client->getHeaders();
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $clientHeaders
         );
@@ -218,7 +218,7 @@ final class HttpClientExtensionsTests extends TestCase
 
         $clientHeaders = $this->client->getHeaders();
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $clientHeaders
         );
@@ -322,7 +322,7 @@ final class HttpClientExtensionsTests extends TestCase
             $clientResponse instanceof ResponseInterface
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $response,
             $clientResponse
         );
@@ -354,7 +354,7 @@ final class HttpClientExtensionsTests extends TestCase
             $clientAdapter instanceof AdapterInterface
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $adapter,
             $clientAdapter
         );
@@ -391,7 +391,7 @@ final class HttpClientExtensionsTests extends TestCase
             $clientMiddlewares
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $defaultMiddlewares,
             $clientMiddlewares
         );

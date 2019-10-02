@@ -20,9 +20,6 @@ class AdapterBuilderTests extends TestCase
     }
 
     /**
-     * @covers AdapterBuilder::getInstance
-     * @covers AdapterBuilder::build
-     *
      * @return void
      */
     public function testExpectAdapterToBeDefaultInstance()
@@ -37,11 +34,6 @@ class AdapterBuilderTests extends TestCase
     }
 
     /**
-     * @covers AdapterBuilder::setImplementation
-     * @covers AdapterBuilder::updateImplementation
-     * @covers AdapterBuilder::getInstance
-     * @covers AdapterBuilder::build
-     *
      * @return void
      */
     public function testExpectAdapterToBeCurlAdapterInstance()
@@ -57,11 +49,6 @@ class AdapterBuilderTests extends TestCase
     }
 
     /**
-     * @covers AdapterBuilder::setImplementation
-     * @covers AdapterBuilder::updateImplementation
-     * @covers AdapterBuilder::getInstance
-     * @covers AdapterBuilder::build
-     *
      * @return void
      */
     public function testExpectAdapterToBeStreamAdapterInstance()

@@ -8,34 +8,24 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http;
 
 use JsonSerializable;
-use Subsession\Http\Abstraction\HttpClientInterface;
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\Builders\AdapterBuilder;
-use Subsession\Http\Builders\RequestBuilder;
-use Subsession\Http\Builders\ResponseBuilder;
-use Subsession\Http\Extensions as Extensions;
+
+use Subsession\Http\{
+    Abstraction\HttpClientInterface,
+    Abstraction\RequestInterface,
+    Abstraction\ResponseInterface,
+    Extensions as Extensions
+};
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class HttpClient implements HttpClientInterface, JsonSerializable
 {
@@ -44,14 +34,6 @@ class HttpClient implements HttpClientInterface, JsonSerializable
     use Extensions\Client\AdapterExtensions;
     use Extensions\Client\MiddlewareExtensions;
     use Extensions\JsonSerializable;
-
-    public function __construct()
-    {
-        $this->setAdapter(AdapterBuilder::getInstance()->build());
-        $this->setRequest(RequestBuilder::getInstance()->build());
-        $this->setResponse(ResponseBuilder::getInstance()->build());
-        $this->setMiddlewares(static::$defaultMiddlewares);
-    }
 
     /**
      * Handle the RequestInterface

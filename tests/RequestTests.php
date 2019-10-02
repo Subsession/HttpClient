@@ -41,7 +41,7 @@ class RequestTests extends TestCase
      * @see https://github.com/Subsession/HttpClient/issues/19
      * @return void
      */
-    public function testRequestJsonEncodesCorrectly()
+    public function testExpectRequestToJsonEncodesCorrectly()
     {
         $innerData = new stdClass();
         $innerData->codi_client = "4475";
@@ -94,12 +94,12 @@ class RequestTests extends TestCase
             var_dump($e->getMessage());
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             0,
             $error
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             "No error",
             $errorMessage
         );

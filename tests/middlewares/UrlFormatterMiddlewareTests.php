@@ -46,7 +46,7 @@ class UrlFormatterMiddlewareTests extends TestCase
             ->withMethod($requestMethod)
             ->build();
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );
@@ -54,7 +54,7 @@ class UrlFormatterMiddlewareTests extends TestCase
         $urlFormatter = new UrlFormatterMiddleware();
         $urlFormatter->onRequest($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             $modifiedUrl,
             $request->getUrl()
         );
@@ -86,7 +86,7 @@ class UrlFormatterMiddlewareTests extends TestCase
             ->withMethod($requestMethod)
             ->build();
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );
@@ -94,7 +94,7 @@ class UrlFormatterMiddlewareTests extends TestCase
         $urlFormatter = new UrlFormatterMiddleware();
         $urlFormatter->onRequest($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );

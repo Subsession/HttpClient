@@ -11,6 +11,8 @@ use Subsession\Http\Builders\RequestBuilder;
 use Subsession\Http\Abstraction\ResponseInterface;
 use Subsession\Http\Abstraction\RequestInterface;
 use Subsession\Http\Builders\HttpClientBuilder;
+use Subsession\Http\Request;
+use Subsession\Http\Tests\Mocks\MockRequest;
 
 final class HttpClientTests extends TestCase
 {
@@ -23,7 +25,7 @@ final class HttpClientTests extends TestCase
 
     protected function setUp()
     {
-        $this->client = new HttpClient();
+        $this->client = HttpClientBuilder::getInstance()->build();
         $this->client->setBaseUrl(self::BASE_URL);
     }
 
@@ -56,7 +58,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -89,7 +91,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
@@ -119,7 +121,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -152,7 +154,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::NOT_FOUND,
             $response->getStatusCode()
         );
@@ -185,7 +187,7 @@ final class HttpClientTests extends TestCase
         /** @var ResponseInterface $response */
         $response = $this->client->handle($request);
 
-        $this->assertEquals(
+        $this->assertSame(
             HttpStatusCode::OK,
             $response->getStatusCode()
         );
@@ -197,7 +199,7 @@ final class HttpClientTests extends TestCase
             $responseHeaders
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $responseHeaders[$contentType],
             $applicationJson
         );
@@ -217,22 +219,55 @@ final class HttpClientTests extends TestCase
             ->setHeaders($headers)
             ->setUrl($url);
 
-        $json = json_encode($client);
-
-        $expectedJson = '"{"baseUrl":"baseUrl\/","request":{"url":"baseUrl\/url","method":"GET","bodyType":null,"params":[],"headers":{"key":"value"},"contentType":null},"response":{"statusCode":200,"headers":[],"body":null,"error":null},"adapter":{},"middlewares":[{},{},{}]}"';
-
-        // Remove double double quotes @ the start & end
-        // ""{"baseUrl
-        $expectedJson = trim($expectedJson, "\"");
+        $json = json_encode($client, JSON_UNESCAPED_SLASHES);
 
         $this->assertNotEquals(
             "{}",
             $json
         );
+    }
+
+    public function testExpectHttpClientToHaveNullResponse()
+    {
+        $client = HttpClientBuilder::getInstance()->build();
+
+        $this->assertNull(
+            $client->getResponse()
+        );
+    }
+
+    public function testExpectHttpClientToHaveDefaultRequestInstantiated()
+    {
+        RequestBuilder::setImplementation(Request::class);
+        $client = HttpClientBuilder::getInstance()->build();
+
+        $this->assertNotNull(
+            $client->getRequest()
+        );
+
+        $this->assertInstanceOf(
+            Request::class,
+            $client->getRequest()
+        );
+    }
+
+    public function testExpectHttpClientToHaveCustomRequestInstantiated()
+    {
+        RequestBuilder::setImplementation(MockRequest::class);
+        $client = HttpClientBuilder::getInstance()->build();
+
+        $this->assertNotNull(
+            $client->getRequest()
+        );
+
+        $this->assertInstanceOf(
+            MockRequest::class,
+            $client->getRequest()
+        );
 
         $this->assertEquals(
-            $expectedJson,
-            $json
+            RequestBuilder::getInstance()->build(),
+            $client->getRequest()
         );
     }
 }

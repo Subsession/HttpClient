@@ -8,30 +8,23 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http;
 
 use JsonSerializable;
-use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\HttpStatusCode;
-use Subsession\Http\Extensions as Extensions;
+
+use Subsession\Http\{
+    Abstraction\ResponseInterface,
+    HttpStatusCode,
+    Extensions as Extensions
+};
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class Response implements ResponseInterface, JsonSerializable
 {
@@ -44,8 +37,8 @@ class Response implements ResponseInterface, JsonSerializable
     /**
      * Response instance for HttpClient
      *
-     * @param array             $headers    Response headers
      * @param int|null          $statusCode Response status code
+     * @param array             $headers    Response headers
      * @param mixed|string|null $body       Response body
      * @param string|null       $error      Response error message
      */

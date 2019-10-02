@@ -8,28 +8,17 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Extensions\Client;
 
 use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\Builders\ResponseBuilder;
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 trait ResponseExtensions
 {
@@ -38,7 +27,7 @@ trait ResponseExtensions
      *
      * @access private
      * @see    Response
-     * @var    ResponseInterface
+     * @var    ResponseInterface|null
      */
     private $response;
 
@@ -50,14 +39,10 @@ trait ResponseExtensions
      * the RequestInterface.
      *
      * @access public
-     * @return ResponseInterface
+     * @return ResponseInterface|null
      */
     public function getResponse()
     {
-        if (null === $this->response) {
-            $this->setResponse(ResponseBuilder::build());
-        }
-
         return $this->response;
     }
 

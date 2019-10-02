@@ -72,27 +72,27 @@ class RequestBuilderTests extends TestCase
             $request
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $request->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $method,
             $request->getMethod()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $bodyType,
             $request->getBodyType()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $params,
             $request->getParams()
         );
@@ -158,27 +158,27 @@ class RequestBuilderTests extends TestCase
             $request
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $url,
             $request->getUrl()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $request->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $method,
             $request->getMethod()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $bodyType,
             $request->getBodyType()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $params,
             $request->getParams()
         );
@@ -190,6 +190,54 @@ class RequestBuilderTests extends TestCase
         $this->assertInstanceOf(
             Request::class,
             $request
+        );
+    }
+
+    public function testExpectRequestBuilderToFallbackToDefaultImplementation()
+    {
+        $default = Request::class;
+        $custom = MockRequest::class;
+
+        RequestBuilder::setImplementation($custom);
+
+        $this->assertSame(
+            $custom,
+            RequestBuilder::getImplementation()
+        );
+
+        // Reset to default implementation
+        RequestBuilder::setImplementation(null);
+
+        $this->assertSame(
+            $default,
+            RequestBuilder::getImplementation()
+        );
+    }
+
+    public function testExpectBuilderWithNoConfigToBuildDefaultInstance()
+    {
+        // Reset to default implementation
+        RequestBuilder::setImplementation(Request::class);
+
+        $expected = new Request();
+        $actual = RequestBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
+
+    public function testExpectBuilderWithCustomConfigToBuildIdenticalInstanceAsClassConstructor()
+    {
+        RequestBuilder::setImplementation(MockRequest::class);
+
+        $expected = new MockRequest();
+        $actual = RequestBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
         );
     }
 }

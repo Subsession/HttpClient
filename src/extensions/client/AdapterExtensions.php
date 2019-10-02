@@ -8,29 +8,20 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Extensions\Client;
 
-use InvalidArgumentException;
-use Subsession\Http\Builders\AdapterBuilder;
-use Subsession\Http\Abstraction\AdapterInterface;
+use Subsession\Http\{
+    Builders\AdapterBuilder,
+    Abstraction\AdapterInterface
+};
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 trait AdapterExtensions
 {
@@ -78,9 +69,9 @@ trait AdapterExtensions
      *
      * @param AdapterInterface|string $adapter
      *
+     * @throws \Subsession\Exceptions\InvalidArgumentException
      * @access public
      * @see    AdapterInterface
-     * @throws InvalidArgumentException If the given adapter is not an instance of AdapterInterface
      * @return static
      */
     public function setAdapter($adapter)
@@ -91,7 +82,8 @@ trait AdapterExtensions
             AdapterBuilder::setImplementation($adapter);
             $this->adapter = AdapterBuilder::getInstance()->build();
         } else {
-            throw new InvalidArgumentException("Adapter is not an instance of AdapterInterface");
+            $error = "$adapter is not an instance of AdapterInterface";
+            throw new \Subsession\Exceptions\InvalidArgumentException($error);
         }
 
         return $this;

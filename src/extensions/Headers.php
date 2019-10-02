@@ -8,12 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Extensions;
@@ -21,29 +16,10 @@ namespace Subsession\Http\Extensions;
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 trait Headers
 {
-    /**
-     * Default request headers
-     *
-     * @access private
-     * @var    array
-     */
-    private static $defaultHeaders = [
-        "Cache-Control" => "max-age=0",
-        "Connection" => "keep-alive",
-        "Keep-Alive" => "300",
-        "Accept" => "application/json,text/xml,application/xml,application/xhtml+xml,text/plain,image/png,*/*",
-        "Accept-Charset" => "utf-8,ISO-8859-1",
-    ];
-
     /**
      * HTTP headers
      *

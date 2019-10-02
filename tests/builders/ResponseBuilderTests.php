@@ -58,17 +58,17 @@ class ResponseBuilderTests extends TestCase
             $response
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $statusCode,
             $response->getStatusCode()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $response->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $body,
             $response->getBody()
         );
@@ -123,17 +123,17 @@ class ResponseBuilderTests extends TestCase
             $response
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $statusCode,
             $response->getStatusCode()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $headers,
             $response->getHeaders()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $body,
             $response->getBody()
         );
@@ -145,6 +145,33 @@ class ResponseBuilderTests extends TestCase
         $this->assertInstanceOf(
             Response::class,
             $response
+        );
+    }
+
+    public function testExpectBuilderWithNoConfigToBuildDefaultInstance()
+    {
+        // Reset to default implementation
+        ResponseBuilder::setImplementation(Response::class);
+
+        $expected = new Response();
+        $actual = ResponseBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
+        );
+    }
+
+    public function testExpectBuilderWithCustomConfigToBuildIdenticalInstanceAsClassConstructor()
+    {
+        ResponseBuilder::setImplementation(MockResponse::class);
+
+        $expected = new MockResponse();
+        $actual = ResponseBuilder::getInstance()->build();
+
+        $this->assertEquals(
+            $expected,
+            $actual
         );
     }
 }

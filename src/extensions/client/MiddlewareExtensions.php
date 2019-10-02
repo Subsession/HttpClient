@@ -8,55 +8,43 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Extensions\Client;
 
-use Subsession\Http\Abstraction\MiddlewareInterface;
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Abstraction\ResponseInterface;
-use Subsession\Http\Middlewares\BodyFormatterMiddleware;
-use Subsession\Http\Middlewares\HeadersFormatterMiddleware;
-use Subsession\Http\Middlewares\UrlFormatterMiddleware;
+use Subsession\Http\Abstraction\{
+    MiddlewareInterface,
+    RequestInterface,
+    ResponseInterface
+};
+
+use Subsession\Http\Middlewares\{
+    BodyFormatterMiddleware,
+    HeadersFormatterMiddleware,
+    UrlFormatterMiddleware,
+    ValidatorMiddleware
+};
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 trait MiddlewareExtensions
 {
     /**
-     * Default middlewares
-     *
-     * @static
-     * @access private
-     * @var    array
-     */
-    private static $defaultMiddlewares = [
-        UrlFormatterMiddleware::class,
-        HeadersFormatterMiddleware::class,
-        BodyFormatterMiddleware::class,
-    ];
-
-    /**
      * Collection of middlewares
      *
      * @access private
-     * @var    MiddlewareInterface[]
+     * @var    MiddlewareInterface[]|string[]
      */
-    private $middlewares = [];
+    private $middlewares = [
+        UrlFormatterMiddleware::class => UrlFormatterMiddleware::class,
+        HeadersFormatterMiddleware::class => HeadersFormatterMiddleware::class,
+        BodyFormatterMiddleware::class => BodyFormatterMiddleware::class,
+        ValidatorMiddleware::class => ValidatorMiddleware::class
+    ];
 
     /**
      * Get the middleware collection
@@ -66,9 +54,7 @@ trait MiddlewareExtensions
      */
     public function getMiddlewares()
     {
-        if (empty($this->middlewares)) {
-            $this->addMiddlewares(static::$defaultMiddlewares);
-        }
+        $this->addMiddlewares($this->middlewares);
 
         return $this->middlewares;
     }
@@ -76,7 +62,7 @@ trait MiddlewareExtensions
     /**
      * Set the middleware collection
      *
-     * @param MiddlewareInterface[] $middlewares
+     * @param MiddlewareInterface[]|string[] $middlewares
      *
      * @access public
      * @return static
@@ -87,13 +73,15 @@ trait MiddlewareExtensions
 
         foreach ($middlewares as $key => $middleware) {
             if ($middleware instanceof MiddlewareInterface) {
-                $instances[] = $middleware;
+                $instances[$key] = $middleware;
             } elseif (is_string($middleware)) {
-                $instances[] = new $middleware();
+                $instances[$key] = new $middleware();
+            } else {
+                throw new InvalidArgumentException();
             }
         }
 
-        $this->middlewares = $instances;
+        $this->middlewares = array_merge($this->middlewares, $instances);
 
         return $this;
     }
@@ -101,7 +89,9 @@ trait MiddlewareExtensions
     /**
      * Add a middleware to the collection
      *
+     * Code example:
      * ```php
+     * // @var HttpClient $client
      * // MiddlewareInterface
      * $client->addMiddleware(new InterceptorMiddleware());
      * // Or string
@@ -110,15 +100,18 @@ trait MiddlewareExtensions
      *
      * @param MiddlewareInterface|string $middleware
      *
+     * @throws \Subsession\Exceptions\InvalidArgumentException
      * @access public
      * @return static
      */
     public function addMiddleware($middleware)
     {
         if ($middleware instanceof MiddlewareInterface) {
-            $this->middlewares[] = $middleware;
+            $this->middlewares[get_class($middleware)] = $middleware;
+        } elseif (is_string($middleware)) {
+            $this->middlewares[$middleware] = new $middleware();
         } else {
-            $this->middlewares[] = new $middleware();
+            throw new \Subsession\Exceptions\InvalidArgumentException();
         }
 
         return $this;

@@ -13,13 +13,12 @@
 
 namespace Subsession\Http\Middlewares;
 
-use Subsession\Exceptions\InvalidOperationException;
+use Subsession\Exceptions\ArgumentNullException;
 
 use Subsession\Http\{
     Abstraction\MiddlewareInterface,
     Abstraction\RequestInterface,
     Abstraction\ResponseInterface,
-    HttpRequestMethod,
 };
 
 /**
@@ -27,47 +26,27 @@ use Subsession\Http\{
  *
  * @author Cristian Moraru <cristian.moraru@live.com>
  */
-class UrlFormatterMiddleware implements MiddlewareInterface
+class ValidatorMiddleware implements MiddlewareInterface
 {
     /**
      * @inheritDoc
      *
      * @param RequestInterface $request
      *
-     * @throws InvalidOperationException
+     * @throws ArgumentNullException If the Request URL is null
+     * @throws ArgumentNullException If the Request method is null
      * @access public
      * @return void
      */
     public function onRequest(RequestInterface &$request)
     {
-        /** @var string $method */
-        $method = $request->getMethod();
-
-        if ($method !== HttpRequestMethod::GET && $method !== HttpRequestMethod::HEAD) {
-            return;
+        if (null === $request->getUrl()) {
+            throw new ArgumentNullException("Request URL cannot be null");
         }
 
-        /** @var array $params */
-        $params = $request->getParams();
-
-        if (empty($params)) {
-            return;
+        if (null === $request->getMethod()) {
+            throw new ArgumentNullException("Request method cannot be null");
         }
-
-        /** @var string $url */
-        $url = $request->getUrl();
-
-        /** @var string $separator */
-        $separator = "?";
-
-        // If "?" already exists in the url
-        if (strpos($url, $separator) !== false) {
-            $separator = "&";
-        }
-
-        $url .= $separator . http_build_query($params);
-
-        $request->setUrl($url);
     }
 
     /**

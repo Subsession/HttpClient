@@ -8,12 +8,7 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Extensions;
@@ -23,12 +18,7 @@ use Subsession\Http\HttpStatusCode;
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 trait StatusCode
 {
@@ -48,7 +38,7 @@ trait StatusCode
      */
     public function getStatusCode()
     {
-        return (int) $this->statusCode;
+        return $this->statusCode;
     }
 
     /**
@@ -75,7 +65,7 @@ trait StatusCode
      */
     public function isInformational()
     {
-        return in_array($this->getStatusCode(), HttpStatusCode::INFORMATIONAL);
+        return isset(HttpStatusCode::INFORMATIONAL[$this->getStatusCode()]);
     }
 
     /**
@@ -86,7 +76,7 @@ trait StatusCode
      */
     public function isSuccess()
     {
-        return in_array($this->getStatusCode(), HttpStatusCode::SUCCESS);
+        return isset(HttpStatusCode::SUCCESS[$this->getStatusCode()]);
     }
 
     /**
@@ -97,7 +87,7 @@ trait StatusCode
      */
     public function isRedirect()
     {
-        return in_array($this->getStatusCode(), HttpStatusCode::REDIRECTION);
+        return isset(HttpStatusCode::REDIRECTION[$this->getStatusCode()]);
     }
 
     /**
@@ -108,7 +98,7 @@ trait StatusCode
      */
     public function isClientError()
     {
-        return in_array($this->getStatusCode(), HttpStatusCode::CLIENT_ERRORS);
+        return isset(HttpStatusCode::CLIENT_ERRORS[$this->getStatusCode()]);
     }
 
     /**
@@ -119,6 +109,6 @@ trait StatusCode
      */
     public function isServerError()
     {
-        return in_array($this->getStatusCode(), HttpStatusCode::SERVER_ERRORS);
+        return isset(HttpStatusCode::SERVER_ERRORS[$this->getStatusCode()]);
     }
 }

@@ -8,29 +8,21 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Adapters;
 
-use Subsession\Http\Abstraction\AdapterInterface;
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Abstraction\ResponseInterface;
+use Subsession\Http\Abstraction\{
+    AdapterInterface,
+    RequestInterface,
+    ResponseInterface
+};
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 abstract class BaseAdapter implements AdapterInterface
 {
@@ -83,8 +75,5 @@ abstract class BaseAdapter implements AdapterInterface
      * @access public
      * @return ResponseInterface
      */
-    public function handle(RequestInterface $request)
-    {
-        //
-    }
+    abstract public function handle(RequestInterface $request);
 }

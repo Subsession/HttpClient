@@ -8,39 +8,36 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Builders;
 
-use Subsession\Http\Abstraction\BuilderInterface;
-use Subsession\Http\Abstraction\ResponseInterface;
 use Subsession\Http\Response;
+use Subsession\Http\Builders\Mocks\MockResponse;
+
+use Subsession\Http\Abstraction\{
+    BuilderInterface,
+    ResponseInterface
+};
+use Subsession\Http\Tools\Validator;
 
 /**
  * Undocumented class
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class ResponseBuilder implements BuilderInterface
 {
     /**
-     * ResponseInterface implementation
+     * MockResponse instance
      *
-     * @access private
-     * @var    ResponseInterface
+     * Stores all the info needed to create the
+     * ResponseInterface instance
+     *
+     * @var MockResponse
      */
-    private $response;
+    private $config = null;
 
     /**
      * Self instance
@@ -71,9 +68,7 @@ class ResponseBuilder implements BuilderInterface
 
     public function __construct()
     {
-        $implementation = static::getImplementation();
-
-        $this->response = new $implementation();
+        $this->config = new MockResponse();
     }
 
     /**
@@ -111,15 +106,19 @@ class ResponseBuilder implements BuilderInterface
     /**
      * Set the ResponseInterface implementation class
      *
-     * @param string $implementation
+     * @param string|null $implementation Fully qualified class name or NULL to
+     *                                    reset to the default internal implementation
      *
      * @static
+     * @throws \Subsession\Exceptions\InvalidArgumentException
      * @access public
      * @return void
      */
     public static function setImplementation($implementation)
     {
-        if (!in_array(ResponseInterface::class, class_implements($implementation))) {
+        if (null === $implementation) {
+            $implementation = static::$defaultImplementation;
+        } elseif (!Validator::implements($implementation, ResponseInterface::class)) {
             $error = "$implementation is not an instance of ResponseInterface";
             throw new \Subsession\Exceptions\InvalidArgumentException($error);
         }
@@ -127,13 +126,8 @@ class ResponseBuilder implements BuilderInterface
         static::$implementation = $implementation;
 
         if (null !== static::$instance) {
-            static::$instance->updateImplementationClass($implementation);
+            static::$instance = new static();
         }
-    }
-
-    private function updateImplementationClass($implementation)
-    {
-        $this->response = new $implementation();
     }
 
     /**
@@ -146,7 +140,7 @@ class ResponseBuilder implements BuilderInterface
      */
     public function withStatusCode($statusCode)
     {
-        $this->response->setStatusCode($statusCode);
+        $this->config->statusCode = $statusCode;
 
         return $this;
     }
@@ -161,7 +155,7 @@ class ResponseBuilder implements BuilderInterface
      */
     public function withHeaders($headers)
     {
-        $this->response->setHeaders($headers);
+        $this->config->headers = $headers;
 
         return $this;
     }
@@ -176,7 +170,7 @@ class ResponseBuilder implements BuilderInterface
      */
     public function withBody($body)
     {
-        $this->response->setBody($body);
+        $this->config->body = $body;
 
         return $this;
     }
@@ -191,7 +185,7 @@ class ResponseBuilder implements BuilderInterface
      */
     public function withError($error)
     {
-        $this->response->setError($error);
+        $this->config->error = $error;
 
         return $this;
     }
@@ -200,10 +194,21 @@ class ResponseBuilder implements BuilderInterface
      * Build a ResponseInterface implementation
      *
      * @access public
-     * @return ResponseInterface
+     * @return ResponseInterface|Response
      */
     public function build()
     {
-        return $this->response;
+        /** @var string $implementation */
+        $implementation = static::getImplementation();
+
+        /** @var ResponseInterface $response */
+        $response = new $implementation();
+
+        $response->setStatusCode($this->config->statusCode)
+            ->setHeaders($this->config->headers)
+            ->setBody($this->config->body)
+            ->setError($this->config->error);
+
+        return $response;
     }
 }

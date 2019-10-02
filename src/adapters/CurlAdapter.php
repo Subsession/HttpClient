@@ -8,30 +8,22 @@
  *
  * Copyright (c) 2019 - present Subsession
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  GIT: &Id&
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 
 namespace Subsession\Http\Adapters;
 
-use Subsession\Http\Abstraction\RequestInterface;
-use Subsession\Http\Adapters\BaseAdapter;
-use Subsession\Http\Builders\ResponseBuilder;
+use Subsession\Http\{
+    Abstraction\RequestInterface,
+    Adapters\BaseAdapter,
+    Builders\ResponseBuilder
+};
 
 /**
  * AdapterInterface implementation using the CURL
  * PHP extension
  *
- * @category Http
- * @package  Subsession\Http
- * @author   Cristian Moraru <cristian.moraru@live.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @version  Release: 1.0.0
- * @link     https://github.com/Subsession/HttpClient
+ * @author Cristian Moraru <cristian.moraru@live.com>
  */
 class CurlAdapter extends BaseAdapter
 {
