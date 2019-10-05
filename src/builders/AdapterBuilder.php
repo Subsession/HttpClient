@@ -16,9 +16,9 @@ namespace Subsession\Http\Builders;
 use Subsession\Http\{
     Abstraction\AdapterInterface,
     Abstraction\BuilderInterface,
-    Adapters\CurlAdapter
+    Adapters\CurlAdapter,
+    Tools\Validator
 };
-use Subsession\Http\Tools\Validator;
 
 /**
  * Builder class for AdapterInterface implementations
