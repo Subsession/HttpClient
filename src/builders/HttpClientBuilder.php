@@ -13,8 +13,6 @@
 
 namespace Subsession\Http\Builders;
 
-use Subsession\Http\HttpClient;
-
 use Subsession\Http\Builders\{
     AdapterBuilder,
     Mocks\MockHttpClient
@@ -27,7 +25,11 @@ use Subsession\Http\Abstraction\{
     ResponseInterface,
     HttpClientInterface,
 };
-use Subsession\Http\Tools\Validator;
+
+use Subsession\Http\{
+    Tools\Validator,
+    HttpClient
+};
 
 /**
  * Builder class for HttpClientInterface implementations
@@ -136,10 +138,6 @@ class HttpClientBuilder implements BuilderInterface
         }
 
         static::$implementation = $implementation;
-
-        if (null !== static::$instance) {
-            static::$instance = new static();
-        }
     }
 
     /**
