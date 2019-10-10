@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Unit\Extensions;
+namespace Subsession\Http\Tests\Unit;
 
 use Subsession\Http\Abstraction\AdapterInterface;
 use Subsession\Http\Abstraction\RequestInterface;
@@ -12,10 +12,8 @@ use Subsession\Http\Builders\RequestBuilder;
 use Subsession\Http\Builders\ResponseBuilder;
 use Subsession\Http\HttpClient;
 use Subsession\Http\HttpStatusCode;
-use Subsession\Http\Response;
 use Subsession\Http\Tests\Mocks\Post;
 use PHPUnit\Framework\TestCase;
-use Subsession\Http\Extensions\Client\MiddlewareExtensions;
 
 final class HttpClientExtensionsTests extends TestCase
 {

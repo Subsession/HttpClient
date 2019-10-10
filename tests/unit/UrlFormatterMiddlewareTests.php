@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Unit\Middlewares;
+namespace Subsession\Http\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Subsession\Http\Builders\RequestBuilder;

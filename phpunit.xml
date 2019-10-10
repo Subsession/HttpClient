@@ -16,15 +16,6 @@
             <testsuite name="Integration">
                 <directory suffix="Tests.php">tests/integration</directory>
             </testsuite>
-            <testsuite name="Builders">
-                <directory suffix="Tests.php">tests/unit/builders</directory>
-            </testsuite>
-            <testsuite name="Extensions">
-                <directory suffix="Tests.php">tests/unit/extensions</directory>
-            </testsuite>
-            <testsuite name="Middlewares">
-                <directory suffix="Tests.php">tests/unit/middlewares</directory>
-            </testsuite>
         </testsuites>
         <logging>
             <log type="coverage-html" target="build/coverage"/>

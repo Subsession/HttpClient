@@ -11,7 +11,7 @@
         "--configuration",
         "phpunit.xml",
         "--testsuite",
-        "Unit,Integration,Builders,Extensions,Middlewares"
+        "Unit,Integration"
       ],
       "problemMatcher": ["$tsc"],
       "presentation": {

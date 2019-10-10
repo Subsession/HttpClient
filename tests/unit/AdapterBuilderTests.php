@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Unit\Builders;
+namespace Subsession\Http\Tests\Unit;
 
 use Subsession\Http\Adapters\CurlAdapter;
 use Subsession\Http\Adapters\StreamAdapter;
