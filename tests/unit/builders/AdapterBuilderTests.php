@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Builders;
+namespace Subsession\Http\Tests\Unit\Builders;
 
 use Subsession\Http\Adapters\CurlAdapter;
 use Subsession\Http\Adapters\StreamAdapter;
@@ -19,9 +19,6 @@ class AdapterBuilderTests extends TestCase
         //
     }
 
-    /**
-     * @return void
-     */
     public function testExpectAdapterToBeDefaultInstance()
     {
         $adapter = AdapterBuilder::getInstance()->build();
@@ -33,9 +30,6 @@ class AdapterBuilderTests extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testExpectAdapterToBeCurlAdapterInstance()
     {
         AdapterBuilder::setImplementation(CurlAdapter::class);
@@ -48,9 +42,6 @@ class AdapterBuilderTests extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testExpectAdapterToBeStreamAdapterInstance()
     {
         AdapterBuilder::setImplementation(StreamAdapter::class);

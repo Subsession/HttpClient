@@ -1,11 +1,10 @@
 <?php
 
-namespace Subsession\Http\Tests;
+namespace Subsession\Http\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Subsession\Http\HttpClient;
 use Subsession\Http\HttpStatusCode;
-use Subsession\Http\Tests\Mocks\Post;
 use Subsession\Http\HttpRequestMethod;
 use Subsession\Http\Builders\RequestBuilder;
 use Subsession\Http\Abstraction\ResponseInterface;
@@ -14,7 +13,7 @@ use Subsession\Http\Builders\HttpClientBuilder;
 use Subsession\Http\Request;
 use Subsession\Http\Tests\Mocks\MockRequest;
 
-final class HttpClientTests extends TestCase
+class HttpClientTests extends TestCase
 {
     /**
      * @var HttpClient
@@ -34,20 +33,6 @@ final class HttpClientTests extends TestCase
         //
     }
 
-    /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::setUrl
-     * @covers Request::setMethod
-     *
-     * @covers HttpClient::handle
-     *
-     * @covers Response::getStatusCode
-     * @covers Response::getBody
-     *
-     * @return void
-     */
     public function testExpect200ResponseStatusCode()
     {
         /** @var RequestInterface $request */
@@ -68,19 +53,6 @@ final class HttpClientTests extends TestCase
         );
     }
 
-    /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::setUrl
-     * @covers Request::setMethod
-     *
-     * @covers HttpClient::handle
-     *
-     * @covers Response::getStatusCode
-     *
-     * @return void
-     */
     public function testExpect404ResponseStatusCode()
     {
         /** @var RequestInterface $request */
@@ -97,20 +69,6 @@ final class HttpClientTests extends TestCase
         );
     }
 
-    /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::setUrl
-     * @covers Request::setMethod
-     *
-     * @covers HttpClient::handle
-     *
-     * @covers Response::getStatusCode
-     * @covers Response::getBody
-     *
-     * @return void
-     */
     public function testExpectResponseBodyToHaveContent()
     {
         /** @var RequestInterface $request */
@@ -131,19 +89,6 @@ final class HttpClientTests extends TestCase
         );
     }
 
-    /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::setUrl
-     * @covers Request::setMethod
-     *
-     * @covers HttpClient::handle
-     *
-     * @covers Response::getStatusCode
-     *
-     * @return void
-     */
     public function testExpectResponseBodyToBeEmpty()
     {
         /** @var RequestInterface $request */
@@ -160,20 +105,6 @@ final class HttpClientTests extends TestCase
         );
     }
 
-    /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::setUrl
-     * @covers Request::setMethod
-     *
-     * @covers HttpClient::handle
-     *
-     * @covers Response::getStatusCode
-     * @covers Response::getHeaders
-     *
-     * @return void
-     */
     public function testExpectResponseHeadersToContainContentTypeApplicationJson()
     {
         $contentType = "Content-Type";

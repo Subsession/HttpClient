@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Builders;
+namespace Subsession\Http\Tests\Unit\Builders;
 
 use Subsession\Http\Builders\ResponseBuilder;
 use Subsession\Http\Response;
@@ -19,23 +19,6 @@ class ResponseBuilderTests extends TestCase
         //
     }
 
-    /**
-     * @covers ResponseBuilder::setImplementation
-     * @covers ResponseBuilder::getInstance
-     * @covers ResponseBuilder::withStatusCode
-     * @covers MockResponse::setStatusCode
-     * @covers ResponseBuilder::withHeaders
-     * @covers MockResponse::setHeaders
-     * @covers ResponseBuilder::withBody
-     * @covers MockResponse::setBody
-     * @covers ResponseBuilder::build
-     *
-     * @covers MockResponse::getStatusCode
-     * @covers MockResponse::getHeaders
-     * @covers MockResponse::getBody
-     *
-     * @return void
-     */
     public function testExpectResponseImplementationToBeMockResponseInstance()
     {
         // Set the ResponseInterface implementation class to use
@@ -83,23 +66,6 @@ class ResponseBuilderTests extends TestCase
         );
     }
 
-    /**
-     * @covers ResponseBuilder::setImplementation
-     * @covers ResponseBuilder::getInstance
-     * @covers ResponseBuilder::withStatusCode
-     * @covers Response::setStatusCode
-     * @covers ResponseBuilder::withHeaders
-     * @covers Response::setHeaders
-     * @covers ResponseBuilder::withBody
-     * @covers Response::setBody
-     * @covers ResponseBuilder::build
-     *
-     * @covers Response::getStatusCode
-     * @covers Response::getHeaders
-     * @covers Response::getBody
-     *
-     * @return void
-     */
     public function testExpectResponseImplementationToBeResponseInstance()
     {
         // Set the ResponseInterface implementation class to use

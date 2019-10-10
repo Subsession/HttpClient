@@ -18,8 +18,6 @@
 
 namespace Subsession\Http\Tests\Mocks;
 
-use Subsession\Exceptions\ArgumentException;
-use Subsession\Exceptions\ArgumentNullException;
 use Subsession\Http\Abstraction\RequestInterface;
 use Subsession\Http\HttpRequestMethod;
 

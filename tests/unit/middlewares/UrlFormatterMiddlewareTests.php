@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Middlewares;
+namespace Subsession\Http\Tests\Unit\Middlewares;
 
 use PHPUnit\Framework\TestCase;
 use Subsession\Http\Builders\RequestBuilder;
@@ -20,16 +20,6 @@ class UrlFormatterMiddlewareTests extends TestCase
     }
 
     /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::withUrl
-     * @covers RequestBuilder::withParams
-     * @covers RequestBuilder::withMethod
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::getUrl
-     *
-     * @covers UrlFormatterMiddleware::onRequest
-     *
      * @dataProvider getRequestMethodsThatModifyTheUrl
      *
      * @return void
@@ -61,16 +51,6 @@ class UrlFormatterMiddlewareTests extends TestCase
     }
 
     /**
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::withUrl
-     * @covers RequestBuilder::withParams
-     * @covers RequestBuilder::withMethod
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::getUrl
-     *
-     * @covers UrlFormatterMiddleware::onRequest
-     *
      * @dataProvider getRequestMethodsThatDoNotModifyTheUrl
      *
      * @return void

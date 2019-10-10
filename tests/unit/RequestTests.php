@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests;
+namespace Subsession\Http\Tests\Unit;
 
 use stdClass;
 use JsonException;
@@ -25,19 +25,6 @@ class RequestTests extends TestCase
     }
 
     /**
-     * Tests json_encode on a Request class
-     *
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::withUrl
-     * @covers RequestBuilder::withParams
-     * @covers RequestBuilder::withBodyType
-     * @covers RequestBuilder::withMethod
-     * @covers RequestBuilder::build
-     *
-     * @covers UrlFormatterMiddleware::onRequest
-     * @covers HeadersFormatterMiddleware::onRequest
-     * @covers BodyFormatterMiddleware::onRequest
-     *
      * @see https://github.com/Subsession/HttpClient/issues/19
      * @return void
      */

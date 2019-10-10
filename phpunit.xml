@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit
+    backupGlobals="false"
+    backupStaticAttributes="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    processIsolation="false"
+    stopOnFailure="false"
+    bootstrap="vendor/autoload.php">
+        <testsuites>
+            <testsuite name="Unit">
+                <directory suffix="Tests.php">tests/unit</directory>
+            </testsuite>
+            <testsuite name="Integration">
+                <directory suffix="Tests.php">tests/integration</directory>
+            </testsuite>
+            <testsuite name="Builders">
+                <directory suffix="Tests.php">tests/unit/builders</directory>
+            </testsuite>
+            <testsuite name="Extensions">
+                <directory suffix="Tests.php">tests/unit/extensions</directory>
+            </testsuite>
+            <testsuite name="Middlewares">
+                <directory suffix="Tests.php">tests/unit/middlewares</directory>
+            </testsuite>
+        </testsuites>
+        <logging>
+            <log type="coverage-html" target="build/coverage"/>
+            <log type="testdox-html" target="build/requirements.html"/>
+        </logging>
+        <filter>
+            <whitelist>
+                <directory suffix=".php">src</directory>
+            </whitelist>
+        </filter>
+</phpunit>

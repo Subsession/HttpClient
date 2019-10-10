@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsession\Http\Tests\Builders;
+namespace Subsession\Http\Tests\Unit\Builders;
 
 use Subsession\Http\Builders\RequestBuilder;
 use Subsession\Http\Request;
@@ -19,29 +19,6 @@ class RequestBuilderTests extends TestCase
         //
     }
 
-    /**
-     * @covers RequestBuilder::setImplementation
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::withUrl
-     * @covers MockRequest::setUrl
-     * @covers RequestBuilder::withHeaders
-     * @covers MockRequest::setHeaders
-     * @covers RequestBuilder::withMethod
-     * @covers MockRequest::setMethod
-     * @covers RequestBuilder::withBodyType
-     * @covers MockRequest::setBodyType
-     * @covers RequestBuilder::withParams
-     * @covers MockRequest::setParams
-     * @covers RequestBuilder::build
-     *
-     * @covers MockRequest::getUrl
-     * @covers MockRequest::getHeaders
-     * @covers MockRequest::getMethod
-     * @covers MockRequest::getBodyType
-     * @covers MockRequest::getParams
-     *
-     * @return void
-     */
     public function testExpectRequestImplementationToBeMockRequestInstance()
     {
         // Set the RequestInterface implementation class to use
@@ -107,29 +84,6 @@ class RequestBuilderTests extends TestCase
         );
     }
 
-    /**
-     * @covers RequestBuilder::setImplementation
-     * @covers RequestBuilder::getInstance
-     * @covers RequestBuilder::withUrl
-     * @covers Request::setUrl
-     * @covers RequestBuilder::withHeaders
-     * @covers Request::setHeaders
-     * @covers RequestBuilder::withMethod
-     * @covers Request::setMethod
-     * @covers RequestBuilder::withBodyType
-     * @covers Request::setBodyType
-     * @covers RequestBuilder::withParams
-     * @covers Request::setParams
-     * @covers RequestBuilder::build
-     *
-     * @covers Request::getUrl
-     * @covers Request::getHeaders
-     * @covers Request::getMethod
-     * @covers Request::getBodyType
-     * @covers Request::getParams
-     *
-     * @return void
-     */
     public function testExpectRequestImplementationToBeRequestInstance()
     {
         // Set the RequestInterface implementation class to use
