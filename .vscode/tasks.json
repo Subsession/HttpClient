@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "test",
+      "command": "./vendor/bin/phpunit",
+      "type": "shell",
+      "args": [
+        "--bootstrap",
+        "vendor/autoload.php",
+        "--configuration",
+        "phpunit.xml",
+        "--testsuite",
+        "Unit,Integration,Builders,Extensions,Middlewares"
+      ],
+      "problemMatcher": ["$tsc"],
+      "presentation": {
+        "reveal": "always"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ]
+}
