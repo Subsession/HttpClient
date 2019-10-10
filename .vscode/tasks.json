@@ -2,7 +2,46 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "test",
+      "label": "Unit tests",
+      "command": "./vendor/bin/phpunit",
+      "type": "shell",
+      "args": [
+        "--bootstrap",
+        "vendor/autoload.php",
+        "--configuration",
+        "phpunit.xml",
+        "--testsuite",
+        "Unit"
+      ],
+      "problemMatcher": ["$tsc"],
+      "presentation": {
+        "reveal": "always"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Integration tests",
+      "command": "./vendor/bin/phpunit",
+      "type": "shell",
+      "args": [
+        "--bootstrap",
+        "vendor/autoload.php",
+        "--configuration",
+        "phpunit.xml",
+        "--testsuite",
+        "Integration"
+      ],
+      "problemMatcher": ["$tsc"],
+      "presentation": {
+        "reveal": "always"
+      },
+      "group": "test"
+    },
+    {
+      "label": "All tests",
       "command": "./vendor/bin/phpunit",
       "type": "shell",
       "args": [
@@ -17,10 +56,7 @@
       "presentation": {
         "reveal": "always"
       },
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      }
+      "group": "test"
     }
   ]
 }
